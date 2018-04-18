@@ -26,7 +26,15 @@ public class BrowserFragment extends Fragment {
                 activity.toGroupMessagingActivity();
             }
         });
-        return rootView;
+
+        Button toLogin = (Button) rootView.findViewById(R.id.to_login);
+        toLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                //go to group activity
+                activity.toLoginActivity();
+            }
+        });
+                return rootView;
     }
 
     @Override

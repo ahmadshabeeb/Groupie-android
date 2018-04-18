@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Groupie</string>
+
     <string name="title_activity_parent">ParentActivity</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
@@ -80,4 +81,5 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+>>>>>>> development
 </resources>

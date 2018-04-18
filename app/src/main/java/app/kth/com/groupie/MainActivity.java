@@ -1,10 +1,6 @@
 package app.kth.com.groupie;
 
 import android.content.Intent;
-<<<<<<< HEAD
-import android.support.v7.app.AppCompatActivity;
-=======
->>>>>>> development
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 

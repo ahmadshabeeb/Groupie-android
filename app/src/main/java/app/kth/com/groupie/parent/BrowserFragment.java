@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,15 @@ public class BrowserFragment extends Fragment {
             public void onClick(View view){
                 //go to group activity
                 activity.toLoginActivity();
+            }
+        });
+
+        Button toRegister = (Button) rootView.findViewById(R.id.to_register);
+        toRegister.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                //go to group activity
+                Log.d("TAG", "working");
+                activity.toRegistrationActivity();
             }
         });
                 return rootView;

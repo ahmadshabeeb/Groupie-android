@@ -22,9 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-        <activity android:name=".registration.RegistrationActivity"></activity>
-=======
+        <activity android:name=".registration.RegistrationActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <activity android:name=".login.LoginActivity"/>
 
@@ -46,7 +45,6 @@
             android:theme="@style/AppTheme">
         </activity>
 
->>>>>>> development
     </application>
 
 </manifest>

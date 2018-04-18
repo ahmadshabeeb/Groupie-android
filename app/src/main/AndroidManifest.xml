@@ -12,8 +12,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".parent.ParentActivity"
             android:label="@string/app_name"
@@ -24,9 +23,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateGroupActivity"
-            android:theme="@style/AppTheme"
-            android:label="Create group"></activity>
+        <activity
+            android:name=".CreateGroupActivity"
+            android:label="Create group"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".groupMessaging.GroupMessagingActivity"
+            android:label="Group Messaging"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".EditProfileActivity"
+            android:label="Edit Profile"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Group Messaging"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>

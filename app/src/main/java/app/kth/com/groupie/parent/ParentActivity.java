@@ -10,7 +10,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import app.kth.com.groupie.CreateGroupActivity;
+import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.SettingsActivity;
+import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 
 public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
@@ -70,6 +73,18 @@ public class ParentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+    public void toGroupMessagingActivity(){
+        Intent intent = new Intent(this, GroupMessagingActivity.class);
+        startActivity(intent);
+    }
+    public void toEditProfileActivity(){
+        Intent intent = new Intent(this, EditProfileActivity.class);
+        startActivity(intent);
+    }
+    public void toSettingActivity(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 }

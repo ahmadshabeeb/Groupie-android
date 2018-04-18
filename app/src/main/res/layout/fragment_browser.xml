@@ -24,11 +24,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Qucik join"/>
-    <Button
-        android:id="@+id/ToCreateFromBrowser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create"/>
 
 
 </LinearLayout>

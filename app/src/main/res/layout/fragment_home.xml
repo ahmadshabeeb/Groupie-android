@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_red_dark"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="fragment1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+
+    <Button
+        android:id="@+id/ToPreviewFromHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to preview"/>
+
+    <Button
+        android:id="@+id/ToQuickJoinFromHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Qucik join"/>
+    <Button
+        android:id="@+id/ToCreateFromHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create"/>
+
+</LinearLayout>

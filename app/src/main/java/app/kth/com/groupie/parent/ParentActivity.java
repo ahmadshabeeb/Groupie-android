@@ -1,5 +1,6 @@
 package app.kth.com.groupie.parent;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import app.kth.com.groupie.CreateGroupActivity;
 import app.kth.com.groupie.R;
 
 public class ParentActivity extends AppCompatActivity {
@@ -56,6 +58,18 @@ public class ParentActivity extends AppCompatActivity {
 
         inflater.inflate(R.menu.parent_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.action_create_group:
+                Intent intent = new Intent(this, CreateGroupActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
 }

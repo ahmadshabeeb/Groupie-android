@@ -14,6 +14,7 @@ import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.login.LoginActivity;
 
 public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
@@ -87,4 +88,8 @@ public class ParentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void toLoginActivity(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
 }

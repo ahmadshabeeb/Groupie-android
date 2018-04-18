@@ -40,5 +40,5 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.2'
 
-
+}
 apply plugin: 'com.google.gms.google-services'

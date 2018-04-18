@@ -14,13 +14,13 @@
 
 
     <Button
-        android:id="@+id/ToPreviewFromBrowser"
+        android:id="@+id/to_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="to preview"/>
 
     <Button
-        android:id="@+id/ToQuickJoiFromBrowser"
+        android:id="@+id/to_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Qucik join"/>

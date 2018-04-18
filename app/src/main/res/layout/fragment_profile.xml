@@ -14,19 +14,19 @@
 
 
     <Button
-        android:id="@+id/ToSetting"
+        android:id="@+id/to_setting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Settings"/>
 
     <Button
-        android:id="@+id/ToEditprofile"
+        android:id="@+id/to_edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit profile"/>
 
     <Button
-        android:id="@+id/ToYourGroupFromProfile"
+        android:id="@+id/to_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Your Group"/>

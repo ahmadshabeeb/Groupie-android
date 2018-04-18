@@ -19,8 +19,8 @@ public class BrowserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_browser, container, false);
 
-        Button ToQuickJoinButton = (Button) rootView.findViewById(R.id.ToQuickJoiFromBrowser);
-        ToQuickJoinButton.setOnClickListener(new View.OnClickListener() {
+        Button toGroup = (Button) rootView.findViewById(R.id.to_group);
+        toGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
                 activity.toGroupMessagingActivity();

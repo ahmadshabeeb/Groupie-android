@@ -19,24 +19,24 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button ToYourGroupButton = (Button) rootView.findViewById(R.id.ToYourGroupFromProfile);
-        ToYourGroupButton.setOnClickListener(new View.OnClickListener() {
+        Button toGroup = (Button) rootView.findViewById(R.id.to_group);
+        toGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
                 activity.toGroupMessagingActivity();
             }
         });
 
-        Button ToEditProfileButton = (Button) rootView.findViewById(R.id.ToEditprofile);
-        ToEditProfileButton.setOnClickListener(new View.OnClickListener() {
+        Button toEditProfile = (Button) rootView.findViewById(R.id.to_edit_profile);
+        toEditProfile.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
                 activity.toEditProfileActivity();
             }
         });
 
-        Button ToSettingButton = (Button) rootView.findViewById(R.id.ToSetting);
-        ToSettingButton.setOnClickListener(new View.OnClickListener() {
+        Button toSetting = (Button) rootView.findViewById(R.id.to_setting);
+        toSetting.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
                 activity.toSettingActivity();

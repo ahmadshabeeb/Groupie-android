@@ -14,9 +14,18 @@ public class Message {
     private String imageUrl;
     private DateFormat timeSent;
 
-    public String getSenderUserId() {
-        return senderUserId;
+    public Message() {}
+
+    public Message(String senderUserId, String name, String senderPicture, String text, String imageUrl, DateFormat timeSent) {
+        this.senderUserId = senderUserId;
+        this.name = name;
+        this.senderPicture = senderPicture;
+        this.text = text;
+        this.imageUrl = imageUrl;
+        this.timeSent = timeSent;
     }
+
+    public String getSenderUserId() { return senderUserId; }
 
     public void setSenderUserId(String senderUserId) {
         this.senderUserId = senderUserId;

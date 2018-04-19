@@ -1,8 +1,6 @@
 package app.kth.com.groupie.groupMessaging;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -32,38 +29,26 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import app.kth.com.groupie.Data.Structure.Message;
 import app.kth.com.groupie.R;
-//import de.hdodenhof.circleimageview.CircleImageView;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupMessagingActivity extends AppCompatActivity {
 
-    public static class receivedMessageViewHolder extends RecyclerView.ViewHolder {
-  //      CircleImageView profilePictureImageView;
+    public static class messageViewHolder extends RecyclerView.ViewHolder {
+        CircleImageView profilePictureImageView;
         TextView messageItemReceivedTextView;
         TextView senderTextView;
-        ImageView messageReceivedImageView;
+        ImageView messageItemImageView;
         RelativeLayout messageItemLayout;
+        TextView messageItemSentTextView;
 
-        public receivedMessageViewHolder(View v) {
+        public messageViewHolder(View v) {
             super(v);
             senderTextView = (TextView) itemView.findViewById(R.id.senderTextView);
             messageItemReceivedTextView = (TextView) itemView.findViewById(R.id.messageItemReceivedTextView);
-       //     profilePictureImageView = (CircleImageView) itemView.findViewById(R.id.profilePictureImageView);
-            messageReceivedImageView = (ImageView) itemView.findViewById(R.id.messageReceivedImageView);
+            profilePictureImageView = (CircleImageView) itemView.findViewById(R.id.profilePictureImageView);
+            messageItemImageView = (ImageView) itemView.findViewById(R.id.messageReceivedImageView);
             messageItemLayout = (RelativeLayout) itemView.findViewById(R.id.messageItemLayout);
-        }
-
-    }
-
-    public static class sentMessageViewHolder extends RecyclerView.ViewHolder {
-        TextView messageItemSentTextView;
-        ImageView messageSentImageView;
-        RelativeLayout messageItemLayout;
-
-        public sentMessageViewHolder(View v) {
-            super(v);
             messageItemSentTextView = (TextView) itemView.findViewById(R.id.messageItemSentTextView);
-            messageSentImageView = (ImageView) itemView.findViewById(R.id.messageSentImageView);
-            messageItemLayout = (RelativeLayout) itemView.findViewById(R.id.messageItemLayout);
         }
 
     }
@@ -78,15 +63,15 @@ public class GroupMessagingActivity extends AppCompatActivity {
     private LinearLayoutManager mLinearLayoutManager;
     private final String CHILD_MESSAGES = "messages";
     private EditText mMessageEditText;
-    private ConstraintLayout mConstraintLayout = findViewById(R.id.constraintLayout);
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder> mFirebaseAdapter;
+    private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
 
 
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
-        if (mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
+        //if (mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
+        if (mCurrentUser.getUid().equals("atuzNWxgGRMjDyoiokQlZCShWWv2")) return true; // change when get updated classes
         return false;
     }
 
@@ -124,32 +109,29 @@ public class GroupMessagingActivity extends AppCompatActivity {
                 new FirebaseRecyclerOptions.Builder<Message>()
                         .setQuery(messagesDatabaseRef, parser)
                         .build();
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, RecyclerView.ViewHolder>(options) {
+        mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, messageViewHolder>(options) {
             @NonNull
             @Override
-            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                if (mUserIsSender) {
-                    Log.d(TAG, "sentMessageViewHolder created - means user is the sender");
-                    return new sentMessageViewHolder(inflater.inflate(R.layout.message_item_sent, parent, false));
-                }
-                else{
-                    Log.d(TAG, "receivedMessageViewHolder created - means user is not the sender");
-                    return new receivedMessageViewHolder(inflater.inflate(R.layout.message_item_received, parent, false));
-                }
+                    Log.d(TAG, "messageViewHolder created - means user is not the sender");
+                    return new messageViewHolder(inflater.inflate(R.layout.message_item, parent, false));
             }
             @Override
-            protected void onBindViewHolder(RecyclerView.ViewHolder holder, int position, Message msg) {
+            protected void onBindViewHolder(messageViewHolder holder, int position, Message msg) {
                 Log.d(TAG, "onBindViewHolder called.");
-                if (mUserIsSender) {
-                    ((sentMessageViewHolder) holder).messageItemSentTextView.setText(msg.getText());
+                if (userIsSender(msg)) {
+                    holder.messageItemReceivedTextView.setVisibility(View.GONE);
+                    holder.senderTextView.setVisibility(View.GONE);
+                    holder.profilePictureImageView.setVisibility(View.GONE);
+                    ((messageViewHolder) holder).messageItemSentTextView.setText(msg.getText());
                 } else {
-                    ((receivedMessageViewHolder) holder).messageItemReceivedTextView.setText(msg.getText());
-                    // ((receivedMessageViewHolder) holder).profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
-                    ((receivedMessageViewHolder) holder).senderTextView.setText(msg.getSenderUserId()); // for now puts sender ID as the name
+                    holder.messageItemSentTextView.setVisibility(View.GONE);
+                    ((messageViewHolder) holder).messageItemReceivedTextView.setText(msg.getText());
                 }
             }
         };
+
         mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 super.onItemRangeInserted(positionStart, itemCount);

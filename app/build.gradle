@@ -47,6 +47,8 @@ dependencies {
 
     implementation 'com.firebaseui:firebase-ui-database:3.3.0'
 
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.2'

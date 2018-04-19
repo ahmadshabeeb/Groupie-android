@@ -6,6 +6,8 @@ import java.text.DateFormat;
  * Created by Ahmad on 4/11/2018.
  */
 
+//Do we need getters and setters for everything?
+
 public class Message {
     private String senderUserId;
     private String name;

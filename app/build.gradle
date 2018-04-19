@@ -37,6 +37,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:12.0.1'
     implementation 'com.google.firebase:firebase-functions:12.0.1'
     implementation 'com.google.firebase:firebase-auth:12.0.1'
+    implementation 'com.google.firebase:firebase-analytics:12.0.1'
+    implementation 'com.google.firebase:firebase-database:12.0.1'
+    implementation 'com.google.firebase:firebase-storage:12.0.1'
+    implementation 'com.google.firebase:firebase-config:12.0.1'
+    implementation 'com.google.firebase:firebase-messaging:12.0.1'
+    implementation 'com.google.firebase:firebase-appindexing:12.0.1'
+    implementation 'com.google.firebase:firebase-crash:12.0.1'
+
+    implementation 'com.firebaseui:firebase-ui-database:3.3.0'
+
 
     // Gson
     implementation 'com.google.code.gson:gson:2.8.2'

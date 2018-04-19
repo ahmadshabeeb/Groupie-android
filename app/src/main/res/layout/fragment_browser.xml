@@ -37,6 +37,11 @@
         android:layout_height="wrap_content"
         android:text="Register"/>
 
+    <Button
+        android:id="@+id/to_firstlogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="First login"/>
 
 
 </LinearLayout>

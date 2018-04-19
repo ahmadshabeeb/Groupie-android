@@ -35,7 +35,7 @@ public class UserProfileFragment extends Fragment {
     EditText firstName;
     EditText lastName;
     EditText fieldOfStudy;
-    EditText school;
+    EditText studyLocation;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -47,9 +47,7 @@ public class UserProfileFragment extends Fragment {
         firstName = (EditText) rootview.findViewById(R.id.firstname_edittext);
         lastName = (EditText) rootview.findViewById(R.id.lastname_edittext);
         fieldOfStudy = (EditText) rootview.findViewById(R.id.fieldofstudy_edittext);
-        school = (EditText) rootview.findViewById(R.id.school_edittext);
-        school.setText(getNameOfSchool());
-
+        studyLocation = (EditText) rootview.findViewById(R.id.studylocation_edittext);
 
         Button nextButton = (Button) rootview.findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -65,13 +63,18 @@ public class UserProfileFragment extends Fragment {
     private void addInfoAndMoveOn(View v){
         String firstNameInput = firstName.getText().toString();
         String lastNameInput = lastName.getText().toString();
-        String schoolInput = school.getText().toString();
+        String schoolInput = getNameOfSchool();
         String fieldOfStudyInput = fieldOfStudy.getText().toString();
+        String studyLocationInput = studyLocation.getText().toString();
 
+        if((firstNameInput.length() < 1) | (lastNameInput.length() < 1) | (fieldOfStudyInput.length() < 1) |
+                (studyLocationInput.length() < 1)){
 
-        FirstLoginActivity activity = (FirstLoginActivity) getActivity();
-        activity.addInfoToProfile(firstNameInput, lastNameInput, schoolInput, fieldOfStudyInput, v);
-
+        } else {
+            FirstLoginActivity activity = (FirstLoginActivity) getActivity();
+            activity.addInfoToProfile(firstNameInput, lastNameInput, schoolInput,
+                    fieldOfStudyInput, studyLocationInput, v);
+        }
     }
 
     private String getNameOfSchool(){

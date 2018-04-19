@@ -44,6 +44,15 @@ public class BrowserFragment extends Fragment {
                 activity.toRegistrationActivity();
             }
         });
+        Button toFirstLogin = (Button) rootView.findViewById(R.id.to_firstlogin);
+        toFirstLogin.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                //go to group activity
+                activity.toFirstLogin();
+            }
+        });
+
+
                 return rootView;
     }
 

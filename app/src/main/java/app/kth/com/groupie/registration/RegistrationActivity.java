@@ -92,7 +92,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Go back to login
-                goToLogin();
+                finish();
 
             }
         });

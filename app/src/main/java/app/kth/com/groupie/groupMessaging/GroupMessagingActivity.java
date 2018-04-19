@@ -1,5 +1,6 @@
 package app.kth.com.groupie.groupMessaging;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,7 +55,6 @@ public class GroupMessagingActivity extends AppCompatActivity {
     }
 
     private static final String TAG = "LogMainActivity";
-    private boolean mUserIsSender;
     private FirebaseUser mCurrentUser;
 
     private Button mSendButton;
@@ -62,6 +62,7 @@ public class GroupMessagingActivity extends AppCompatActivity {
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
     private final String CHILD_MESSAGES = "messages";
+    private final String CHILD_USERS = "users";
     private EditText mMessageEditText;
 
     private DatabaseReference mFirebaseDatabaseReference;
@@ -71,7 +72,7 @@ public class GroupMessagingActivity extends AppCompatActivity {
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
         //if (mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
-        if (mCurrentUser.getUid().equals("atuzNWxgGRMjDyoiokQlZCShWWv2")) return true; // change when get updated classes
+        if (mCurrentUser.getUid().equals("atuzNWxgGRMjDyoiokQlZCShWWv2")) return true;
         return false;
     }
 
@@ -95,16 +96,11 @@ public class GroupMessagingActivity extends AppCompatActivity {
             public Message parseSnapshot(DataSnapshot snapshot) {
                 Log.d(TAG, "parseSnapshot called.");
                 Message msg = snapshot.getValue(Message.class);
-                if (userIsSender(msg)) {
-                    mUserIsSender = true;
-                } else {
-                    mUserIsSender = false;
-                }
                 return msg;
             }
         };
 
-        DatabaseReference messagesDatabaseRef = mFirebaseDatabaseReference.child(CHILD_MESSAGES);
+        final DatabaseReference messagesDatabaseRef = mFirebaseDatabaseReference.child(CHILD_MESSAGES);
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
                         .setQuery(messagesDatabaseRef, parser)
@@ -128,6 +124,8 @@ public class GroupMessagingActivity extends AppCompatActivity {
                 } else {
                     holder.messageItemSentTextView.setVisibility(View.GONE);
                     ((messageViewHolder) holder).messageItemReceivedTextView.setText(msg.getText());
+//                    ((messageViewHolder) holder).senderTextView.setText(msg.getName());
+//                    ((messageViewHolder) holder).profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
                 }
             }
         };

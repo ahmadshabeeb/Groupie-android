@@ -52,7 +52,7 @@
         android:id="@+id/logo"
         android:layout_width="155dp"
         android:layout_height="117dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"

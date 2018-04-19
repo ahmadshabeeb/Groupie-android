@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/logo_image"
-        android:layout_width="249dp"
-        android:layout_height="121dp"
+        android:layout_width="155dp"
+        android:layout_height="117dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"

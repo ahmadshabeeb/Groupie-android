@@ -6,4 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".firstLogin.FirstLoginActivity">
 
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="27dp"
+        tools:layout_editor_absoluteY="56dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="327dp" />
+    </FrameLayout>
+
+
 </android.support.constraint.ConstraintLayout>

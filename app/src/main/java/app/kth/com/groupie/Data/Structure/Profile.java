@@ -6,11 +6,11 @@ package app.kth.com.groupie.Data.Structure;
 
 public class Profile {
     private String userId;
-    private String firstNmae ;
-    private String lastName ;
-    private String profilePicture ;
+    private String firstName;
+    private String lastName;
+    private String profilePicture;
     private String bio;
-    private String school ;
+    private String school;
     private String fieldOfStudy;
 
 

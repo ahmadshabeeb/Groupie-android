@@ -12,7 +12,6 @@ import app.kth.com.groupie.Data.Structure.Profile;
  */
 
 public class Group {
-
     private String groupId;
     private String subject;
     private String topic;

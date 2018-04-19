@@ -12,7 +12,7 @@ public class Conversation {
     private DateFormat timeOfLastMsg;
     private DateFormat creationDate;
     private String lastSender;
-    private List<String> members;
+    private List<Profile> members;
     private List<Message> messages;
 
     public DateFormat getTimeOfLastMsg() {
@@ -27,7 +27,7 @@ public class Conversation {
         return lastSender;
     }
 
-    public List<String> getMembers() {
+    public List<Profile> getMembers() {
         return members;
     }
 

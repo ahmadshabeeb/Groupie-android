@@ -1,4 +1,4 @@
-package app.kth.com.groupie.Data.Structure;
+package app.kth.com.groupie.data.structure;
 
 import java.text.DateFormat;
 
@@ -9,4 +9,12 @@ import java.text.DateFormat;
 public class GroupHistory {
     private String groupId;
     private DateFormat timeJoined;
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public DateFormat getTimeJoined() {
+        return timeJoined;
+    }
 }

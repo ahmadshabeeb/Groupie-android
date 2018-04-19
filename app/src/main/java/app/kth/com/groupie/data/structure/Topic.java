@@ -1,4 +1,4 @@
-package app.kth.com.groupie.Data.Structure;
+package app.kth.com.groupie.data.structure;
 
 /**
  * Created by Ahmad on 4/11/2018.
@@ -7,4 +7,16 @@ package app.kth.com.groupie.Data.Structure;
 public class Topic {
     private String name;
     private int frequency;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getFrequency() {
+        return frequency;
+    }
 }

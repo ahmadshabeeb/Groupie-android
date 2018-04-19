@@ -1,8 +1,8 @@
-package app.kth.com.groupie.Data;
+package app.kth.com.groupie.data;
 
 import java.util.List;
 
-import app.kth.com.groupie.Data.Structure.GroupHistory;
+import app.kth.com.groupie.data.structure.GroupHistory;
 
 /**
  * Created by Ahmad on 4/11/2018.
@@ -11,4 +11,12 @@ import app.kth.com.groupie.Data.Structure.GroupHistory;
 public class User {
     private String userId;
     private List<GroupHistory> history;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public List<GroupHistory> getHistory() {
+        return history;
+    }
 }

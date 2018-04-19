@@ -1,7 +1,11 @@
 package app.kth.com.groupie.registration;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -9,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +27,8 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.login.LoginActivity;
+import app.kth.com.groupie.login.ResetPasswordFragment;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -32,7 +39,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private SpannableString resetPassword  = new SpannableString("Did you forget your password?");
     private TextView error;
     private TextView resetPopUp;
-    private ImageView backButton;
+    private ImageButton backButton;
     private Button registerButton;
     private String [] domains = {"kth.se", "su.se", "ki.se", "hhs.se", "sh.se", "kmh.se", "shh.se", "fhs.se", "esh.se", "konstfack.se", "smi.se", "uniarts.se", "kkh.se", "ths.se", "chiro-student.se", "gih.se", "rkh.se"};
     @Override
@@ -44,7 +51,7 @@ public class RegistrationActivity extends AppCompatActivity {
         resetPassword.setSpan(new UnderlineSpan(), 0, resetPassword.length(), 0);
         registerButton = (Button) findViewById(R.id.registerButton);
         resetPopUp = (TextView) findViewById(R.id.resetPasswordText);
-        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton = (ImageButton) findViewById(R.id.goback_button);
     }
 
     @Override
@@ -64,7 +71,9 @@ public class RegistrationActivity extends AppCompatActivity {
                 String[] emailAndPassword = getEmailandPassword(view);
                 if (emailAndPassword[1].equals(emailAndPassword[2])){
                     if (checkEmail(emailAndPassword[0])){
-                        createAccount(emailAndPassword[0], emailAndPassword[1], view);
+                        if (!emailAndPassword[1].isEmpty()){
+                            createAccount(emailAndPassword[0], emailAndPassword[1], view);
+                        }
                     }else{
                         errorMsg = "Your email needs to have one of Stockholm's Universities' domain in order to register!";
                         error.setText(errorMsg);
@@ -83,14 +92,16 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Go back to login
-                printBar("back to login!", v);
+                goToLogin();
+
             }
         });
         resetPopUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //go to reset Password
-                printBar("to reset password", v);
+                goToResetFromRegistration();
+
             }
         });
     }
@@ -160,6 +171,12 @@ public class RegistrationActivity extends AppCompatActivity {
         String email =  ((EditText)findViewById(R.id.emailText)).getText().toString();
         String password = ((EditText) findViewById(R.id.passwordText)).getText().toString();
         String cpassword = ((EditText) findViewById(R.id.cPasswordText)).getText().toString();
+        if(password.isEmpty()){
+            errorMsg = "please fill out all the fields!";
+            error.setText(errorMsg);
+            errorMsg = null;
+            updateUI(mAuth.getCurrentUser());
+        }
         return new String[]{email, password, cpassword};
     }
 
@@ -189,6 +206,17 @@ public class RegistrationActivity extends AppCompatActivity {
 
     public void verify() {
         mAuth.getCurrentUser().sendEmailVerification();
+    }
+
+    public void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToResetFromRegistration(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("goToResetFromRegistration", true);
+        startActivity(intent);
     }
 
 }

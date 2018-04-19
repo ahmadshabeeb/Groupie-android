@@ -1,10 +1,14 @@
 package app.kth.com.groupie.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import app.kth.com.groupie.parent.ParentActivity;
+import app.kth.com.groupie.registration.RegistrationActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -21,10 +25,16 @@ public class LoginActivity extends AppCompatActivity {
             if (savedInstanceState != null) {
                 return;
             }
-            LoginFragment firstFragment = new LoginFragment();
-            //firstFragment.setArguments(getIntent().getExtras());
-            getSupportFragmentManager().beginTransaction()
-                    .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
+
+            if(getIntent().hasExtra("goToResetFromRegistration")){
+                ResetPasswordFragment firstFragment = new ResetPasswordFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
+            } else {
+                LoginFragment firstFragment = new LoginFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
+            }
         }
     }
     @Override
@@ -33,17 +43,37 @@ public class LoginActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
     }
 
-    public void goToReset(View v) {
+    public void goToReset() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(app.kth.com.groupie.R.id.fragment_container, new ResetPasswordFragment());
         ft.commit();
     }
 
-    public void goToSignIn(View v) {
+    public void goToResetFromRegistration(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(app.kth.com.groupie.R.id.fragment_container, new ResetPasswordFragment());
+        ft.commit();
+
+    }
+
+    public void goToSignIn() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(app.kth.com.groupie.R.id.fragment_container, new LoginFragment());
         ft.commit();
+    }
+
+    public void goToRegistration(){
+        Intent intent = new Intent(this, RegistrationActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToHome(){
+        Intent intent = new Intent(this, ParentActivity.class);
+        startActivity(intent);
     }
 }

@@ -52,7 +52,7 @@ public class LoginFragment extends Fragment {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signUp(v);
+                activity.goToRegistration();
             }
         });
 
@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.goToReset(v);
+                activity.goToReset();
             }
         });
 
@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment {
                         if (task.isSuccessful()) {
                             //UPDATE USER   INTERFACE move on to homepage?
                             if(mAuth.getCurrentUser().isEmailVerified()){
-                                //go to homepage
+                                activity.goToHome();
                             } else{
                                 printErrorMessage("Please Verify Your Email To Log In");
                                 mAuth.signOut();
@@ -129,13 +129,6 @@ public class LoginFragment extends Fragment {
         return null;
     }
 
-    public void printBar(String message, View view){
-
-    }
-
-    public void signUp(View view){
-        printBar("hello", view);
-    }
 
     @Override
     public void onDetach() {

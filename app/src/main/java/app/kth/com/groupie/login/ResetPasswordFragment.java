@@ -50,7 +50,7 @@ public class ResetPasswordFragment extends Fragment {
         goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.goToSignIn(v);
+                activity.goToSignIn();
             }
         });
 

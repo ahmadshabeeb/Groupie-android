@@ -14,6 +14,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -23,11 +24,14 @@ import app.kth.com.groupie.data.Group;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groupArrayList = new ArrayList<>();
     private Context context;
+    private static int NUM_GROUPS_TO_LOAD = 10;
 
     public GroupAdapter(DatabaseReference databaseReference, Context context) {
         this.context = context;
 
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+
+        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
@@ -87,7 +91,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         holder.subject.setText(group.getSubject());
         holder.topic.setText(group.getTopic());
         holder.location.setText(group.getLocation());
-        holder.description.setText(group.getDescription());
+        holder.description.setText(group.getDateOfMeeting());
     }
 
     @Override

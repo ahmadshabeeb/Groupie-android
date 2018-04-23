@@ -1,5 +1,6 @@
 package app.kth.com.groupie.firstLogin;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -7,12 +8,19 @@ import android.os.Bundle;
 import android.view.View;
 
 
+import com.google.firebase.functions.FirebaseFunctions;
+
+import org.json.JSONObject;
+
 import app.kth.com.groupie.data.structure.PrivateProfile;
 
 import app.kth.com.groupie.R;
-public class FirstLoginActivity extends AppCompatActivity {
+import app.kth.com.groupie.parent.ParentActivity;
+import app.kth.com.groupie.utilities.Utility;
 
-    PrivateProfile privateProfile;
+public class FirstLoginActivity extends AppCompatActivity {
+    private FirebaseFunctions addProfileFunction;
+    private PrivateProfile privateProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +29,7 @@ public class FirstLoginActivity extends AppCompatActivity {
         UserProfileFragment firstFragment = new UserProfileFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
-
+        addProfileFunction = FirebaseFunctions.getInstance();
         privateProfile = new PrivateProfile();
 
     }
@@ -71,7 +79,17 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     public void addProfilePicture(String imageUri){
         privateProfile.setProfilePicture(imageUri);
-
+        addToDatabase(privateProfile);
+        goToHome();
     }
 
+    public void addToDatabase(PrivateProfile privateProfile){
+        JSONObject profileJson = Utility.toJson(privateProfile);
+        addProfileFunction.getHttpsCallable("dbUsersCreate").call(profileJson);
+    }
+
+    public void goToHome(){
+        Intent intent = new Intent(this, ParentActivity.class);
+        startActivity(intent);
+    }
 }

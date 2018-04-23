@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:padding="100dp"
+    android:background="@android:color/darker_gray"
+    android:id="@+id/group_card_view"
+    >
+
+    <TextView
+       android:id="@+id/group_subject_textview"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+        android:text="subject"
+        android:layout_centerHorizontal="true"
+       />
+    <TextView
+        android:id="@+id/group_topic_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="topic"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/group_subject_textview"
+        />
+    <TextView
+        android:id="@+id/group_location_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="location"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/group_topic_textview"
+        />
+    <TextView
+        android:id="@+id/group_description_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="description"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/group_location_textview"
+        />
+
+
+
+</RelativeLayout>

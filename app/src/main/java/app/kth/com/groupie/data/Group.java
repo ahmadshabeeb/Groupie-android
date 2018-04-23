@@ -4,6 +4,7 @@ import android.location.Location;
 
 import java.text.DateFormat;
 import java.util.List;
+import java.util.Map;
 
 import app.kth.com.groupie.data.structure.Profile;
 
@@ -16,14 +17,14 @@ public class Group {
     private String subject;
     private String topic;
     private String description;
-    private List<Profile>members;
+    private Map<String, Boolean> members;
     private int numberOfMembers;
     private int maxNumberOfMembers;
-    private DateFormat timeOfCreation;
-    private Location location;
+    private String timeOfCreation;
+    private String location;
     private String conversationId;
     private boolean isPublic;
-    private DateFormat dateOfMeeting;
+    private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
 
@@ -59,11 +60,11 @@ public class Group {
         this.description = description;
     }
 
-    public List<Profile> getMembers() {
+    public Map<String, Boolean> getMembers() {
         return members;
     }
 
-    public void setMembers(List<Profile> members) {
+    public void setMembers(Map<String, Boolean> members) {
         this.members = members;
     }
 
@@ -83,19 +84,19 @@ public class Group {
         this.maxNumberOfMembers = maxNumberOfMembers;
     }
 
-    public DateFormat getTimeOfCreation() {
+    public String getTimeOfCreation() {
         return timeOfCreation;
     }
 
-    public void setTimeOfCreation(DateFormat timeOfCreation) {
+    public void setTimeOfCreation(String timeOfCreation) {
         this.timeOfCreation = timeOfCreation;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -115,11 +116,11 @@ public class Group {
         this.isPublic = isPublic;
     }
 
-    public DateFormat getDateOfMeeting() {
+    public String getDateOfMeeting() {
         return dateOfMeeting;
     }
 
-    public void setDateOfMeeting(DateFormat dateOfMeeting) {
+    public void setDateOfMeeting(String dateOfMeeting) {
         this.dateOfMeeting = dateOfMeeting;
     }
 

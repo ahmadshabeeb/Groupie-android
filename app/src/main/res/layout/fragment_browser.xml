@@ -2,33 +2,8 @@
 <LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_green_light"
+    android:background="@color/offWhite"
     android:orientation="vertical">
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="browser"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        />
 
-
-    <Button
-        android:id="@+id/to_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="to preview"/>
-
-    <Button
-        android:id="@+id/to_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Qucik join"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="login"
-        android:id="@+id/to_login"/>
-
+    <include layout="@layout/list_group_recycle" />
 </LinearLayout>

@@ -27,12 +27,14 @@ public class BiographyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_biography, container, false);
+
+
         biography = (EditText) rootview.findViewById(R.id.bio_editText);
         Button nextButton = (Button) rootview.findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addBio(v);
+                addBio();
             }
         });
         return rootview;
@@ -51,10 +53,13 @@ public class BiographyFragment extends Fragment {
         super.onDetach();
     }
 
-    private void addBio(View v){
+    private void addBio(){
         String bio = biography.getText().toString();
+        if(bio.length() > 1){
+            bio = null;
+        }
         FirstLoginActivity activity = (FirstLoginActivity) getActivity();
-        activity.addBioToProfile(bio, v);
+        activity.addBioToProfile(bio);
     }
 
 }

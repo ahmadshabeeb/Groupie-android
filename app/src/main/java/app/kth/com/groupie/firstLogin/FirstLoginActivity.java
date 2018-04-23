@@ -1,18 +1,15 @@
 package app.kth.com.groupie.firstLogin;
 
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
+
 
 import app.kth.com.groupie.data.structure.PrivateProfile;
 
 import app.kth.com.groupie.R;
-import app.kth.com.groupie.login.ResetPasswordFragment;
 public class FirstLoginActivity extends AppCompatActivity {
 
     PrivateProfile privateProfile;
@@ -55,15 +52,25 @@ public class FirstLoginActivity extends AppCompatActivity {
         return capitalizedName;
     }
 
-    public void printBar(String message, View view){
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
 
-    public void addBioToProfile(String bio, View v){
+    public void addBioToProfile(String bio){
         privateProfile.setBio(bio);
-        printBar(bio + privateProfile.getFirstName(), v);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, new FavoriteSubjectFragment());
+        ft.commit();
+        }
+
+    public void addFavoriteSubject(String subject){
+        privateProfile.setFavoriteSubject(subject);
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.fragment_container, new ProfilePictureFragment());
+        ft.commit();
     }
 
+    public void addProfilePicture(String imageUri){
+        privateProfile.setProfilePicture(imageUri);
+    }
 
 }

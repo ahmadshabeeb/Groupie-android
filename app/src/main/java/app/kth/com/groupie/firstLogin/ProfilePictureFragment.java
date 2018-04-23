@@ -1,22 +1,29 @@
 package app.kth.com.groupie.firstLogin;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -26,6 +33,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.UUID;
 
 import app.kth.com.groupie.R;
@@ -40,7 +48,10 @@ public class ProfilePictureFragment extends Fragment {
     private Button uploadImageButton;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 1234;
-    private ImageView testImageView;
+    private  Button skipButton;
+    private View view;
+    private ImageView testImage;
+    private String imageStorageRef;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,11 +63,20 @@ public class ProfilePictureFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile_picture, container, false);
+        view = rootView;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         uploadImageButton = (Button) rootView.findViewById(R.id.upload_image_button);
         chooseImage = (ImageView) rootView.findViewById(R.id.choose_image_imageView);
-        testImageView = (ImageView) rootView.findViewById(R.id.test_imageView);
+        skipButton = (Button) rootView.findViewById(R.id.skip_button);
+        testImage = (ImageView) rootView.findViewById(R.id.testimage);
+        skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               skip();
+            }
+        });
+
         chooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +114,8 @@ public class ProfilePictureFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null){
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null
+                && data.getData() != null){
             filePath = data.getData();
             try{
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), filePath);
@@ -112,8 +133,8 @@ public class ProfilePictureFragment extends Fragment {
 
             // create cloud storage ref for image being uploaded
 
-            StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
-            ref.putFile(filePath)
+           final StorageReference ref = storageReference.child("images/" + UUID.randomUUID().toString());
+           ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -135,6 +156,23 @@ public class ProfilePictureFragment extends Fragment {
                             progressDialog.setMessage("Uploaded " + (int)progress + "%");
                         }
                     });
+           imageStorageRef = ref.toString();
+           setProfilePicture(imageStorageRef);
+
         }
+    }
+
+    public void setProfilePicture(String ref){
+        printBar(imageStorageRef, view);
+        FirstLoginActivity activity = (FirstLoginActivity) getActivity();
+        activity.addProfilePicture(ref);
+    }
+    public void printBar(String message, View view){
+        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
+    }
+
+    public void skip(){
+        printBar("skip this ting ", view);
     }
 }

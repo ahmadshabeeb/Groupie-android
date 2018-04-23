@@ -1,6 +1,6 @@
 package app.kth.com.groupie.groupMessaging;
 
-import android.net.Uri;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,11 +25,14 @@ import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import app.kth.com.groupie.Data.Structure.Message;
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.parent.ParentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupMessagingActivity extends AppCompatActivity {
@@ -61,8 +64,12 @@ public class GroupMessagingActivity extends AppCompatActivity {
     private Button mProfilePictureButton;
     private RecyclerView mMessageRecyclerView;
     private LinearLayoutManager mLinearLayoutManager;
+    private final String CHILD_CONVERSATIONS = "conversations";
     private final String CHILD_MESSAGES = "messages";
     private final String CHILD_USERS = "users";
+    private String mConversationId;
+    private DataSnapshot mConversationSnapshot;
+
     private EditText mMessageEditText;
 
     private DatabaseReference mFirebaseDatabaseReference;
@@ -71,9 +78,18 @@ public class GroupMessagingActivity extends AppCompatActivity {
 
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
-        //if (mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
-        if (mCurrentUser.getUid().equals("atuzNWxgGRMjDyoiokQlZCShWWv2")) return true;
+        if (mCurrentUser!=null &&
+                mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
         return false;
+    }
+
+    private void goToParentActivity() {
+        Intent intent = new Intent(this, ParentActivity.class);
+        startActivity(intent);
+    }
+
+    private DatabaseReference getMessageRef(DataSnapshot snapshot) {
+        return snapshot.getRef().child(CHILD_MESSAGES);
     }
 
     @Override
@@ -81,8 +97,11 @@ public class GroupMessagingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
 
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        // what to do if user comes to group messaging from the create group screen.
+        Intent intent = getIntent();
+        mConversationId = intent.getStringExtra("conversationId");
 
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         Log.d(TAG, "onCreate called.");
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
@@ -91,6 +110,24 @@ public class GroupMessagingActivity extends AppCompatActivity {
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+//        final DatabaseReference conversationsRef = mFirebaseDatabaseReference.child(CHILD_CONVERSATIONS);
+//        conversationsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Iterable<DataSnapshot> conversations = dataSnapshot.getChildren();
+//                for (DataSnapshot conversationSnapshot: conversations) {
+//                    if (conversationSnapshot.getKey().equals(mConversationId)) {
+//                        mConversationSnapshot = conversationSnapshot;
+//                    } else {
+//                        goToParentActivity();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {}
+//        });
+
         SnapshotParser<Message> parser = new SnapshotParser<Message>() {
             @Override
             public Message parseSnapshot(DataSnapshot snapshot) {
@@ -100,10 +137,10 @@ public class GroupMessagingActivity extends AppCompatActivity {
             }
         };
 
-        final DatabaseReference messagesDatabaseRef = mFirebaseDatabaseReference.child(CHILD_MESSAGES);
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
-                        .setQuery(messagesDatabaseRef, parser)
+         //               .setQuery(getMessageRef(mConversationSnapshot), parser)
+                        .setQuery(mFirebaseDatabaseReference.child(CHILD_MESSAGES), parser)
                         .build();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, messageViewHolder>(options) {
             @NonNull

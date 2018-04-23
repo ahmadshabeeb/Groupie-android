@@ -31,7 +31,6 @@
         android:text="login"
         android:id="@+id/to_login"/>
 
-<<<<<<< HEAD
     <Button
         android:id="@+id/to_register"
         android:layout_width="wrap_content"
@@ -43,8 +42,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="First login"/>
-
-
-=======
->>>>>>> development
+    
 </LinearLayout>

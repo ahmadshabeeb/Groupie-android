@@ -71,6 +71,7 @@ public class FirstLoginActivity extends AppCompatActivity {
 
     public void addProfilePicture(String imageUri){
         privateProfile.setProfilePicture(imageUri);
+
     }
 
 }

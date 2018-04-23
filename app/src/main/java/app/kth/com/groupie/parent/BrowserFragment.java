@@ -36,6 +36,7 @@ public class BrowserFragment extends Fragment {
             }
         });
 
+
         Button toRegister = (Button) rootView.findViewById(R.id.to_register);
         toRegister.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -44,6 +45,7 @@ public class BrowserFragment extends Fragment {
                 activity.toRegistrationActivity();
             }
         });
+
         Button toFirstLogin = (Button) rootView.findViewById(R.id.to_firstlogin);
         toFirstLogin.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -52,8 +54,7 @@ public class BrowserFragment extends Fragment {
             }
         });
 
-
-                return rootView;
+        return rootView;
     }
 
     @Override

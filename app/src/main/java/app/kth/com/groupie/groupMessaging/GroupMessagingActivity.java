@@ -1,5 +1,17 @@
 package app.kth.com.groupie.groupMessaging;
 
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.view.View;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,13 +43,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import app.kth.com.groupie.Data.Structure.Message;
+import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class GroupMessagingActivity extends AppCompatActivity {
+import app.kth.com.groupie.R;
 
-    public static class messageViewHolder extends RecyclerView.ViewHolder {
+public class GroupMessagingActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    ParentActivity activity;
+
+    public static class messageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CircleImageView profilePictureImageView;
         TextView messageItemReceivedTextView;
         TextView senderTextView;
@@ -55,6 +73,10 @@ public class GroupMessagingActivity extends AppCompatActivity {
             messageItemSentTextView = (TextView) itemView.findViewById(R.id.messageItemSentTextView);
         }
 
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick called.");
+        }
     }
 
     private static final String TAG = "LogMainActivity";
@@ -69,6 +91,14 @@ public class GroupMessagingActivity extends AppCompatActivity {
     private final String CHILD_USERS = "users";
     private String mConversationId;
     private DataSnapshot mConversationSnapshot;
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick called.");
+            goToParentActivity();
+        }
+    };
+    private View mViewHolder;
 
     private EditText mMessageEditText;
 
@@ -92,10 +122,26 @@ public class GroupMessagingActivity extends AppCompatActivity {
         return snapshot.getRef().child(CHILD_MESSAGES);
     }
 
+
+    private void initDrawer() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
+        initDrawer();
 
         // what to do if user comes to group messaging from the create group screen.
         Intent intent = getIntent();
@@ -139,26 +185,29 @@ public class GroupMessagingActivity extends AppCompatActivity {
 
         FirebaseRecyclerOptions<Message> options =
                 new FirebaseRecyclerOptions.Builder<Message>()
-         //               .setQuery(getMessageRef(mConversationSnapshot), parser)
+                        //               .setQuery(getMessageRef(mConversationSnapshot), parser)
                         .setQuery(mFirebaseDatabaseReference.child(CHILD_MESSAGES), parser)
                         .build();
         mFirebaseAdapter = new FirebaseRecyclerAdapter<Message, messageViewHolder>(options) {
             @NonNull
             @Override
             public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-                    Log.d(TAG, "messageViewHolder created - means user is not the sender");
-                    return new messageViewHolder(inflater.inflate(R.layout.message_item, parent, false));
+                Log.d(TAG, "messageViewHolder created - means user is not the sender");
+                mViewHolder = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
+                mViewHolder.findViewById(R.id.profilePictureImageView).setOnClickListener(mOnClickListener);
+                return new messageViewHolder(mViewHolder);
             }
             @Override
             protected void onBindViewHolder(messageViewHolder holder, int position, Message msg) {
                 Log.d(TAG, "onBindViewHolder called.");
                 if (userIsSender(msg)) {
+                    mViewHolder.setClickable(false);
                     holder.messageItemReceivedTextView.setVisibility(View.GONE);
                     holder.senderTextView.setVisibility(View.GONE);
                     holder.profilePictureImageView.setVisibility(View.GONE);
                     ((messageViewHolder) holder).messageItemSentTextView.setText(msg.getText());
                 } else {
+                    mViewHolder.setClickable(true);
                     holder.messageItemSentTextView.setVisibility(View.GONE);
                     ((messageViewHolder) holder).messageItemReceivedTextView.setText(msg.getText());
 //                    ((messageViewHolder) holder).senderTextView.setText(msg.getName());
@@ -213,8 +262,65 @@ public class GroupMessagingActivity extends AppCompatActivity {
                 mMessageEditText.setText("");
             }
         });
+
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.group_messaging, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_camera) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_manage) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 
     @Override
@@ -229,13 +335,3 @@ public class GroupMessagingActivity extends AppCompatActivity {
         mFirebaseAdapter.startListening();
     }
 }
-
-
-
-
-
-
-
-
-
-

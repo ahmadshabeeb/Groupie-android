@@ -13,8 +13,8 @@
         android:id="@+id/subject_imageview"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
         android:layout_centerVertical="true"
         android:src="@drawable/logo" />
 
@@ -30,9 +30,11 @@
         />
     <TextView
         android:id="@+id/group_subject_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:text="data"
+        android:textSize="16sp"
+        android:singleLine="true"
         android:layout_toRightOf="@id/subject_textview_fixed"
         android:layout_marginTop="20dp"
         />
@@ -50,9 +52,11 @@
         />
     <TextView
         android:id="@+id/group_topic_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:text="data"
+        android:textSize="16sp"
+        android:singleLine="true"
         android:layout_toRightOf="@id/topic_textview_fixed"
         android:layout_below="@id/group_subject_textview"
         />
@@ -70,11 +74,14 @@
         />
     <TextView
         android:id="@+id/group_location_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:text="data"
+        android:textSize="16sp"
+        android:singleLine="true"
         android:layout_toRightOf="@id/location_textview_fixed"
         android:layout_below="@id/group_topic_textview"
+
         />
 
     <TextView
@@ -89,14 +96,17 @@
         />
     <TextView
         android:id="@+id/group_description_textview"
-        android:layout_width="wrap_content"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:text="data"
+        android:textSize="16sp"
+        android:singleLine="true"
         android:layout_toRightOf="@id/description_textview_fixed"
         android:layout_below="@id/group_location_textview"
         />
 
     <Button
+        android:id="@+id/join_group_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"

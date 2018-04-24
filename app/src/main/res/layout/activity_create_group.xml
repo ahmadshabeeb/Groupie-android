@@ -23,124 +23,174 @@
         android:id="@+id/day1_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/darkNavy"
         android:textColor="@color/offWhite"
         android:textSize="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/day2_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintEnd_toStartOf="@+id/day2_button" />
 
     <Button
         android:id="@+id/day2_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/day3_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintEnd_toStartOf="@+id/day3_button" />
 
     <Button
         android:id="@+id/day4_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/day5_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintStart_toEndOf="@+id/day4_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintStart_toEndOf="@+id/day4_button" />
 
     <Button
         android:id="@+id/day6_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintStart_toEndOf="@+id/day5_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintStart_toEndOf="@+id/day5_button" />
 
     <Button
         android:id="@+id/day3_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/day4_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintEnd_toStartOf="@+id/day4_button" />
 
     <Button
         android:id="@+id/day7_button"
         android:layout_width="52dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintStart_toEndOf="@+id/day6_button"
-        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
+        app:layout_constraintStart_toEndOf="@+id/day6_button" />
 
     <EditText
         android:id="@+id/location_edittext"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:gravity="center"
         android:hint="Location"
         android:inputType="textPersonName"
+        android:backgroundTint="@color/darkNavy"
+        app:layout_constraintBottom_toTopOf="@+id/dayofmeeting_textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topic_edittext" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <EditText
         android:id="@+id/topic_edittext"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="260dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="Topic"
         android:gravity="center"
+        android:backgroundTint="@color/darkNavy"
+        android:hint="Topic"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/location_edittext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/create_button"
-        android:layout_width="304dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="Create"
+        android:layout_marginBottom="8dp"
         android:background="@color/darkNavy"
+        android:text="Create"
         android:textColor="@color/offWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/day4_button" />
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/description_edittext"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:hint="Description"
+        android:backgroundTint="@color/darkNavy"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/create_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <SeekBar
+        android:id="@+id/members_seekbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/description_edittext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/seekBar_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/members_seekbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/dayofmeeting_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:gravity="center"
+        android:text="day of meeting"
+        app:layout_constraintBottom_toTopOf="@+id/day4_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

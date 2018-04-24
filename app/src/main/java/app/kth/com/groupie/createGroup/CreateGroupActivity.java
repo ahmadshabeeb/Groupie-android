@@ -1,27 +1,43 @@
 package app.kth.com.groupie.createGroup;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.data.Group;
 
 public class CreateGroupActivity extends AppCompatActivity {
 
 
     Button currentDayButton;
     String currentDate;
+    FirebaseAuth mAuth;
+    private static SeekBar seek_bar;
+    private static TextView seekBarTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_group);
+        mAuth = FirebaseAuth.getInstance();
+        membersSeekBar();
 
         ImageButton goBack = (ImageButton) findViewById(R.id.back_button);
         goBack.setOnClickListener(new View.OnClickListener() {
@@ -156,7 +172,91 @@ public class CreateGroupActivity extends AppCompatActivity {
                 .setAction("Action", null).show();
     }
 
-    public void createGroup(View v){
+    public void membersSeekBar(){
+        seek_bar = (SeekBar) findViewById(R.id.members_seekbar);
+        seekBarTextView = (TextView) findViewById(R.id.seekBar_textview);
+
+        seek_bar.setMax(15);
+        seek_bar.setProgress(5);
+        seekBarTextView.setText("max number of members in group: " + seek_bar.getProgress());
+
+        seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            int progressValue;
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressValue = progress;
+                if (progress < 2){
+                    progressValue = 2;
+                }
+                seekBarTextView.setText("max number of members in group: " + progressValue);
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                seekBarTextView.setText("max number of members in group: " + progressValue);
+            }
+        });
+    }
+
+    //GET VALUES FOR THE GROUP
+    private String getTopic(){
+        EditText topic = (EditText) findViewById(R.id.topic_edittext);
+        String enteredTopic =  topic.getText().toString();
+        if (enteredTopic.length() < 1){
+            return null;
+        }
+        return enteredTopic;
+    }
+
+    private String getDescription(){
+        EditText description = (EditText) findViewById(R.id.description_edittext);
+        String enteredDesc =  description.getText().toString();
+        if (enteredDesc.length() < 1){
+            return null;
+        }
+        return enteredDesc;
+    }
+
+    private String getLocation(){
+        EditText location = (EditText) findViewById(R.id.location_edittext);
+        String enteredLoc =  location.getText().toString();
+        if (enteredLoc.length() < 1){
+            return null;
+        }
+        return enteredLoc;
+    }
+
+    private String getTodayDate(){
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(date);
+    }
+
+    public void createGroup(){
+        Group group = new Group();
+
+        int maxNumberOfMembers = seek_bar.getProgress();
+        if(maxNumberOfMembers < 2){
+            maxNumberOfMembers = 2;
+        }
+
+        group.setTimeOfCreation(getTodayDate());
+        group.setTopic(getTopic());
+        group.setHasMeetingDate(true);
+        group.setDescription(getDescription());
+        group.setDateOfMeeting(currentDate);
+        group.setOwner(mAuth.getCurrentUser().getUid());
+        group.setPublic(true);
+        group.setLocation(getLocation());
+        group.setNumberOfMembers(1);
+        group.setMaxNumberOfMembers(maxNumberOfMembers);
+
+        Map<String, Boolean> members = new HashMap<>();
+        members.put(mAuth.getCurrentUser().getUid(), true);
+        group.setMembers(members);
 
     }
 

@@ -73,7 +73,7 @@ public class ProfilePictureFragment extends Fragment {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               skip();
+               setProfilePicture(null);
             }
         });
 
@@ -170,9 +170,5 @@ public class ProfilePictureFragment extends Fragment {
     public void printBar(String message, View view){
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
-    }
-
-    public void skip(){
-        printBar("skip this ting ", view);
     }
 }

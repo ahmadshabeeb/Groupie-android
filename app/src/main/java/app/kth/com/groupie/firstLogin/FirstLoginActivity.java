@@ -67,7 +67,7 @@ public class FirstLoginActivity extends AppCompatActivity {
         FragmentTransaction ft = fm.beginTransaction();
         ft.replace(R.id.fragment_container, new FavoriteSubjectFragment());
         ft.commit();
-        }
+    }
 
     public void addFavoriteSubject(String subject){
         privateProfile.setFavoriteSubject(subject);
@@ -92,4 +92,5 @@ public class FirstLoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ParentActivity.class);
         startActivity(intent);
     }
+
 }

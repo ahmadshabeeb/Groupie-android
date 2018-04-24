@@ -9,6 +9,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import app.kth.com.groupie.CreateGroupActivity;
 import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
@@ -22,7 +25,8 @@ public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
     ProfileFragment profileFragment;
     BrowserFragment browserFragment;
-
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -44,16 +48,27 @@ public class ParentActivity extends AppCompatActivity {
     };
 
     @Override
+    public void onStart(){
+        super.onStart();
+        //Check if user already signed in and update UI
+        currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    public void updateUI(FirebaseUser currentUser){
+        if (currentUser == null){
+            toLoginActivity();
+        }
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
-
         homeFragment = new HomeFragment();
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
-
+        mAuth = FirebaseAuth.getInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -100,8 +115,4 @@ public class ParentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void toFirstLogin(){
-        Intent intent = new Intent(this, FirstLoginActivity.class);
-        startActivity(intent);
-    }
 }

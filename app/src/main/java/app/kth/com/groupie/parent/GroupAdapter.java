@@ -11,19 +11,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groupArrayList = new ArrayList<>();
@@ -41,15 +44,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
 
-
                 if (group.getIsPublic()) {
                     group.setGroupId(dataSnapshot.getKey());
                     groupArrayList.add(group);
                     Log.d("TAG", "GROUP KEY: " + group.getGroupId());
                 }
-
-
-
                 notifyDataSetChanged();
             }
 
@@ -208,11 +207,37 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("TAG" , "Join Group!");
-                //join the group via Cloud functions
-                // go somewhere in the app
-                String groupId = group.getGroupId();
-                mFunction.getHttpsCallable("dbGroupsJoin").call(groupId);
+                final String groupId = group.getGroupId();
+
+                Utility.callCloudFunctions("dbGroupsJoin", groupId)
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Exception e = task.getException();
+
+                                    if (e instanceof FirebaseFunctionsException) {
+                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                        FirebaseFunctionsException.Code code = ffe.getCode();
+                                        //Object details = ffe.getDetails();
+                                        String message = ffe.getMessage();
+                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
+                                    }
+
+                                    // [START_EXCLUDE]
+                                    Log.d("TAG" , "id: " + groupId);
+                                    Log.w("TAG", "onFailure", e);
+                                    return;
+                                    // [END_EXCLUDE]
+                                } else {
+                                    Log.d("TAG", "successfull " + groupId);
+                                }
+
+                                String result = task.getResult();
+                                Log.d("TAG" , "id: " + groupId);
+                                Log.d("TAG", "result: " + result );
+                            }
+                        });
             }
         });
     }

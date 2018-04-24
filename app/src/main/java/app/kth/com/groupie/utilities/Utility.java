@@ -26,7 +26,7 @@ public class Utility {
         return jsonObject;
     }
 
-    public static Task<String> getDataFromCloudFunctions(String functionName, Object data) {
+    public static Task<String> callCloudFunctions(String functionName, Object data) {
         FirebaseFunctions mFunction = FirebaseFunctions.getInstance();
 
         return mFunction

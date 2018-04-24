@@ -36,7 +36,17 @@ public class BrowserFragment extends Fragment {
             }
         });
 
-                return rootView;
+
+        Button toRegister = (Button) rootView.findViewById(R.id.to_register);
+        toRegister.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                //go to group activity
+                Log.d("TAG", "working");
+                activity.toRegistrationActivity();
+            }
+        });
+
+        return rootView;
     }
 
     @Override

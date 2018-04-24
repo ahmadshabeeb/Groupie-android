@@ -13,6 +13,10 @@ import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.createGroup.CreateGroupActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.registration.RegistrationActivity;
@@ -21,7 +25,8 @@ public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
     ProfileFragment profileFragment;
     BrowserFragment browserFragment;
-
+    FirebaseAuth mAuth;
+    FirebaseUser currentUser;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -43,16 +48,28 @@ public class ParentActivity extends AppCompatActivity {
     };
 
     @Override
+    public void onStart(){
+        super.onStart();
+        //Check if user already signed in and update UI
+        currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
+    }
+
+    public void updateUI(FirebaseUser currentUser){
+        if (currentUser == null){
+            toLoginActivity();
+        }
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
-
         homeFragment = new HomeFragment();
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
-
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -76,6 +93,11 @@ public class ParentActivity extends AppCompatActivity {
         }
 
     }
+    public void signOut(){
+        mAuth.signOut();
+        onStart();
+    }
+
     public void toGroupMessagingActivity(){
         Intent intent = new Intent(this, GroupMessagingActivity.class);
         startActivity(intent);
@@ -98,4 +120,5 @@ public class ParentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
     }
+
 }

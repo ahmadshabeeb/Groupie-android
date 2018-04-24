@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="app.kth.com.groupie">
-
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -23,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".registration.RegistrationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -38,11 +40,12 @@
         <activity
             android:name=".SettingsActivity"
             android:label="Group Messaging"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".createGroup.CreateGroupActivity"
             android:label="@string/title_activity_create_group"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".firstLogin.FirstLoginActivity"/>
     </application>
 
 </manifest>

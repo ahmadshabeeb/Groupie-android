@@ -12,6 +12,7 @@ import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -41,6 +42,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private TextView resetPopUp;
     private ImageButton backButton;
     private Button registerButton;
+    private CheckBox termsCheckBox;
     private String [] domains = {"kth.se", "su.se", "ki.se", "hhs.se", "sh.se", "kmh.se", "shh.se", "fhs.se", "esh.se", "konstfack.se", "smi.se", "uniarts.se", "kkh.se", "ths.se", "chiro-student.se", "gih.se", "rkh.se"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +54,17 @@ public class RegistrationActivity extends AppCompatActivity {
         registerButton = (Button) findViewById(R.id.registerButton);
         resetPopUp = (TextView) findViewById(R.id.resetPasswordText);
         backButton = (ImageButton) findViewById(R.id.goback_button);
+        termsCheckBox = (CheckBox) findViewById(R.id.termsAndService_checkbox);
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        //Check if user already signed in and update UI
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        toRegister();
     }
 
 
-    public void updateUI(final FirebaseUser currentUser){
+    public void toRegister(){
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 resetPopUp.setText("");
@@ -72,20 +73,21 @@ public class RegistrationActivity extends AppCompatActivity {
                 if (emailAndPassword[1].equals(emailAndPassword[2])){
                     if (checkEmail(emailAndPassword[0])){
                         if (!emailAndPassword[1].isEmpty()){
-                            createAccount(emailAndPassword[0], emailAndPassword[1], view);
+                            if (termsCheckBox.isChecked()){
+                                createAccount(emailAndPassword[0], emailAndPassword[1], view);
+                            }
+                            else {
+                                errorMsg = "You need to accept the terms and service to sign up!";
+                            }
                         }
                     }else{
                         errorMsg = "Your email needs to have one of Stockholm's Universities' domain in order to register!";
-                        error.setText(errorMsg);
-                        errorMsg = null;
-                        updateUI(currentUser);
                     }
                 } else {
                     errorMsg = "Passwords didn't match!";
-                    error.setText(errorMsg);
-                    errorMsg = null;
-                    updateUI(currentUser);
                 }
+                error.setText(errorMsg);
+                errorMsg = null;
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +106,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
+
     }
 
     public void createAccount(String email, String password, final View view){
@@ -120,11 +123,8 @@ public class RegistrationActivity extends AppCompatActivity {
                             verify();
                             signOut();
                             //send this user to login page
-                            updateUI(user);
                             errorMsg="Congratulations! we have sent you a confirmation email with a link that you need to click before you are able to log in." + "\n" + "We look forward to seeing you on groupie :)";
-                            error.setText(errorMsg);
                             resetPopUp.setText("");
-                            errorMsg = null;
                         } else {
                             try {
                                 throw task.getException();
@@ -138,10 +138,9 @@ public class RegistrationActivity extends AppCompatActivity {
                             } catch (Exception e){
                                 errorMsg = "Something went wrong :( Please try again!";
                             }
-                            error.setText(errorMsg);
-                            errorMsg = null;
-                            updateUI(null);
                         }
+                    error.setText(errorMsg);
+                    errorMsg = null;
                     }
                 });
     }
@@ -154,14 +153,12 @@ public class RegistrationActivity extends AppCompatActivity {
                         if (task.isSuccessful()){
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
                         }
                         else{
                             // If sign in fails, display a message to the user.
                             errorMsg = "Authentication Failed";
                             String error = ((TextView) findViewById(R.id.errorText)).getText().toString();
                             error = errorMsg;
-                            updateUI(null);
                         }
                     }
                 });
@@ -175,7 +172,6 @@ public class RegistrationActivity extends AppCompatActivity {
             errorMsg = "please fill out all the fields!";
             error.setText(errorMsg);
             errorMsg = null;
-            updateUI(mAuth.getCurrentUser());
         }
         return new String[]{email, password, cpassword};
     }

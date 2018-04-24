@@ -146,9 +146,6 @@ public class LoginFragment extends Fragment {
         if((email.length() == 0) | (password.length() == 0)){
             return "*Please enter both email and password";
         }
-        if(password.length() < 4){
-            return "*The password needs to be atleast 7 characters";
-        }
         return null;
     }
 

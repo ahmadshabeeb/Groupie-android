@@ -55,7 +55,7 @@ public class BiographyFragment extends Fragment {
 
     private void addBio(){
         String bio = biography.getText().toString();
-        if(bio.length() > 1){
+        if(bio.length() < 1){
             bio = null;
         }
         FirstLoginActivity activity = (FirstLoginActivity) getActivity();

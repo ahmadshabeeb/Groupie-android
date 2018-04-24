@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import app.kth.com.groupie.firstLogin.FirstLoginActivity;
 import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.registration.RegistrationActivity;
 
@@ -37,6 +38,13 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed(){
+        // don't let the user go back
+        this.finishAffinity();
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -73,7 +81,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToHome(){
-        Intent intent = new Intent(this, ParentActivity.class);
+        finish();
+    }
+    public void toFirstLogin(){
+        Intent intent = new Intent(this, FirstLoginActivity.class);
         startActivity(intent);
     }
 }

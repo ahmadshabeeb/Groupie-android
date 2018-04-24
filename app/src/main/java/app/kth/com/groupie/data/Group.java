@@ -108,7 +108,7 @@ public class Group {
         this.conversationId = conversationId;
     }
 
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
 

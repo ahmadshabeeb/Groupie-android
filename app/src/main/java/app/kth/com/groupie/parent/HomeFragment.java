@@ -23,7 +23,7 @@ public class HomeFragment extends Fragment {
         toGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                activity.toGroupMessagingActivity();
+                activity.toLoginActivity();
             }
         });
 

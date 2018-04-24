@@ -11,12 +11,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import java.util.ArrayList;
 
@@ -27,8 +29,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     private ArrayList<Group> groupArrayList = new ArrayList<>();
     private Context context;
     private static int NUM_GROUPS_TO_LOAD = 10;
+    private FirebaseFunctions mFunction;
 
-    public GroupAdapter(DatabaseReference databaseReference, Context context) {
+    public GroupAdapter(final DatabaseReference databaseReference, Context context) {
         this.context = context;
 
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
@@ -37,7 +40,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
-                groupArrayList.add(group);
+
+
+                if (group.getIsPublic()) {
+                    group.setGroupId(dataSnapshot.getKey());
+                    groupArrayList.add(group);
+                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
+                }
+
+
+
                 notifyDataSetChanged();
             }
 
@@ -189,16 +201,19 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-    private void setJoinGroupButton (Group group, GroupViewHolder holder){
+    private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
         // Join group button
+        mFunction = FirebaseFunctions.getInstance();
+
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("TAG" , "Join Group!");
                 //join the group via Cloud functions
                 // go somewhere in the app
+                String groupId = group.getGroupId();
+                mFunction.getHttpsCallable("dbGroupsJoin").call(groupId);
             }
         });
     }
-
 }

@@ -19,32 +19,30 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".registration.RegistrationActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".login.LoginActivity"/>
-
-
         <activity
-            android:name=".CreateGroupActivity"
-            android:label="Create group"
-            android:theme="@style/AppTheme" />
+            android:name=".registration.RegistrationActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".groupMessaging.GroupMessagingActivity"
             android:label="Group Messaging"
             android:theme="@style/AppTheme" />
-        <activity android:name=".EditProfileActivity"
+        <activity
+            android:name=".EditProfileActivity"
             android:label="Edit Profile"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SettingsActivity"
             android:label="Group Messaging"
-            android:theme="@style/AppTheme">
-        </activity>
-
+            android:theme="@style/AppTheme"></activity>
+        <activity
+            android:name=".createGroup.CreateGroupActivity"
+            android:label="@string/title_activity_create_group"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

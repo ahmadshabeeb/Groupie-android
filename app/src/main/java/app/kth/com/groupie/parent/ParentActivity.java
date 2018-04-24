@@ -9,10 +9,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import app.kth.com.groupie.CreateGroupActivity;
 import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.registration.RegistrationActivity;

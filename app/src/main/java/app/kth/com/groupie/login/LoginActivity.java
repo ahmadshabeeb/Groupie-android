@@ -50,16 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void goToResetFromRegistration(){
-        Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ft.replace(app.kth.com.groupie.R.id.fragment_container, new ResetPasswordFragment());
-        ft.commit();
-
-    }
-
     public void goToSignIn() {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();

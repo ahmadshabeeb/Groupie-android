@@ -45,7 +45,6 @@ public class LoginFragment extends Fragment {
         // Inflate the layout for this fragment
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
 
-
         //LOG IN BUTTON
         Button loginbutton = (Button) rootview.findViewById(R.id.signin_button);
         loginbutton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +77,6 @@ public class LoginFragment extends Fragment {
             }
         });
 
-
         return rootview;
     }
 
@@ -109,6 +107,9 @@ public class LoginFragment extends Fragment {
                                             activity.goToHome();
                                         }else{
                                             activity.toFirstLogin();
+                                            if(mAuth.getCurrentUser() != null){
+                                                activity.goToHome();
+                                            }
                                         }
                                     }
 
@@ -141,14 +142,12 @@ public class LoginFragment extends Fragment {
         errorTextView.setText(errorMessage);
     }
 
-
     private String checkEmailandPassword(String email, String password){
         if((email.length() == 0) | (password.length() == 0)){
             return "*Please enter both email and password";
         }
         return null;
     }
-
 
     @Override
     public void onDetach() {
@@ -165,8 +164,6 @@ public class LoginFragment extends Fragment {
         super.onAttach(context);
         activity = (LoginActivity) getActivity();
     }
-
-
 
 }
 

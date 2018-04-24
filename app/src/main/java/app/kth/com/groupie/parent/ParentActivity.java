@@ -68,6 +68,7 @@ public class ParentActivity extends AppCompatActivity {
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -92,6 +93,11 @@ public class ParentActivity extends AppCompatActivity {
         }
 
     }
+    public void signOut(){
+        mAuth.signOut();
+        onStart();
+    }
+
     public void toGroupMessagingActivity(){
         Intent intent = new Intent(this, GroupMessagingActivity.class);
         startActivity(intent);

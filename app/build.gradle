@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "app.kth.com.groupie"
-        minSdkVersion 27
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -48,6 +48,6 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
     //adding glid library
-    compile 'com.github.bumptech.glide:glide:4.3.1'
+    implementation 'com.github.bumptech.glide:glide:4.3.1'
 }
 apply plugin: 'com.google.gms.google-services'

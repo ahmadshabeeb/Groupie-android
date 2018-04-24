@@ -60,11 +60,11 @@ public class RegistrationActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        updateUI();
+        toRegister();
     }
 
 
-    public void updateUI(){
+    public void toRegister(){
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 resetPopUp.setText("");
@@ -123,7 +123,6 @@ public class RegistrationActivity extends AppCompatActivity {
                             verify();
                             signOut();
                             //send this user to login page
-                            updateUI();
                             errorMsg="Congratulations! we have sent you a confirmation email with a link that you need to click before you are able to log in." + "\n" + "We look forward to seeing you on groupie :)";
                             resetPopUp.setText("");
                         } else {

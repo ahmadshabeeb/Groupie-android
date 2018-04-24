@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctions;
 
 import org.json.JSONObject;
@@ -15,25 +16,34 @@ import org.json.JSONObject;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseFunctions addProfileFunction;
     private PrivateProfile privateProfile;
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_login);
 
+        mAuth = FirebaseAuth.getInstance();
         UserProfileFragment firstFragment = new UserProfileFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
         addProfileFunction = FirebaseFunctions.getInstance();
         privateProfile = new PrivateProfile();
-
     }
 
+    @Override
+    public void onBackPressed(){
+        // don't let the user go back
+        finish();
+        mAuth.signOut();
+    }
 
     public void addInfoToProfile(String firstName, String lastName, String school,
                                  String fieldOfStudy, String studyLocation, View v){
@@ -80,7 +90,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     public void addProfilePicture(String imageUri){
         privateProfile.setProfilePicture(imageUri);
         addToDatabase(privateProfile);
-        goToHome();
+        finish();
     }
 
     public void addToDatabase(PrivateProfile privateProfile){
@@ -88,9 +98,15 @@ public class FirstLoginActivity extends AppCompatActivity {
         addProfileFunction.getHttpsCallable("dbUsersCreate").call(profileJson);
     }
 
-    public void goToHome(){
-        Intent intent = new Intent(this, ParentActivity.class);
-        startActivity(intent);
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mAuth.signOut();
     }
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        mAuth.signOut();
+    }
 }

@@ -27,8 +27,6 @@ public class BiographyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_biography, container, false);
-
-
         biography = (EditText) rootview.findViewById(R.id.bio_editText);
         Button nextButton = (Button) rootview.findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {

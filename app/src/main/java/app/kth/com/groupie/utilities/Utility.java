@@ -1,6 +1,7 @@
 package app.kth.com.groupie.utilities;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
@@ -35,8 +36,14 @@ public class Utility {
                 .continueWith(new Continuation<HttpsCallableResult, String>() {
                     @Override
                     public String then(@NonNull Task<HttpsCallableResult> task) throws Exception {
-                        String result = task.getResult().getData().toString();
-                        return result;
+
+                        if(task.getResult().getData() != null){
+                            return task.getResult().getData().toString();
+
+                        }else {
+                            Log.d("ERROR", "task.getResult().getData() is returning null");
+                            return null;
+                        }
                     }
                 });
     }

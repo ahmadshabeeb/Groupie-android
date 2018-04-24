@@ -1,6 +1,7 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
@@ -224,18 +227,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                                         Log.d("TAG", "EROR CODE: " + code + " ... " + message);
                                     }
 
-                                    // [START_EXCLUDE]
-                                    Log.d("TAG" , "id: " + groupId);
                                     Log.w("TAG", "onFailure", e);
+                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     return;
-                                    // [END_EXCLUDE]
                                 } else {
-                                    Log.d("TAG", "successfull " + groupId);
+                                    String result = task.getResult();
+                                    context.startActivity(new Intent(context , GroupMessagingActivity.class));
                                 }
-
-                                String result = task.getResult();
-                                Log.d("TAG" , "id: " + groupId);
-                                Log.d("TAG", "result: " + result );
                             }
                         });
             }

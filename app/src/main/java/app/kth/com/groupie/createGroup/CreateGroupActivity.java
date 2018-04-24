@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import app.kth.com.groupie.Data.Group;
 import app.kth.com.groupie.R;
 
 public class CreateGroupActivity extends AppCompatActivity {
@@ -158,7 +157,6 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
 
     public void createGroup(View v){
-        Group group = new Group();
 
     }
 

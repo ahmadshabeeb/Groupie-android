@@ -35,7 +35,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     private ArrayList<Group> groupArrayList = new ArrayList<>();
     private Context context;
     private static int NUM_GROUPS_TO_LOAD = 10;
-    private FirebaseFunctions mFunction;
 
     public GroupAdapter(final DatabaseReference databaseReference, Context context) {
         this.context = context;
@@ -91,20 +90,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         TextView locationTitle = (TextView) itemView.findViewById(R.id.location_textview_fixed);
         TextView descriptionTitle = (TextView) itemView.findViewById(R.id.description_textview_fixed);
 
-
-
         public GroupViewHolder(View itemView) {
             super(itemView);
         }
     }
 
-
-
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group, parent, false);
-
         return new GroupViewHolder(v);
     }
 
@@ -121,37 +115,31 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public int getItemCount() {
         return groupArrayList.size();
     }
-
     
     private void setFields(Group group, GroupViewHolder holder) {
         holder.subject.setText(group.getSubject());
 
         // Empty fields are hidden
-        if(group.getTopic() == null){
+        if (group.getTopic() == null) {
             holder.topic.setText("");
             holder.topicTitle.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.topic.setText(group.getTopic());
             holder.topicTitle.setVisibility(View.VISIBLE);
-
         }
 
-        if(group.getLocation() == null){
+        if (group.getLocation() == null) {
             holder.location.setText("");
             holder.locationTitle.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             holder.location.setText(group.getLocation());
             holder.locationTitle.setVisibility(View.VISIBLE);
         }
 
-        if(group.getDescription()== null){
+        if (group.getDescription()== null) {
             holder.description.setText("");
             holder.descriptionTitle.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             holder.description.setText(group.getDescription());
             holder.descriptionTitle.setVisibility(View.VISIBLE);
         }
@@ -204,9 +192,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
-        // Join group button
-        mFunction = FirebaseFunctions.getInstance();
-
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -32,6 +32,7 @@ public class ParentActivity extends AppCompatActivity {
     BrowserFragment browserFragment;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -82,7 +83,6 @@ public class ParentActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         MenuInflater inflater = getMenuInflater();
-
         inflater.inflate(R.menu.parent_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -92,13 +92,11 @@ public class ParentActivity extends AppCompatActivity {
             case R.id.action_create_group:
 //                Intent intent = new Intent(this, CreateGroupActivity.class);
 //                startActivity(intent);
-
                 createGroup();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void createGroup() {
@@ -151,5 +149,4 @@ public class ParentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
     }
-
 }

@@ -15,7 +15,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         android:layout_centerVertical="true"
-        android:src="@drawable/logo" />
+        android:scaleType="center"
+        />
 
     <TextView
         android:id="@+id/subject_textview_fixed"

@@ -25,25 +25,28 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0'
 
 
-    implementation 'com.android.support:design:27.1.1'
-    implementation 'com.android.support:support-vector-drawable:27.1.1'
-
-    implementation 'com.android.support:support-v4:27.1.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    //android front end
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:support-vector-drawable:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+
 
     //firebase
     implementation 'com.google.firebase:firebase-core:15.0.0'
     implementation 'com.google.firebase:firebase-database:15.0.0'
     implementation 'com.google.firebase:firebase-functions:15.0.0'
     implementation 'com.google.firebase:firebase-auth:15.0.0'
+    implementation 'com.google.firebase:firebase-storage:15.0.0'
 
-    // Gson
+    //Gson for JSON <-> Java
     implementation 'com.google.code.gson:gson:2.8.2'
 
-    //recycle view
-    implementation 'com.android.support:recyclerview-v7:27.1.1'
-
+    //Glide for images
+    implementation 'com.github.bumptech.glide:glide:4.3.1'
 }
 apply plugin: 'com.google.gms.google-services'

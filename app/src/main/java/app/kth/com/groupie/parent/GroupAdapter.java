@@ -142,7 +142,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             holder.locationTitle.setVisibility(View.GONE);
         }
         else {
-            holder.location.setText(group.getTopic());
+            holder.location.setText(group.getLocation());
             holder.locationTitle.setVisibility(View.VISIBLE);
         }
 
@@ -152,7 +152,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
         else
         {
-            holder.description.setText(group.getTopic());
+            holder.description.setText(group.getDescription());
             holder.descriptionTitle.setVisibility(View.VISIBLE);
         }
     }
@@ -162,43 +162,43 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         switch (group.getSubject()){
             case "Language" :
                 //replace by the right image
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.language);
                 break;
 
             case "Programming" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.programming);
                 break;
 
-            case "Maths" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+            case "Math" :
+                holder.subjectImage.setBackgroundResource(R.drawable.math);
                 break;
 
             case "Business and Economics" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.business);
                 break;
 
             case "Engineering" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.engineering);
                 break;
 
             case "Natural Science" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.science);
                 break;
 
             case "Law and Political Science" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.law);
                 break;
 
             case "Art and Music" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.music);
                 break;
 
             case "Other" :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.other);
                 break;
 
             default :
-                holder.subjectImage.setBackgroundResource(R.drawable.logo);
+                holder.subjectImage.setBackgroundResource(R.drawable.other);
                 break;
         }
     }

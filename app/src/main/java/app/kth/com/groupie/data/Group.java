@@ -1,4 +1,4 @@
-package app.kth.com.groupie.Data;
+package app.kth.com.groupie.data;
 
 import android.location.Location;
 
@@ -6,7 +6,7 @@ import java.text.DateFormat;
 import java.util.List;
 import java.util.Map;
 
-import app.kth.com.groupie.Data.Structure.Profile;
+import app.kth.com.groupie.data.structure.Profile;
 
 /**
  * Created by Ahmad on 4/11/2018.
@@ -27,28 +27,6 @@ public class Group {
     private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
-
-    public Group(String groupId, String subject, String topic, String description, Map<String, Boolean> members,
-                 int numberOfMembers, int maxNumberOfMembers, String timeOfCreation, String location,
-                 String conversationId, boolean isPublic, String dateOfMeeting,
-                 boolean hasMeetingDate, String owner) {
-        this.groupId = groupId;
-        this.subject = subject;
-        this.topic = topic;
-        this.description = description;
-        this.members = members;
-        this.numberOfMembers = numberOfMembers;
-        this.maxNumberOfMembers = maxNumberOfMembers;
-        this.timeOfCreation = timeOfCreation;
-        this.location = location;
-        this.conversationId = conversationId;
-        this.isPublic = isPublic;
-        this.dateOfMeeting = dateOfMeeting;
-        this.hasMeetingDate = hasMeetingDate;
-        this.owner = owner;
-    }
-
-    public Group() {}
 
     public String getGroupId() {
         return groupId;
@@ -130,12 +108,12 @@ public class Group {
         this.conversationId = conversationId;
     }
 
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public String getDateOfMeeting() {
@@ -162,3 +140,5 @@ public class Group {
         this.owner = owner;
     }
 }
+
+

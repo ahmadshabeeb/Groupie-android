@@ -1,4 +1,4 @@
-package app.kth.com.groupie.Data.Structure;
+package app.kth.com.groupie.data.structure;
 
 /**
  * Created by Ahmad on 4/11/2018.

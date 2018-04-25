@@ -88,4 +88,6 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    <string name="chooseSubject">Please choose your favorite subject from one of the nine below. You can change this at any time in your profile.</string>
 </resources>

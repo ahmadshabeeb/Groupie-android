@@ -40,13 +40,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import app.kth.com.groupie.Data.Group;
-import app.kth.com.groupie.Data.Structure.Message;
-import app.kth.com.groupie.Data.Structure.Profile;
-import app.kth.com.groupie.Data.User;
+import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.data.structure.Message;
+import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;

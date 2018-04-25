@@ -1,10 +1,12 @@
-package app.kth.com.groupie.Data.Structure;
+package app.kth.com.groupie.data.structure;
 
 import java.text.DateFormat;
 
 /**
  * Created by Ahmad on 4/11/2018.
  */
+
+//Do we need getters and setters for everything?
 
 public class Message {
     private String senderUserId;
@@ -14,18 +16,9 @@ public class Message {
     private String imageUrl;
     private DateFormat timeSent;
 
-    public Message() {}
-
-    public Message(String senderUserId, String name, String senderPicture, String text, String imageUrl, DateFormat timeSent) {
-        this.senderUserId = senderUserId;
-        this.name = name;
-        this.senderPicture = senderPicture;
-        this.text = text;
-        this.imageUrl = imageUrl;
-        this.timeSent = timeSent;
+    public String getSenderUserId() {
+        return senderUserId;
     }
-
-    public String getSenderUserId() { return senderUserId; }
 
     public void setSenderUserId(String senderUserId) {
         this.senderUserId = senderUserId;

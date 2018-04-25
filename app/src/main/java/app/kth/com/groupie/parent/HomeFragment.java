@@ -19,11 +19,10 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
 
-        Button toGroup = (Button) rootView.findViewById(R.id.to_group);
-        toGroup.setOnClickListener(new View.OnClickListener() {
+        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
+        signOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
-                //go to group activity
-                activity.toGroupMessagingActivity();
+                activity.signOut();
             }
         });
 

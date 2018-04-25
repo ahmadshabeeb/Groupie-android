@@ -17,17 +17,25 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctions;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.parent.ParentActivity;
 
 
 public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
-    String errorMessage;
-    LoginActivity activity;
-    EditText inputEmail;
-    EditText inputPassword;
-    TextView errorTextView;
+    private String errorMessage;
+    private LoginActivity activity;
+    private EditText inputEmail;
+    private EditText inputPassword;
+    private TextView errorTextView;
+    private DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,7 +44,6 @@ public class LoginFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         // Inflate the layout for this fragment
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_login, container, false);
-
 
         //LOG IN BUTTON
         Button loginbutton = (Button) rootview.findViewById(R.id.signin_button);
@@ -60,6 +67,7 @@ public class LoginFragment extends Fragment {
         inputEmail = (EditText) rootview.findViewById(R.id.email_edittext);
         inputPassword = (EditText) rootview.findViewById(R.id.password_edittext);
         errorTextView = (TextView) rootview.findViewById(R.id.errorMessage);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
         TextView forgotPassword = rootview.findViewById(R.id.forgotpassword_textview);
         forgotPassword.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +76,6 @@ public class LoginFragment extends Fragment {
                 activity.goToReset();
             }
         });
-
 
         return rootview;
     }
@@ -85,16 +92,33 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    public void logIn(String email, String password, final View view){
+    public void logIn(String email, String password, final View view) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //UPDATE USER   INTERFACE move on to homepage?
-                            if(mAuth.getCurrentUser().isEmailVerified()){
-                                activity.goToHome();
-                            } else{
+                            if(mAuth.getCurrentUser().isEmailVerified()) {
+                                databaseReference.child("users").child(mAuth.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()){
+                                            activity.goToHome();
+                                        }else{
+                                            activity.toFirstLogin();
+                                            if(mAuth.getCurrentUser() != null){
+                                                activity.goToHome();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            } else {
                                 printErrorMessage("Please Verify Your Email To Log In");
                                 mAuth.signOut();
                             }
@@ -118,17 +142,12 @@ public class LoginFragment extends Fragment {
         errorTextView.setText(errorMessage);
     }
 
-
     private String checkEmailandPassword(String email, String password){
         if((email.length() == 0) | (password.length() == 0)){
             return "*Please enter both email and password";
         }
-        if(password.length() < 7){
-            return "*The password needs to be atleast 7 characters";
-        }
         return null;
     }
-
 
     @Override
     public void onDetach() {
@@ -145,8 +164,6 @@ public class LoginFragment extends Fragment {
         super.onAttach(context);
         activity = (LoginActivity) getActivity();
     }
-
-
 
 }
 

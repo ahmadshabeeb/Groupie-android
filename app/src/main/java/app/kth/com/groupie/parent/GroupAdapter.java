@@ -216,7 +216,9 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    context.startActivity(new Intent(context , GroupMessagingActivity.class));
+                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
+                                    intent.putExtra("group", group);
+                                    context.startActivity(intent);
                                 }
                             }
                         });

@@ -39,7 +39,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.Message;
@@ -126,12 +125,6 @@ public class GroupMessagingActivity extends AppCompatActivity
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
 
-
-    private Group genInitGroup() {
-        return new Group("","","","",new HashMap<String, Boolean>(),
-                0, 0, null, null,
-                "", true, null, true, "");
-    }
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
         if (mCurrentUser!=null &&
@@ -209,9 +202,8 @@ public class GroupMessagingActivity extends AppCompatActivity
         initViews();
 
         Intent intent = getIntent();
-        //mGroupId = intent.getStringExtra("groupId");
-
-        mGroupId = "-LAmufsgVQ7QI5m7UWZp";
+        mGroup = (Group) intent.getParcelableExtra("group");
+        mGroupId = "-LAvz1HsItFpbo97t5g_"; // FIX LATERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
 
         Log.d(TAG, "onCreate called.");
         mLinearLayoutManager = new LinearLayoutManager(this);
@@ -223,16 +215,9 @@ public class GroupMessagingActivity extends AppCompatActivity
         final DatabaseReference conversationsRef = mFirebaseDatabaseReference.child(CHILD_CONVERSATIONS);
         final DatabaseReference groupsRef = mFirebaseDatabaseReference.child(CHILD_GROUPS);
 
-        mGroup = genInitGroup();
-//        mConversationId = "-LAmugAzwSrEnmylD1V_";
         mConversationId = mGroup.getConversationId();
 
-
-
-        if (mGroup.getOwner()
-                //.equals(mCurrentUser.getUid()
-                .equals("")
-                ) {
+        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
             mGroupNotificationTextView.bringToFront();
             mGroupNotificationTextView.setVisibility(View.VISIBLE);
             mGroupNotificationTextView.setText("Private - this group is no longer accepting new members.");
@@ -330,7 +315,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
             @Override
             public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-                ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers()   );
+               // ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers()   );
             }
 
             @Override

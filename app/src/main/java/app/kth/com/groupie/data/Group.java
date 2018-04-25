@@ -1,18 +1,15 @@
 package app.kth.com.groupie.data;
 
-import android.location.Location;
-
-import java.text.DateFormat;
-import java.util.List;
+import android.os.Parcel;
+import android.os.Parcelable;
+import java.util.HashMap;
 import java.util.Map;
-
-import app.kth.com.groupie.data.structure.Profile;
 
 /**
  * Created by Ahmad on 4/11/2018.
  */
 
-public class Group {
+public class Group implements Parcelable {
     private String groupId;
     private String subject;
     private String topic;
@@ -27,6 +24,57 @@ public class Group {
     private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(groupId);
+        dest.writeString(subject);
+        dest.writeString(topic);
+        dest.writeString(description);
+        dest.writeMap(members);
+        dest.writeInt(numberOfMembers);
+        dest.writeInt(maxNumberOfMembers);
+        dest.writeString(timeOfCreation);
+        dest.writeString(location);
+        dest.writeString(conversationId);
+        dest.writeValue(isPublic); // must cast to boolean when retrieving
+        dest.writeString(dateOfMeeting);
+        dest.writeValue(hasMeetingDate); // must cast to boolean when retrieving
+        dest.writeString(owner);
+    }
+    public static final Parcelable.Creator<Group> CREATOR = new Parcelable.Creator<Group>(){
+        @Override
+        public Group createFromParcel(Parcel source) {
+            Group group = new Group();
+            group.setGroupId(source.readString());
+            group.setSubject(source.readString());
+            group.setTopic(source.readString());
+            group.setDescription(source.readString());
+            group.setMembers(source.readHashMap(HashMap.class.getClassLoader()));
+            group.setNumberOfMembers(source.readInt());
+            group.setMaxNumberOfMembers(source.readInt());
+            group.setTimeOfCreation(source.readString());
+            group.setLocation(source.readString());
+            group.setConversationId(source.readString());
+            group.setPublic((Boolean) source.readValue(Boolean.class.getClassLoader()));
+            group.setDateOfMeeting(source.readString());
+            group.setHasMeetingDate((Boolean) source.readValue(Boolean.class.getClassLoader()));
+            group.setOwner(source.readString());
+            return group;
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
+
+    public Group() {}
 
     public String getGroupId() {
         return groupId;
@@ -139,6 +187,7 @@ public class Group {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
 }
 
 

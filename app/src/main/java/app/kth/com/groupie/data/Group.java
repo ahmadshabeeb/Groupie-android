@@ -52,9 +52,11 @@ public class Group {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public Map<String, Boolean> getMembers() {
         return members;
     }
+
     public void setMembers(Map<String, Boolean> members) {
         this.members = members;
     }
@@ -70,15 +72,19 @@ public class Group {
     public void setMaxNumberOfMembers(int maxNumberOfMembers) {
         this.maxNumberOfMembers = maxNumberOfMembers;
     }
+
     public String getTimeOfCreation() {
         return timeOfCreation;
     }
+
     public void setTimeOfCreation(String timeOfCreation) {
         this.timeOfCreation = timeOfCreation;
     }
+
     public String getLocation() {
         return location;
     }
+
     public void setLocation(String location) {
         this.location = location;
     }
@@ -88,15 +94,18 @@ public class Group {
     public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
     }
+
     public boolean getIsPublic() {
         return isPublic;
     }
     public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
+
     public String getDateOfMeeting() {
         return dateOfMeeting;
     }
+
     public void setDateOfMeeting(String dateOfMeeting) {
         this.dateOfMeeting = dateOfMeeting;
     }

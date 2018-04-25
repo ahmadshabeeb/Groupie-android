@@ -39,8 +39,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.kth.com.groupie.Data.Group;
 import app.kth.com.groupie.Data.Structure.Message;
@@ -103,13 +107,18 @@ public class GroupMessagingActivity extends AppCompatActivity
     private View mViewHolder;
     private TextView mGroupNotificationTextView;
     private EditText mMessageEditText;
+    private TextView mEditableSubjectTextView;
+    private TextView mEditableTopicTextView;
+    private TextView mEditableLocationTextView;
+    private TextView mEditableDayTextView;
+    private TextView mEditableDescriptionTextView;
 
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
 
 
     private Group genInitGroup() {
-        return new Group("","","","",new ArrayList<Profile>(),
+        return new Group("","","","",new HashMap<String, Boolean>(),
                 0, 0, null, null,
                 "", true, null, true, "");
     }
@@ -162,6 +171,24 @@ public class GroupMessagingActivity extends AppCompatActivity
         });
     }
 
+    private void updateGroupInfo() {
+        mEditableSubjectTextView.setText(mGroup.getSubject());
+        mEditableTopicTextView.setText(mGroup.getTopic());
+        mEditableLocationTextView.setText(mGroup.getLocation());
+        mEditableDayTextView.setText(mGroup.getDateOfMeeting());
+        mEditableDescriptionTextView.setText(mGroup.getDescription());
+    }
+
+    private void initViews() {
+        mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
+        mGroupNotificationTextView = (TextView) findViewById(R.id.privateGroupNotificationTextView);
+        mEditableSubjectTextView = (TextView) findViewById(R.id.editableSubjectTextView);
+        mEditableTopicTextView = (TextView) findViewById(R.id.editableTopicTextView);
+        mEditableLocationTextView = (TextView) findViewById(R.id.editableLocationTextView);
+        mEditableDayTextView = (TextView) findViewById(R.id.editableDayTextView);
+        mEditableDescriptionTextView = (TextView) findViewById(R.id.editableDescriptionTextView);
+    }
+
 
 
     @Override
@@ -170,6 +197,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         setContentView(R.layout.activity_group_messaging);
         initDrawer();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        initViews();
 
         Intent intent = getIntent();
         //mGroupId = intent.getStringExtra("groupId");
@@ -177,7 +205,6 @@ public class GroupMessagingActivity extends AppCompatActivity
         mGroupId = "-LAmufsgVQ7QI5m7UWZp";
 
         Log.d(TAG, "onCreate called.");
-        mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
         mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -191,7 +218,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 //        mConversationId = "-LAmugAzwSrEnmylD1V_";
         mConversationId = mGroup.getConversationId();
 
-        mGroupNotificationTextView = (TextView) findViewById(R.id.privateGroupNotificationTextView);
+
 
         if (mGroup.getOwner()
                 //.equals(mCurrentUser.getUid()
@@ -260,6 +287,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 //                    holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
                     }
                 }
+                updateGroup();
             }
         };
 
@@ -340,6 +368,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             drawer.openDrawer(GravityCompat.END);
+            updateGroupInfo();
             return true;
         }
 

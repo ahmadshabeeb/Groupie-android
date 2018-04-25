@@ -4,6 +4,7 @@ import android.location.Location;
 
 import java.text.DateFormat;
 import java.util.List;
+import java.util.Map;
 
 import app.kth.com.groupie.Data.Structure.Profile;
 
@@ -16,20 +17,20 @@ public class Group {
     private String subject;
     private String topic;
     private String description;
-    private List<Profile>members;
+    private Map<String, Boolean> members;
     private int numberOfMembers;
     private int maxNumberOfMembers;
-    private DateFormat timeOfCreation;
-    private Location location;
+    private String timeOfCreation;
+    private String location;
     private String conversationId;
     private boolean isPublic;
-    private DateFormat dateOfMeeting;
+    private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
 
-    public Group(String groupId, String subject, String topic, String description, List<Profile> members,
-                 int numberOfMembers, int maxNumberOfMembers, DateFormat timeOfCreation, Location location,
-                 String conversationId, boolean isPublic, DateFormat dateOfMeeting,
+    public Group(String groupId, String subject, String topic, String description, Map<String, Boolean> members,
+                 int numberOfMembers, int maxNumberOfMembers, String timeOfCreation, String location,
+                 String conversationId, boolean isPublic, String dateOfMeeting,
                  boolean hasMeetingDate, String owner) {
         this.groupId = groupId;
         this.subject = subject;
@@ -81,11 +82,11 @@ public class Group {
         this.description = description;
     }
 
-    public List<Profile> getMembers() {
+    public Map<String, Boolean> getMembers() {
         return members;
     }
 
-    public void setMembers(List<Profile> members) {
+    public void setMembers(Map<String, Boolean> members) {
         this.members = members;
     }
 
@@ -105,19 +106,19 @@ public class Group {
         this.maxNumberOfMembers = maxNumberOfMembers;
     }
 
-    public DateFormat getTimeOfCreation() {
+    public String getTimeOfCreation() {
         return timeOfCreation;
     }
 
-    public void setTimeOfCreation(DateFormat timeOfCreation) {
+    public void setTimeOfCreation(String timeOfCreation) {
         this.timeOfCreation = timeOfCreation;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -137,11 +138,11 @@ public class Group {
         isPublic = aPublic;
     }
 
-    public DateFormat getDateOfMeeting() {
+    public String getDateOfMeeting() {
         return dateOfMeeting;
     }
 
-    public void setDateOfMeeting(DateFormat dateOfMeeting) {
+    public void setDateOfMeeting(String dateOfMeeting) {
         this.dateOfMeeting = dateOfMeeting;
     }
 

@@ -168,7 +168,7 @@
         android:id="@+id/seekBar_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
@@ -194,17 +194,18 @@
         android:id="@+id/language_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
         app:layout_constraintBottom_toTopOf="@+id/language_textview"
         app:layout_constraintEnd_toStartOf="@+id/programming_imageview"
-        app:srcCompat="@drawable/language"
-        />
+        app:srcCompat="@drawable/language" />
 
     <ImageView
         android:id="@+id/programming_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -218,25 +219,36 @@
         android:id="@+id/math_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="56dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="56dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/math_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
         app:layout_constraintStart_toEndOf="@+id/programming_imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/math" />
 
     <TextView
         android:id="@+id/language_textview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginRight="28dp"
-        android:text="Language\n"
+        android:layout_height="22dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
         android:gravity="center"
-        app:layout_constraintBottom_toTopOf="@+id/business_imageview"
+        android:text="Language"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/science_imageview"
         app:layout_constraintEnd_toStartOf="@+id/programming_textview" />
 
     <TextView
         android:id="@+id/programming_textview"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:layout_marginBottom="16dp"
@@ -249,22 +261,23 @@
         android:id="@+id/math_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="36dp"
-        android:layout_marginStart="36dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
         android:gravity="center"
         android:text="Math"
-        app:layout_constraintBottom_toTopOf="@+id/science_imageview"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/business_imageview"
         app:layout_constraintStart_toEndOf="@+id/programming_textview" />
 
     <ImageView
         android:id="@+id/business_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
         app:layout_constraintBottom_toTopOf="@+id/business_textview"
-        app:layout_constraintEnd_toStartOf="@+id/engineering_imageview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_imageview"
         app:srcCompat="@drawable/business" />
 
     <ImageView
@@ -280,42 +293,46 @@
         android:id="@+id/science_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="56dp"
-        android:layout_marginStart="56dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
         app:layout_constraintBottom_toTopOf="@+id/science_textview"
-        app:layout_constraintStart_toEndOf="@+id/engineering_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_imageview"
         app:srcCompat="@drawable/science" />
 
     <TextView
         android:id="@+id/engineering_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="12dp"
         android:text="Engineering"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/music_imageview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/business_textview"
-        android:layout_width="86dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:text="Business and Economics"
-        app:layout_constraintBottom_toTopOf="@+id/law_imageview"
-        app:layout_constraintEnd_toStartOf="@+id/engineering_textview" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/other_imageview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_textview" />
 
     <TextView
         android:id="@+id/science_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
         android:text="Natural Sciences"
-        app:layout_constraintBottom_toTopOf="@+id/other_imageview"
-        app:layout_constraintStart_toEndOf="@+id/engineering_textview" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/law_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_textview" />
 
     <ImageView
         android:id="@+id/music_imageview"
@@ -330,8 +347,8 @@
         android:id="@+id/law_imageview"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="56dp"
-        android:layout_marginRight="56dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
         app:layout_constraintBottom_toTopOf="@+id/law_textview"
         app:layout_constraintEnd_toStartOf="@+id/music_imageview"
         app:srcCompat="@drawable/law" />
@@ -350,15 +367,15 @@
         android:id="@+id/law_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:gravity="center"
         android:text="Law and\nPolitical Science"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
         app:layout_constraintEnd_toStartOf="@+id/music_textview" />
 
     <TextView
         android:id="@+id/music_textview"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -369,6 +386,7 @@
 
     <TextView
         android:id="@+id/other_textview"
+        android:textSize="16sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -380,15 +398,18 @@
         app:layout_constraintStart_toEndOf="@+id/music_textview" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/darkNavy"
+        android:backgroundTint="@color/darkNavy"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="Create a Group"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

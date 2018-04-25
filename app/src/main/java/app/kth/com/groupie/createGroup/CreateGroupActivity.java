@@ -383,6 +383,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         group.setMembers(members);
 
         addGroupToDB(group);
+        finish();
     }
 
     private void addGroupToDB(Group group){

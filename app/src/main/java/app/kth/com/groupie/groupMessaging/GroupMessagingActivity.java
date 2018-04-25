@@ -21,6 +21,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -47,10 +48,6 @@ import app.kth.com.groupie.Data.Structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-interface firebaseCallback {
-    void onCallback(Group group);
-}
 
 public class GroupMessagingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -139,12 +136,12 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void initDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -161,17 +158,18 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         });
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
         initDrawer();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         Intent intent = getIntent();
         //mGroupId = intent.getStringExtra("groupId");
@@ -240,7 +238,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             protected void onBindViewHolder(messageViewHolder holder, int position, Message msg) {
                 Log.d(TAG, "onBindViewHolder called.");
                 if (isNotificationMsg(msg)) {
-                    //updateGroup();
+                    updateGroup();
                     mViewHolder.setClickable(false);
                     holder.messageItemReceivedTextView.setVisibility(View.GONE);
                     holder.senderTextView.setVisibility(View.GONE);
@@ -317,8 +315,8 @@ public class GroupMessagingActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen(GravityCompat.END)) {
+            drawer.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
@@ -337,9 +335,11 @@ public class GroupMessagingActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            drawer.openDrawer(GravityCompat.END);
             return true;
         }
 
@@ -352,22 +352,8 @@ public class GroupMessagingActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        drawer.closeDrawer(GravityCompat.END);
         return true;
     }
 

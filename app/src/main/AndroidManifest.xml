@@ -32,7 +32,8 @@
             android:label="Create group"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".groupMessaging.GroupMessagingActivity" />
+            android:name=".groupMessaging.GroupMessagingActivity"
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".EditProfileActivity"
             android:label="Edit Profile"

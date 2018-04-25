@@ -27,6 +27,8 @@ public class ParentActivity extends AppCompatActivity {
     BrowserFragment browserFragment;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

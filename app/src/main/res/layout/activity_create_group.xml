@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".createGroup.CreateGroupActivity">
+    tools:context=".createGroup.CreateGroupActivity"
+    android:background="@color/offWhite">
 
 
     <ImageButton
@@ -23,29 +24,26 @@
         android:id="@+id/day1_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/darkNavy"
         android:textColor="@color/offWhite"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintEnd_toStartOf="@+id/day2_button" />
+        app:layout_constraintEnd_toStartOf="@+id/day2_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
 
     <Button
         android:id="@+id/day2_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintEnd_toStartOf="@+id/day3_button" />
+        app:layout_constraintEnd_toStartOf="@+id/day3_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
 
     <Button
         android:id="@+id/day4_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -53,53 +51,49 @@
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
 
     <Button
         android:id="@+id/day5_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintStart_toEndOf="@+id/day4_button" />
+        app:layout_constraintStart_toEndOf="@+id/day4_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
 
     <Button
         android:id="@+id/day6_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintStart_toEndOf="@+id/day5_button" />
+        app:layout_constraintStart_toEndOf="@+id/day5_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
 
     <Button
         android:id="@+id/day3_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintEnd_toStartOf="@+id/day4_button" />
+        app:layout_constraintEnd_toStartOf="@+id/day4_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
 
     <Button
         android:id="@+id/day7_button"
         android:layout_width="52dp"
         android:layout_height="34dp"
-        android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
         android:textSize="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar_textview"
-        app:layout_constraintStart_toEndOf="@+id/day6_button" />
+        app:layout_constraintStart_toEndOf="@+id/day6_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
 
     <EditText
         android:id="@+id/location_edittext"
@@ -111,35 +105,38 @@
         android:hint="Location"
         android:inputType="textPersonName"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/dayofmeeting_textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topic_edittext" />
 
 
     <EditText
         android:id="@+id/topic_edittext"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/darkNavy"
         android:ems="10"
         android:gravity="center"
         android:hint="Topic"
         android:inputType="textPersonName"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/location_edittext"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/create_button"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:background="@color/darkNavy"
+        android:background="@color/grey"
         android:text="Create Group"
         android:textColor="@color/offWhite"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -150,34 +147,34 @@
         android:id="@+id/description_edittext"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/darkNavy"
         android:gravity="center"
         android:hint="Description"
-        android:backgroundTint="@color/darkNavy"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/create_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/members_seekbar" />
 
     <SeekBar
         android:id="@+id/members_seekbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/description_edittext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_textview" />
 
     <TextView
         android:id="@+id/seekBar_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/members_seekbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day4_button" />
 
     <TextView
         android:id="@+id/dayofmeeting_textView"
@@ -185,12 +182,13 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="day of meeting"
-        app:layout_constraintBottom_toTopOf="@+id/day4_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
 
     <ImageView
         android:id="@+id/language_imageview"
@@ -200,7 +198,8 @@
         android:layout_marginRight="56dp"
         app:layout_constraintBottom_toTopOf="@+id/language_textview"
         app:layout_constraintEnd_toStartOf="@+id/programming_imageview"
-        app:srcCompat="@drawable/language" />
+        app:srcCompat="@drawable/language"
+        />
 
     <ImageView
         android:id="@+id/programming_imageview"
@@ -248,12 +247,13 @@
 
     <TextView
         android:id="@+id/math_textview"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginStart="36dp"
         android:gravity="center"
-        android:text="Math\n"
+        android:text="Math"
         app:layout_constraintBottom_toTopOf="@+id/science_imageview"
         app:layout_constraintStart_toEndOf="@+id/programming_textview" />
 
@@ -369,12 +369,13 @@
 
     <TextView
         android:id="@+id/other_textview"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
         android:gravity="center"
-        android:text="Other\n"
+        android:text="Other"
         app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
         app:layout_constraintStart_toEndOf="@+id/music_textview" />
 

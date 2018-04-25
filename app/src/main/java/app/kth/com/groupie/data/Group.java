@@ -88,10 +88,10 @@ public class Group {
     public void setConversationId(String conversationId) {
         this.conversationId = conversationId;
     }
-    public boolean isPublic() {
+    public boolean getIsPublic() {
         return isPublic;
     }
-    public void setPublic(boolean isPublic) {
+    public void setIsPublic(boolean isPublic) {
         this.isPublic = isPublic;
     }
     public String getDateOfMeeting() {

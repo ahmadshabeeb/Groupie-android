@@ -5,14 +5,18 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,6 +35,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     private static SeekBar seek_bar;
     private static TextView seekBarTextView;
+    DatabaseReference dbr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +51,39 @@ public class CreateGroupActivity extends AppCompatActivity {
                 finish();
             }
         });
+        initButtons();
+        initImageButtons();
 
+    }
+
+    private String getDay(int dayOfWeek){
+        if(dayOfWeek > 7){
+            dayOfWeek -= 7;
+        }
+
+        switch (dayOfWeek){
+            case 2:
+                return "MON";
+            case 3:
+                return "TUES";
+            case 4:
+                return "WEDS";
+            case 5:
+                return "THUR";
+            case 6:
+                return "FRI";
+            case 7:
+                return "SAT";
+            case 1:
+                return "SUN";
+        }
+        return null;
+    }
+
+    private void initButtons(){
         switchCurrentDate(0);
         Calendar calendar = Calendar.getInstance();
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
         //SET UP DATE BUTTONS
         final Button day1Button = findViewById(R.id.day1_button);
         day1Button.setText(getDay(dayOfWeek));
@@ -127,30 +160,6 @@ public class CreateGroupActivity extends AppCompatActivity {
 
     }
 
-    private String getDay(int dayOfWeek){
-        if(dayOfWeek > 7){
-            dayOfWeek -= 7;
-        }
-
-        switch (dayOfWeek){
-            case 2:
-                return "MON";
-            case 3:
-                return "TUES";
-            case 4:
-                return "WEDS";
-            case 5:
-                return "THUR";
-            case 6:
-                return "FRI";
-            case 7:
-                return "SAT";
-            case 1:
-                return "SUN";
-        }
-        return null;
-    }
-
     private void switchCurrentButton(Button otherButton){
         currentDayButton.setBackgroundColor(getResources().getColor(R.color.offWhite));
         currentDayButton.setTextColor(getResources().getColor(R.color.darkNavy));
@@ -158,6 +167,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         currentDayButton.setBackgroundColor(getResources().getColor(R.color.darkNavy));
         currentDayButton.setTextColor(getResources().getColor(R.color.offWhite));
     }
+
     private void switchCurrentDate(int i) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -235,6 +245,121 @@ public class CreateGroupActivity extends AppCompatActivity {
         return sdf.format(date);
     }
 
+    private ImageView currentImageview;
+    private void initImageButtons(){
+        final ImageView language = (ImageView) findViewById(R.id.language_imageview);
+        language.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(language);
+            }
+        });
+
+        final ImageView programming = (ImageView) findViewById(R.id.programming_imageview);
+        programming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(programming);
+            }
+        });
+
+        final ImageView math = (ImageView) findViewById(R.id.math_imageview);
+        math.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(math);
+            }
+        });
+
+        final ImageView business = (ImageView) findViewById(R.id.business_imageview);
+        business.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(business);
+            }
+        });
+
+        final ImageView engineering = (ImageView) findViewById(R.id.engineering_imageview);
+        engineering.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(engineering);
+            }
+        });
+
+        final ImageView science = (ImageView) findViewById(R.id.science_imageview);
+        science.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(science);
+            }
+        });
+
+        final ImageView law = (ImageView) findViewById(R.id.law_imageview);
+        law.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(law);
+            }
+        });
+
+        final ImageView music = (ImageView) findViewById(R.id.music_imageview);
+        music.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(music);
+            }
+        });
+
+        final ImageView other = (ImageView) findViewById(R.id.other_imageview);
+        other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeImageButton(other);
+            }
+        });
+    }
+    private void changeImageButton(ImageView imageview){
+        if(currentImageview != null){
+            currentImageview.setBackgroundColor(getResources().getColor(R.color.offWhite));
+        } else{
+            Button createButton = (Button) findViewById(R.id.create_button);
+            createButton.setBackgroundColor(getResources().getColor(R.color.darkNavy));
+            createButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createGroup();
+                }
+            });
+        }
+        currentImageview = imageview;
+        currentImageview.setBackground(getResources().getDrawable(R.drawable.square));
+    }
+
+    private String getSubject(){
+        switch (currentImageview.getId()){
+            case R.id.language_imageview:
+                return "Language";
+            case R.id.programming_imageview:
+                return "Programming";
+            case R.id.math_imageview:
+                return "Math";
+            case R.id.business_imageview:
+                return "Business and Economics";
+            case R.id.engineering_imageview:
+                return "Engineering";
+            case R.id.science_imageview:
+                return "Natural Sciences";
+            case R.id.law_imageview:
+                return "Law and Political Science";
+            case R.id.music_imageview:
+                return "Art and Music";
+            case R.id.other_imageview:
+                return "Other";
+        }
+        return null;
+    }
+
     public void createGroup(){
         Group group = new Group();
 
@@ -249,15 +374,23 @@ public class CreateGroupActivity extends AppCompatActivity {
         group.setDescription(getDescription());
         group.setDateOfMeeting(currentDate);
         group.setOwner(mAuth.getCurrentUser().getUid());
-        group.setPublic(true);
+        group.setIsPublic(true);
         group.setLocation(getLocation());
-        group.setNumberOfMembers(1);
         group.setMaxNumberOfMembers(maxNumberOfMembers);
-
+        group.setSubject(getSubject());
         Map<String, Boolean> members = new HashMap<>();
         members.put(mAuth.getCurrentUser().getUid(), true);
         group.setMembers(members);
 
+        addGroupToDB(group);
+    }
+
+    private void addGroupToDB(Group group){
+        dbr = FirebaseDatabase.getInstance().getReference();
+        String groupId = dbr.child("groups").push().getKey();
+        dbr.child("groups").child(groupId).setValue(group);
+        group.setGroupId(groupId);
+        Log.d("Tag", groupId);
     }
 
 }

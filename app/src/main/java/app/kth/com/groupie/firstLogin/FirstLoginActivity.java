@@ -1,29 +1,25 @@
 package app.kth.com.groupie.firstLogin;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.functions.FirebaseFunctions;
 
 import org.json.JSONObject;
 
-import app.kth.com.groupie.data.structure.PrivateProfile;
-
 import app.kth.com.groupie.R;
-import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.parent.ParentActivity;
+import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.utilities.Utility;
 
 public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseFunctions addProfileFunction;
     private PrivateProfile privateProfile;
     FirebaseAuth mAuth;
+    private Boolean registrationCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +86,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     public void addProfilePicture(String imageUri){
         privateProfile.setProfilePicture(imageUri);
         addToDatabase(privateProfile);
+        registrationCompleted = true;
         finish();
     }
 
@@ -101,12 +98,14 @@ public class FirstLoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        mAuth.signOut();
+        if(!registrationCompleted) {
+            mAuth.signOut();}
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        mAuth.signOut();
+        if(!registrationCompleted) {
+            mAuth.signOut(); }
     }
 }

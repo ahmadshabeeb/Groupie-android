@@ -54,4 +54,12 @@
         android:background="@color/colorPrimary"
         android:scaleType="fitCenter"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/notificationMessageTextView"
+        />
+
 </RelativeLayout>

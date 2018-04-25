@@ -21,6 +21,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/sendButton" />
 
+    <TextView
+        android:id="@+id/privateGroupNotificationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/offWhite"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAlignment="center"
+        />
+
     <Button
         android:id="@+id/sendButton"
         android:layout_width="wrap_content"

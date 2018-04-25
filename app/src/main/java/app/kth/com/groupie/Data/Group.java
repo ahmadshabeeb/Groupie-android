@@ -27,4 +27,137 @@ public class Group {
     private boolean hasMeetingDate;
     private String owner;
 
+    public Group(String groupId, String subject, String topic, String description, List<Profile> members,
+                 int numberOfMembers, int maxNumberOfMembers, DateFormat timeOfCreation, Location location,
+                 String conversationId, boolean isPublic, DateFormat dateOfMeeting,
+                 boolean hasMeetingDate, String owner) {
+        this.groupId = groupId;
+        this.subject = subject;
+        this.topic = topic;
+        this.description = description;
+        this.members = members;
+        this.numberOfMembers = numberOfMembers;
+        this.maxNumberOfMembers = maxNumberOfMembers;
+        this.timeOfCreation = timeOfCreation;
+        this.location = location;
+        this.conversationId = conversationId;
+        this.isPublic = isPublic;
+        this.dateOfMeeting = dateOfMeeting;
+        this.hasMeetingDate = hasMeetingDate;
+        this.owner = owner;
+    }
+
+    public Group() {}
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<Profile> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Profile> members) {
+        this.members = members;
+    }
+
+    public int getNumberOfMembers() {
+        return numberOfMembers;
+    }
+
+    public void setNumberOfMembers(int numberOfMembers) {
+        this.numberOfMembers = numberOfMembers;
+    }
+
+    public int getMaxNumberOfMembers() {
+        return maxNumberOfMembers;
+    }
+
+    public void setMaxNumberOfMembers(int maxNumberOfMembers) {
+        this.maxNumberOfMembers = maxNumberOfMembers;
+    }
+
+    public DateFormat getTimeOfCreation() {
+        return timeOfCreation;
+    }
+
+    public void setTimeOfCreation(DateFormat timeOfCreation) {
+        this.timeOfCreation = timeOfCreation;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getConversationId() {
+        return conversationId;
+    }
+
+    public void setConversationId(String conversationId) {
+        this.conversationId = conversationId;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
+    }
+
+    public DateFormat getDateOfMeeting() {
+        return dateOfMeeting;
+    }
+
+    public void setDateOfMeeting(DateFormat dateOfMeeting) {
+        this.dateOfMeeting = dateOfMeeting;
+    }
+
+    public boolean isHasMeetingDate() {
+        return hasMeetingDate;
+    }
+
+    public void setHasMeetingDate(boolean hasMeetingDate) {
+        this.hasMeetingDate = hasMeetingDate;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 }

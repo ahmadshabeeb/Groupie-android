@@ -4,18 +4,16 @@
     android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="@android:color/darker_gray"
+    android:background="@drawable/layout_cardview_background"
     android:id="@+id/group_card_view"
     >
   
     <ImageView
         android:id="@+id/subject_imageview"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:scaleType="center"
+        android:layout_margin="16dp"
         />
 
     <TextView
@@ -26,7 +24,7 @@
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_toRightOf="@id/subject_imageview"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
         />
     <TextView
         android:id="@+id/group_subject_textview"
@@ -36,7 +34,7 @@
         android:textSize="16sp"
         android:singleLine="true"
         android:layout_toRightOf="@id/subject_textview_fixed"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="18dp"
         />
 
 
@@ -107,12 +105,12 @@
 
     <Button
         android:id="@+id/join_group_btn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="20dp"
-        android:background="@color/offWhite"
+        android:layout_marginRight="18dp"
+        android:background="@drawable/layout_join_button"
         android:text="JOIN"
         />
 

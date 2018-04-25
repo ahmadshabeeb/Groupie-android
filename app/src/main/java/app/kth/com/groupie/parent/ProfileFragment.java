@@ -13,7 +13,7 @@ import app.kth.com.groupie.R;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
-
+    private
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){

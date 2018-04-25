@@ -1,14 +1,13 @@
 package app.kth.com.groupie.groupMessaging;
 
-import android.location.Location;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
@@ -39,8 +38,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,12 +46,26 @@ import java.util.Map;
 import app.kth.com.groupie.Data.Group;
 import app.kth.com.groupie.Data.Structure.Message;
 import app.kth.com.groupie.Data.Structure.Profile;
+import app.kth.com.groupie.Data.User;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupMessagingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static class ProfileViewHolder extends RecyclerView.ViewHolder {
+        ConstraintLayout mNavDrawerConstrainLayout;
+        CircleImageView mNavProfilePictureImageView;
+        TextView mProfileNameTextView;
+
+        public ProfileViewHolder(View itemView) {
+            super(itemView);
+            mNavDrawerConstrainLayout = (ConstraintLayout) itemView.findViewById(R.id.navDrawerConstraintLayout);
+            mNavProfilePictureImageView = (CircleImageView) itemView.findViewById(R.id.navProfilePictureImageView);
+            mProfileNameTextView = (TextView) itemView.findViewById(R.id.navProfileNameTextView);
+        }
+    }
 
     public static class messageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CircleImageView profilePictureImageView;
@@ -93,9 +104,11 @@ public class GroupMessagingActivity extends AppCompatActivity
     private final String CHILD_CONVERSATIONS = "conversations";
     private final String CHILD_MESSAGES = "messages";
     private final String CHILD_GROUPS = "groups";
+    private final String CHILD_USERS = "users";
     private String mConversationId;
     private String mGroupId;
     private Group mGroup;
+    private ArrayList<Profile> memberNames;
     private DatabaseReference mGroupConversationRef;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -160,12 +173,11 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private void updateGroup() {
         mFirebaseDatabaseReference.child(CHILD_GROUPS).child(mGroupId)
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mGroup = dataSnapshot.getValue(Group.class);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {}
         });
@@ -302,8 +314,33 @@ public class GroupMessagingActivity extends AppCompatActivity
                 }
             }
         });
-
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+
+        class ProfileRecyclerViewAdapter extends RecyclerView.Adapter {
+            @NonNull
+            @Override
+            public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View viewHolder = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.profile_item, parent, false);
+                viewHolder.findViewById(R.id.navDrawerConstraintLayout).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("Adapter", "onClick called.");
+                    }
+                });
+                return new ProfileViewHolder(viewHolder);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers()   );
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        }
 
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(140)});

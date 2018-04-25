@@ -95,9 +95,8 @@ public class ParentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_create_group:
-//                Intent intent = new Intent(this, CreateGroupActivity.class);
-//                startActivity(intent);
-                createGroup();
+                Intent intent = new Intent(this, CreateGroupActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -9,8 +9,8 @@
 
     <ImageButton
         android:id="@+id/back_button"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
+        android:layout_width="30dp"
+        android:layout_height="28dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -22,7 +22,7 @@
     <Button
         android:id="@+id/day1_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/darkNavy"
         android:textColor="@color/offWhite"
@@ -33,7 +33,7 @@
     <Button
         android:id="@+id/day2_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
@@ -44,7 +44,7 @@
     <Button
         android:id="@+id/day4_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
@@ -60,7 +60,7 @@
     <Button
         android:id="@+id/day5_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
@@ -71,7 +71,7 @@
     <Button
         android:id="@+id/day6_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
@@ -82,7 +82,7 @@
     <Button
         android:id="@+id/day3_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
@@ -93,7 +93,7 @@
     <Button
         android:id="@+id/day7_button"
         android:layout_width="52dp"
-        android:layout_height="wrap_content"
+        android:layout_height="34dp"
         android:layout_marginBottom="8dp"
         android:background="@color/offWhite"
         android:textColor="@color/darkNavy"
@@ -105,12 +105,12 @@
         android:id="@+id/location_edittext"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/darkNavy"
         android:ems="10"
         android:gravity="center"
         android:hint="Location"
         android:inputType="textPersonName"
-        android:backgroundTint="@color/darkNavy"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/dayofmeeting_textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -120,16 +120,16 @@
         android:id="@+id/topic_edittext"
         android:layout_width="238dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:backgroundTint="@color/darkNavy"
         android:ems="10"
         android:gravity="center"
-        android:backgroundTint="@color/darkNavy"
         android:hint="Topic"
         android:inputType="textPersonName"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/location_edittext"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:background="@color/darkNavy"
-        android:text="Create"
+        android:text="Create Group"
         android:textColor="@color/offWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,27 +163,26 @@
         android:id="@+id/members_seekbar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/description_edittext"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/seekBar_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="TextView"
         app:layout_constraintBottom_toTopOf="@+id/members_seekbar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/dayofmeeting_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:gravity="center"
@@ -192,5 +191,191 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/language_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/language_textview"
+        app:layout_constraintEnd_toStartOf="@+id/programming_imageview"
+        app:srcCompat="@drawable/language" />
+
+    <ImageView
+        android:id="@+id/programming_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/programming_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/programming" />
+
+    <ImageView
+        android:id="@+id/math_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/math_textview"
+        app:layout_constraintStart_toEndOf="@+id/programming_imageview"
+        app:srcCompat="@drawable/math" />
+
+    <TextView
+        android:id="@+id/language_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginRight="28dp"
+        android:text="Language\n"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/business_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/programming_textview" />
+
+    <TextView
+        android:id="@+id/programming_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginBottom="16dp"
+        android:text="Programming"
+        app:layout_constraintBottom_toTopOf="@+id/engineering_imageview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/math_textview"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:gravity="center"
+        android:text="Math\n"
+        app:layout_constraintBottom_toTopOf="@+id/science_imageview"
+        app:layout_constraintStart_toEndOf="@+id/programming_textview" />
+
+    <ImageView
+        android:id="@+id/business_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/business_textview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_imageview"
+        app:srcCompat="@drawable/business" />
+
+    <ImageView
+        android:id="@+id/engineering_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/engineering_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/engineering" />
+
+    <ImageView
+        android:id="@+id/science_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/science_textview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_imageview"
+        app:srcCompat="@drawable/science" />
+
+    <TextView
+        android:id="@+id/engineering_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="Engineering"
+        app:layout_constraintBottom_toTopOf="@+id/music_imageview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/business_textview"
+        android:layout_width="86dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:text="Business and Economics"
+        app:layout_constraintBottom_toTopOf="@+id/law_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_textview" />
+
+    <TextView
+        android:id="@+id/science_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Natural Sciences"
+        app:layout_constraintBottom_toTopOf="@+id/other_imageview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_textview" />
+
+    <ImageView
+        android:id="@+id/music_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/music_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/music" />
+
+    <ImageView
+        android:id="@+id/law_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/law_textview"
+        app:layout_constraintEnd_toStartOf="@+id/music_imageview"
+        app:srcCompat="@drawable/law" />
+
+    <ImageView
+        android:id="@+id/other_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/other_textview"
+        app:layout_constraintStart_toEndOf="@+id/music_imageview"
+        app:srcCompat="@drawable/other" />
+
+    <TextView
+        android:id="@+id/law_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:text="Law and\nPolitical Science"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintEnd_toStartOf="@+id/music_textview" />
+
+    <TextView
+        android:id="@+id/music_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Art and Music"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/other_textview"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:gravity="center"
+        android:text="Other\n"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintStart_toEndOf="@+id/music_textview" />
 
 </android.support.constraint.ConstraintLayout>

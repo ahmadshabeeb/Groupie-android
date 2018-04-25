@@ -13,13 +13,12 @@ import app.kth.com.groupie.R;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
-    private
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button toGroup = (Button) rootView.findViewById(R.id.to_group);
+        Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
         toGroup.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity

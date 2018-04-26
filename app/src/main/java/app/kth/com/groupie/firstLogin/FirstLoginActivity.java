@@ -71,7 +71,6 @@ public class FirstLoginActivity extends AppCompatActivity {
         return capitalizedName;
     }
 
-
     public void addBioToProfile(String bio){
         privateProfile.setBio(bio);
         FragmentManager fm = getSupportFragmentManager();

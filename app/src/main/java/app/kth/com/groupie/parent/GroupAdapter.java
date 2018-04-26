@@ -23,7 +23,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Map;
+import java.util.TimeZone;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -32,11 +38,45 @@ import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groupArrayList = new ArrayList<>();
+    private Long[] dayReference = new Long[7];
+    private Map<String,Integer> daysInUNIX;
+    private final Long DAY_IN_SECONDS = 86400l;
     private Context context;
     private static int NUM_GROUPS_TO_LOAD = 10;
 
     public GroupAdapter(final DatabaseReference databaseReference, Context context) {
         this.context = context;
+        calculateDaysInUNIX();
+        setGroups(databaseReference);
+    }
+
+    private void calculateDaysInUNIX(){
+        Long todayUnix = getTodayUnix();
+//        Log.d("TAG", todayUnix + " ...");
+        dayReference[0] = todayUnix;
+
+        for(int i=1; i<dayReference.length; i++){
+            dayReference[i] = dayReference[i-1] + DAY_IN_SECONDS;
+//            Log.d("TAG" , dayReference[i] + " ...");
+        }
+    }
+
+    private Long getTodayUnix(){
+        Date today = new Date();
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String todayDate = sdf.format(today);
+        Long todayUnix = null;
+
+        try {
+            todayUnix = sdf.parse(todayDate).getTime()/1000;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return todayUnix;
+    }
+
+    private void setGroups(final DatabaseReference databaseReference){
 
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
@@ -73,6 +113,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
             }
         });
+
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -106,7 +147,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         final Group group = groupArrayList.get(position);
 
         setFields(group, holder);
-        setSubjectImage(group, holder);
+            setSubjectImage(group, holder);
         setJoinGroupButton(group, holder);
     }
 

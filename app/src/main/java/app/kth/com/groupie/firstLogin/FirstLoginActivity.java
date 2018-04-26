@@ -25,6 +25,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseFunctions addProfileFunction;
     private PrivateProfile privateProfile;
     FirebaseAuth mAuth;
+    private boolean registrationCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class FirstLoginActivity extends AppCompatActivity {
         privateProfile.setProfilePicture(imageUri);
       //  Log.d("tag", );
         addToDatabase(privateProfile);
+        registrationCompleted = true;
         finish();
     }
 
@@ -103,12 +105,16 @@ public class FirstLoginActivity extends AppCompatActivity {
     @Override
     public void onDestroy(){
         super.onDestroy();
-        mAuth.signOut();
+        if (!registrationCompleted) {
+            mAuth.signOut();
+        }
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        mAuth.signOut();
+        if (!registrationCompleted) {
+            mAuth.signOut();
+        }
     }
 }

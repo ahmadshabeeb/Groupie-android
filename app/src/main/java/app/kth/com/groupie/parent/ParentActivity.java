@@ -103,29 +103,6 @@ public class ParentActivity extends AppCompatActivity {
         }
     }
 
-    private void createGroup() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
-        Group group = new Group();
-        group.setSubject("Math");
-        group.setTopic("Calculus");
-        group.setDescription("In the library");
-        group.setDateOfMeeting("20-04-2018");
-        group.setTimeOfCreation("19-04-18");
-        group.setHasMeetingDate(true);
-        group.setLocation("KTH kista");
-        group.setMaxNumberOfMembers(8);
-        group.setOwner(mAuth.getUid());
-        group.setIsPublic(true);
-
-        HashMap<String, Boolean> members = new HashMap<>();
-        members.put(mAuth.getUid(), true);
-        group.setMembers(members);
-
-        String groupKey = db.child("groups").push().getKey();
-        db.child("groups/" + groupKey).setValue(group);
-    }
-
     public void signOut(){
         mAuth.signOut();
         onStart();
@@ -149,8 +126,4 @@ public class ParentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void toRegistrationActivity(){
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        startActivity(intent);
-    }
 }

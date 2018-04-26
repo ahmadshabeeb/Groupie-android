@@ -44,13 +44,6 @@ public class CreateGroupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         membersSeekBar();
 
-        ImageButton goBack = (ImageButton) findViewById(R.id.back_button);
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         initButtons();
         initImageButtons();
 
@@ -185,10 +178,12 @@ public class CreateGroupActivity extends AppCompatActivity {
     public void membersSeekBar(){
         seek_bar = (SeekBar) findViewById(R.id.members_seekbar);
         seekBarTextView = (TextView) findViewById(R.id.seekBar_textview);
+        final String message = "Max members: ";
+
 
         seek_bar.setMax(15);
         seek_bar.setProgress(5);
-        seekBarTextView.setText("max number of members in group: " + seek_bar.getProgress());
+        seekBarTextView.setText(message + seek_bar.getProgress());
 
         seek_bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progressValue;
@@ -198,7 +193,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                 if (progress < 2){
                     progressValue = 2;
                 }
-                seekBarTextView.setText("max number of members in group: " + progressValue);
+                seekBarTextView.setText(message + progressValue);
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -206,7 +201,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             }
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekBarTextView.setText("max number of members in group: " + progressValue);
+                seekBarTextView.setText(message + progressValue);
             }
         });
     }

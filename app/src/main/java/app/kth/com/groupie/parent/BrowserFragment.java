@@ -26,9 +26,7 @@ import app.kth.com.groupie.data.Group;
 
 public class BrowserFragment extends Fragment {
     ParentActivity activity;
-    private ArrayList<Group> groups;
     private RecyclerView.Adapter mAdapter;
-    private static int NUM_GROUPS_TO_LOAD = 10;
 
     @Nullable
     @Override
@@ -38,54 +36,10 @@ public class BrowserFragment extends Fragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecycleView.setLayoutManager(mLayoutManager);
 
-        groups = new ArrayList<>();
-        //assign global variable groups to listen to group database
-        getGroups();
-
-        mAdapter = new GroupAdapter(getActivity(), groups);
+        mAdapter = new GroupAdapter(getActivity());
         mRecycleView.setAdapter(mAdapter);
 
         return rootView;
-    }
-
-    private void getGroups() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
-
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
-
-        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Group group = dataSnapshot.getValue(Group.class);
-
-                if (group.getIsPublic()) {
-                    group.setGroupId(dataSnapshot.getKey());
-                    groups.add(group);
-                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     @Override

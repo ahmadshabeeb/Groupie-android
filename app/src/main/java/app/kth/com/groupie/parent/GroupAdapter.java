@@ -20,6 +20,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
@@ -33,47 +34,49 @@ import app.kth.com.groupie.utilities.Utility;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groups;
     private Context context;
-    //private static int NUM_GROUPS_TO_LOAD = 10;
+    private static int NUM_GROUPS_TO_LOAD = 10;
 
-    public GroupAdapter(Context context, ArrayList<Group> groups) {
+    public GroupAdapter(Context context) {
         this.context = context;
-        this.groups = groups;
+        groups = new ArrayList<>();
+        getGroups();
+    }
 
-        //Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+    private void getGroups() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
 
-//        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                Group group = dataSnapshot.getValue(Group.class);
-//
-//                if (group.getIsPublic()) {
-//                    group.setGroupId(dataSnapshot.getKey());
-//                    groupArrayList.add(group);
-//                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
-//                }
-//                notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+        Query nearestGroupMeetingQuery = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
+
+        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+                group.setGroupId(dataSnapshot.getKey());
+                groups.add(group);
+                Log.d("TAG", "GROUP KEY: " + group.getGroupId());
+                notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -105,6 +108,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         final Group group = groups.get(position);
+        Log.d("TAG", "GROUP SIZE ADAPTER: " + groups.size());
 
         setFields(group, holder);
         setSubjectImage(group, holder);

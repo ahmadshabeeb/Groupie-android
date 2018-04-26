@@ -33,17 +33,22 @@ import java.util.TimeZone;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.data.recycleViewData.RecyclerHeader;
+import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.utilities.Utility;
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private ArrayList<Group> groupArrayList = new ArrayList<>();
+public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_GROUP = 1;
+
     private long[] daysInUNIX = new long[7];
     private int[] daysReference = new int[7];
-
+    private boolean[] headers = new boolean[7];
     private final Long DAY_IN_SECONDS = 86400l;
     private Context context;
-    private static int NUM_GROUPS_TO_LOAD = 100;
+    private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
 
     public GroupAdapter(Context context) {
@@ -53,16 +58,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         setGroups(databaseReference);
     }
 
-    private void calculateDaysInUNIX(){
-        long todayUnix = getTodayUnix();
-//        Log.d("TAG", todayUnix + " ...");
-        daysInUNIX[0] = todayUnix;
-
-        for(int i=1; i<daysInUNIX.length; i++){
-            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
-//            Log.d("TAG" , dayReference[i] + " ...");
-        }
-    }
     private long getTodayUnix(){
         Date today = new Date();
         DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -77,7 +72,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
         return todayUnix;
     }
+    private void calculateDaysInUNIX(){
+        long todayUnix = getTodayUnix();
+//        Log.d("TAG", todayUnix + " ...");
+        daysInUNIX[0] = todayUnix;
 
+        for(int i=1; i<daysInUNIX.length; i++){
+            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
+//            Log.d("TAG" , dayReference[i] + " ...");
+        }
+    }
 
     private void setGroups(final DatabaseReference databaseReference){
 
@@ -116,7 +120,6 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
             }
         });
-
     }
 
     private void addGroupToDataSet(Group group){
@@ -124,37 +127,72 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         Log.d("TAG", "group meeting day:" + groupMeetingDay);
 
         if(groupMeetingDay == daysInUNIX[0]){
-            groupArrayList.add(0,group);
-            modifyReferences(1,6);
+            groupArrayList.add(daysReference[0],group);
+            updateReferences(1,6);
+            if(!headers[0]){
+                addHeader("Today",  daysReference[0]);
+                headers[0] = true;
+                updateReferences(0,6);
+            }
             Log.d("TAG" , "added to Day1" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[1]){
             groupArrayList.add(daysReference[1],group);
-            modifyReferences(2,6);
+            updateReferences(2,6);
+            if(!headers[1]){
+                addHeader("Tomorrow", daysReference[1]);
+                headers[1] = true;
+                updateReferences(1,6);
+            }
             Log.d("TAG" , "added to Day2" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[2]){
             groupArrayList.add(daysReference[2],group);
-            modifyReferences(3,6);
+            updateReferences(3,6);
+            if(!headers[2]){
+                addHeader(getWeekDay(daysInUNIX[2]) , daysReference[2]);
+                headers[2] = true;
+                updateReferences(2,6);
+            }
             Log.d("TAG" , "added to Day3" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[3]){
             groupArrayList.add(daysReference[3],group);
-            modifyReferences(4,6);
+            updateReferences(4,6);
+            if(!headers[3]){
+                addHeader(getWeekDay(daysInUNIX[3]), daysReference[3]);
+                headers[3] = true;
+                updateReferences(3,6);
+            }
             Log.d("TAG" ,  "added to Day4"+ " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[4]){
             groupArrayList.add(daysReference[4],group);
-            modifyReferences(5,6);
+            updateReferences(5,6);
+            if(!headers[4]){
+                addHeader(getWeekDay(daysInUNIX[4]), daysReference[4]);
+                headers[4] = true;
+                updateReferences(4,6);
+            }
             Log.d("TAG" , "added to Day5" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[5]){
             groupArrayList.add(daysReference[5],group);
-            modifyReferences(6,6);
+            updateReferences(6,6);
+            if(!headers[5]){
+                addHeader(getWeekDay(daysInUNIX[5]), daysReference[5]);
+                headers[5] = true;
+                updateReferences(5,6);
+            }
             Log.d("TAG" , "added to Day6" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[6]){
             groupArrayList.add(daysReference[6],group);
+            if(!headers[6]){
+                addHeader(getWeekDay(daysInUNIX[6]), daysReference[6]);
+                headers[6] = true;
+                updateReferences(6,6);
+            }
             Log.d("TAG" , "added to Day7" + " ..." );
 
         }else {
@@ -164,12 +202,29 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     }
 
-    private void modifyReferences(int start, int end){
+    private void addHeader(String day, int position){
+        RecyclerHeader header = new RecyclerHeader();
+        header.setDay(day);
+        groupArrayList.add(position, header);
+    }
+
+    private String getWeekDay(long day){
+        Date date = new Date(day * 1000l);
+        DateFormat sdf = new SimpleDateFormat("EEEE");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String weekDay = sdf.format(date);
+        Log.d("Week day" , weekDay + "..." );
+        return weekDay;
+    }
+    private void updateReferences(int start, int end){
         for(int i=start; i<=end; i++){
             daysReference[i] += 1;
             Log.d("TAG" , "updated ref " + i + "   value: " + daysReference[i] );
         }
     }
+
+
+    //-------------------BINDING DATA----------------------//
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout parent = (RelativeLayout) itemView.findViewById(R.id.group_card_view);
@@ -190,22 +245,54 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
     }
 
-    @NonNull
-    @Override
-    public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group, parent, false);
-        return new GroupViewHolder(v);
+    public class HeaderViewHolder extends RecyclerView.ViewHolder{
+        TextView header = (TextView) itemView.findViewById(R.id.header);
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        final Group group = groupArrayList.get(position);
+    public int getItemViewType(int position) {
+        if (groupArrayList == null) {
+            return 0;
+        } else {
+            return groupArrayList.get(position).isHeader() ? TYPE_HEADER : TYPE_GROUP;
+        }
+    }
 
-        Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v;
+        switch (viewType) {
+            case TYPE_HEADER:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group_header, parent, false);
+                return new HeaderViewHolder(v);
+            case TYPE_GROUP:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group, parent, false);
+                return new GroupViewHolder(v);
+            default:
+                throw new IllegalArgumentException("NO CASE FOR TYPE " + viewType);
+        }
+    }
 
-        setFields(group, holder);
-        setSubjectImage(group, holder);
-        setJoinGroupButton(group, holder);
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        RecyclerListItem item = groupArrayList.get(position);
+        if (item.isHeader()){
+            RecyclerHeader header = (RecyclerHeader) item;
+            ((HeaderViewHolder) holder).header.setText(header.getDay());
+
+        }else {
+            Group group = (Group) item;
+            Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
+
+            setFields(group, (GroupViewHolder) holder);
+            setSubjectImage(group, (GroupViewHolder) holder);
+            setJoinGroupButton(group, (GroupViewHolder) holder);
+        }
     }
 
     @Override

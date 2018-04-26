@@ -2,11 +2,13 @@ package app.kth.com.groupie.data;
 
 import java.util.Map;
 
+import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
+
 /**
  * Created by Ahmad on 4/11/2018.
  */
 
-public class Group {
+public class Group implements RecyclerListItem {
     private String groupId;
     private String subject;
     private String topic;
@@ -121,4 +123,9 @@ public class Group {
     public long getMeetingDateTimeStamp() { return meetingDateTimeStamp; }
 
     public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
+
+    @Override
+    public boolean isHeader() {
+        return false;
+    }
 }

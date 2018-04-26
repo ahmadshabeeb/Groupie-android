@@ -1,5 +1,7 @@
 package app.kth.com.groupie.groupMessaging;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
@@ -22,9 +24,11 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -51,13 +55,13 @@ public class GroupMessagingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     public static class ProfileViewHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout mNavDrawerConstrainLayout;
+        RelativeLayout mNavDrawerRelativeLayout;
         CircleImageView mNavProfilePictureImageView;
         TextView mProfileNameTextView;
 
         public ProfileViewHolder(View itemView) {
             super(itemView);
-            mNavDrawerConstrainLayout = (ConstraintLayout) itemView.findViewById(R.id.navDrawerConstraintLayout);
+            mNavDrawerRelativeLayout = (RelativeLayout) itemView.findViewById(R.id.navDrawerRelativeLayout);
             mNavProfilePictureImageView = (CircleImageView) itemView.findViewById(R.id.navProfilePictureImageView);
             mProfileNameTextView = (TextView) itemView.findViewById(R.id.navProfileNameTextView);
         }
@@ -102,8 +106,9 @@ public class GroupMessagingActivity extends AppCompatActivity
     private final String CHILD_GROUPS = "groups";
     private final String CHILD_USERS = "users";
     private String mConversationId;
-    private String mGroupId;
     private Group mGroup;
+    private String mGroupID;
+    private int mPublicSwitchCounter =0;
     private ArrayList<Profile> memberNames;
     private DatabaseReference mGroupConversationRef;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -121,6 +126,11 @@ public class GroupMessagingActivity extends AppCompatActivity
     private TextView mEditableLocationTextView;
     private TextView mEditableDayTextView;
     private TextView mEditableDescriptionTextView;
+    private Switch mPublicSwitch;
+    private Button mLeaveGroupBtn;
+    private Button mEditGroupBtn;
+
+    private RecyclerView mProfileRecyclerView;
 
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
@@ -143,10 +153,6 @@ public class GroupMessagingActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private DatabaseReference getMessageRef(DataSnapshot snapshot) {
-        return snapshot.getRef().child(CHILD_MESSAGES);
-    }
-
     private void initDrawer() {
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //setSupportActionBar(toolbar);
@@ -162,7 +168,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void updateGroup() {
-        mFirebaseDatabaseReference.child(CHILD_GROUPS).child(mGroupId)
+        mFirebaseDatabaseReference.child(CHILD_GROUPS).child(mGroupID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -179,16 +185,27 @@ public class GroupMessagingActivity extends AppCompatActivity
         mEditableLocationTextView.setText(mGroup.getLocation());
         mEditableDayTextView.setText(mGroup.getDateOfMeeting());
         mEditableDescriptionTextView.setText(mGroup.getDescription());
+        mPublicSwitch.setChecked(mGroup.getIsPublic());
     }
 
     private void initViews() {
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setStackFromEnd(true);
+        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mProfileRecyclerView = (RecyclerView) findViewById(R.id.nav_drawer_recycler_view);
+        mProfileRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mGroupNotificationTextView = (TextView) findViewById(R.id.privateGroupNotificationTextView);
         mEditableSubjectTextView = (TextView) findViewById(R.id.editableSubjectTextView);
         mEditableTopicTextView = (TextView) findViewById(R.id.editableTopicTextView);
         mEditableLocationTextView = (TextView) findViewById(R.id.editableLocationTextView);
         mEditableDayTextView = (TextView) findViewById(R.id.editableDayTextView);
         mEditableDescriptionTextView = (TextView) findViewById(R.id.editableDescriptionTextView);
+        mPublicSwitch = (Switch) findViewById(R.id.publicSwitch);
+        mSendButton = (Button) findViewById(R.id.sendButton);
+        mLeaveGroupBtn = (Button) findViewById(R.id.leaveGroupButton);
+        mEditGroupBtn =(Button) findViewById(R.id.editGroupButton);
+        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
     }
 
 
@@ -201,14 +218,11 @@ public class GroupMessagingActivity extends AppCompatActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initViews();
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
-        mGroupId = "-LAvz1HsItFpbo97t5g_"; // FIX LATERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+        mGroupID = "-LB0ipl3XmWPBSf01Cbn";
 
         Log.d(TAG, "onCreate called.");
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setStackFromEnd(true);
-        mMessageRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -221,6 +235,25 @@ public class GroupMessagingActivity extends AppCompatActivity
             mGroupNotificationTextView.bringToFront();
             mGroupNotificationTextView.setVisibility(View.VISIBLE);
             mGroupNotificationTextView.setText("Private - this group is no longer accepting new members.");
+
+            mPublicSwitch.setClickable(true);
+            mPublicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Log.d(TAG, "onCheckChanged for publicSwitch;");
+                    mPublicSwitchCounter++;
+                }
+            });
+            // set color different for owner
+            mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    goToParentActivity();
+//                    Intent intent = new Intent(this , EditGroupActivity.class);
+//                    intent.putExtra("group", mGroup);
+//                    startActivity(intent);
+                }
+            });
         } else {
             mGroupNotificationTextView.setVisibility(View.GONE);
         }
@@ -298,33 +331,46 @@ public class GroupMessagingActivity extends AppCompatActivity
         });
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
 
-        class ProfileRecyclerViewAdapter extends RecyclerView.Adapter {
+        ArrayList<String> profiles = new ArrayList<String>();
+        for (int i=0; i<5; i++){ profiles.add("BEN BAI");}
+
+        class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
+            private ArrayList<String> profileCards;
+            private Context context;
+            private ProfileRecyclerViewAdapter(Context context, ArrayList<String> profileCards) {
+                this.profileCards = profileCards;
+                this.context = context;
+                Log.d(TAG, "Adaptor");
+            }
+
             @NonNull
             @Override
             public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View viewHolder = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.profile_item, parent, false);
-                viewHolder.findViewById(R.id.navDrawerConstraintLayout).setOnClickListener(new View.OnClickListener() {
+                viewHolder.findViewById(R.id.navDrawerRelativeLayout).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("Adapter", "onClick called.");
+                        Log.d(TAG, "onClick called.");
                     }
                 });
                 return new ProfileViewHolder(viewHolder);
             }
 
             @Override
-            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-               // ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers()   );
+            public void onBindViewHolder(ProfileViewHolder holder, int position) {
+               // ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers());
+                holder.mProfileNameTextView.setText(profileCards.get(position));
             }
 
             @Override
             public int getItemCount() {
-                return 0;
+                return this.profileCards.size();
             }
         }
 
-        mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+        mProfileRecyclerView.setAdapter(new ProfileRecyclerViewAdapter(this, profiles));
+
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(140)});
         mMessageEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -345,18 +391,27 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
 
-        mSendButton = (Button) findViewById(R.id.sendButton);
+        mLeaveGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //cloud function
+                Log.d(TAG,"LEAVE GROUP");
+            }
+        });
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Message msg = new Message();
                 msg.setText(mMessageEditText.getText().toString());
+                msg.setSenderUserId(mCurrentUser.getUid());
+                // use cloud function to fill in rest of sender data
                 mGroupConversationRef.child(CHILD_MESSAGES)
                         .push().setValue(msg);
                 mMessageEditText.setText("");
             }
         });
         Log.d(TAG, "end.");
+
     }
 
     @Override
@@ -367,6 +422,9 @@ public class GroupMessagingActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        //if (mPublicSwitchCounter%2==0) // don't call cloud function
+        //else // call cloud function
+        mPublicSwitchCounter=0;
     }
 
     @Override

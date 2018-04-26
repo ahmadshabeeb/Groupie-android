@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
-    android:id="@+id/navDrawerConstraintLayout"
+    android:id="@+id/navDrawerRelativeLayout"
     android:layout_marginTop="10dp"
     >
 
@@ -21,12 +20,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
         android:text="Sample text"
         android:textAlignment="center"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@id/navProfilePictureImageView"
-        app:layout_constraintRight_toLeftOf="parent"
-        tools:layout_editor_absoluteY="9dp" />
+        android:layout_toRightOf="@id/navProfilePictureImageView"
+        />
 
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

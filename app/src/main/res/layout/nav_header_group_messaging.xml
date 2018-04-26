@@ -37,10 +37,12 @@
         />
 
     <Switch
+        android:id="@+id/publicSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/fixedPublicTextView"
         android:layout_alignParentRight="true"
+        android:clickable="false"
         />
 
     <TextView

@@ -36,7 +36,10 @@ public class ProfileFragment extends Fragment {
     private TextView defaultLocation;
     private TextView firstName;
     private TextView lastName;
-    PrivateProfile currentUserProfile;
+    private DatabaseReference databaseReference;
+    private FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
+    private PrivateProfile currentUserProfile;
 
     @Nullable
     @Override
@@ -49,8 +52,13 @@ public class ProfileFragment extends Fragment {
         defaultLocation = (TextView) rootView.findViewById(R.id.profile_default_location);
         firstName = (TextView) rootView.findViewById(R.id.profile_first_name);
         lastName = (TextView) rootView.findViewById(R.id.profile_last_name);
+        mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
-        if (currentUserProfile != null){
+        if (currentUserProfile == null){
+           getUserProfile();
+        } else {
             displayProfileValues(currentUserProfile);
         }
         //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
@@ -89,18 +97,33 @@ public class ProfileFragment extends Fragment {
         activity = null;
     }
 
-   public void displayProfileValues(PrivateProfile currentUserProfile){
+
+    public void getUserProfile(){
+        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);
+                displayProfileValues(currentUserProfile);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void displayProfileValues(PrivateProfile currentUserProfile){
         schoolName.setText(currentUserProfile.getSchool());
         majorName.setText(currentUserProfile.getFieldOfStudy());
         defaultLocation.setText(currentUserProfile.getStudyLocation());
         firstName.setText(currentUserProfile.getFirstName());
         lastName.setText(currentUserProfile.getLastName());
-
-   }
+    }
 
     public void printBar(String message, View view){
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
 
 }

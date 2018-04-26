@@ -111,6 +111,22 @@ public class FirstLoginActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onPause(){
+        super.onPause();
+        if (!registrationCompleted) {
+            mAuth.signOut();
+        }
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
+        if (!registrationCompleted) {
+            mAuth.signOut();
+        }
+    }
+
+    @Override
     public void onStop(){
         super.onStop();
         if (!registrationCompleted) {

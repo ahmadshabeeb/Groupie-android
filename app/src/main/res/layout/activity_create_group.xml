@@ -4,6 +4,401 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateGroupActivity">
+    tools:context=".createGroup.CreateGroupActivity"
+    android:background="@color/offWhite">
+
+    <Button
+        android:id="@+id/day1_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/darkNavy"
+        android:textColor="@color/offWhite"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day2_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day2_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day3_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day4_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
+
+    <Button
+        android:id="@+id/day5_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day4_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
+
+    <Button
+        android:id="@+id/day6_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day5_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
+
+    <Button
+        android:id="@+id/day3_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day4_button"
+        app:layout_constraintTop_toBottomOf="@+id/dayofmeeting_textView" />
+
+    <Button
+        android:id="@+id/day7_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day6_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <EditText
+        android:id="@+id/location_edittext"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/darkNavy"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Location"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topic_edittext" />
+
+
+    <EditText
+        android:id="@+id/topic_edittext"
+        android:layout_width="238dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/darkNavy"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Topic"
+        android:inputType="textPersonName"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/create_button"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@color/grey"
+        android:text="Create Group"
+        android:textColor="@color/offWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/description_edittext"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/darkNavy"
+        android:gravity="center"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/members_seekbar" />
+
+    <SeekBar
+        android:id="@+id/members_seekbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/seekBar_textview" />
+
+    <TextView
+        android:id="@+id/seekBar_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day4_button" />
+
+    <TextView
+        android:id="@+id/dayofmeeting_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Day of meeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_edittext" />
+
+    <ImageView
+        android:id="@+id/language_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        app:layout_constraintBottom_toTopOf="@+id/language_textview"
+        app:layout_constraintEnd_toStartOf="@+id/programming_imageview"
+        app:srcCompat="@drawable/language" />
+
+    <ImageView
+        android:id="@+id/programming_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/programming_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/programming" />
+
+    <ImageView
+        android:id="@+id/math_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/math_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.024"
+        app:layout_constraintStart_toEndOf="@+id/programming_imageview"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/math" />
+
+    <TextView
+        android:id="@+id/language_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginRight="36dp"
+        android:gravity="center"
+        android:text="Language"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/science_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/programming_textview" />
+
+    <TextView
+        android:id="@+id/programming_textview"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginBottom="16dp"
+        android:text="Programming"
+        app:layout_constraintBottom_toTopOf="@+id/engineering_imageview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/math_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp"
+        android:gravity="center"
+        android:text="Math"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/business_imageview"
+        app:layout_constraintStart_toEndOf="@+id/programming_textview" />
+
+    <ImageView
+        android:id="@+id/business_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/business_textview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_imageview"
+        app:srcCompat="@drawable/business" />
+
+    <ImageView
+        android:id="@+id/engineering_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/engineering_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/engineering" />
+
+    <ImageView
+        android:id="@+id/science_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        app:layout_constraintBottom_toTopOf="@+id/science_textview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_imageview"
+        app:srcCompat="@drawable/science" />
+
+    <TextView
+        android:id="@+id/engineering_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:text="Engineering"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/music_imageview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/business_textview"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Business and Economics"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/other_imageview"
+        app:layout_constraintStart_toEndOf="@+id/engineering_textview" />
+
+    <TextView
+        android:id="@+id/science_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:text="Natural Sciences"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/law_imageview"
+        app:layout_constraintEnd_toStartOf="@+id/engineering_textview" />
+
+    <ImageView
+        android:id="@+id/music_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/music_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/music" />
+
+    <ImageView
+        android:id="@+id/law_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginRight="68dp"
+        app:layout_constraintBottom_toTopOf="@+id/law_textview"
+        app:layout_constraintEnd_toStartOf="@+id/music_imageview"
+        app:srcCompat="@drawable/law" />
+
+    <ImageView
+        android:id="@+id/other_imageview"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="56dp"
+        android:layout_marginStart="56dp"
+        app:layout_constraintBottom_toTopOf="@+id/other_textview"
+        app:layout_constraintStart_toEndOf="@+id/music_imageview"
+        app:srcCompat="@drawable/other" />
+
+    <TextView
+        android:id="@+id/law_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Law and\nPolitical Science"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintEnd_toStartOf="@+id/music_textview" />
+
+    <TextView
+        android:id="@+id/music_textview"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Art and Music"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/other_textview"
+        android:textSize="16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginStart="32dp"
+        android:gravity="center"
+        android:text="Other"
+        app:layout_constraintBottom_toTopOf="@+id/topic_edittext"
+        app:layout_constraintStart_toEndOf="@+id/music_textview" />
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/darkNavy"
+        android:backgroundTint="@color/darkNavy"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Create a Group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

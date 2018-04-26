@@ -20,6 +20,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
@@ -42,11 +43,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     private final Long DAY_IN_SECONDS = 86400l;
     private Context context;
-    private static int NUM_GROUPS_TO_LOAD = 10;
+    private static int NUM_GROUPS_TO_LOAD = 100;
+    private final DatabaseReference databaseReference;
 
-    public GroupAdapter(final DatabaseReference databaseReference, Context context) {
+    public GroupAdapter(Context context) {
         this.context = context;
         calculateDaysInUNIX();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         setGroups(databaseReference);
     }
 
@@ -263,7 +266,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
                 break;
 
-            case "Natural Science" :
+            case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
                 break;
 

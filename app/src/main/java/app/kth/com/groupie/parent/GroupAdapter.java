@@ -31,48 +31,49 @@ import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
-    private ArrayList<Group> groupArrayList = new ArrayList<>();
+    private ArrayList<Group> groups;
     private Context context;
-    private static int NUM_GROUPS_TO_LOAD = 10;
+    //private static int NUM_GROUPS_TO_LOAD = 10;
 
-    public GroupAdapter(final DatabaseReference databaseReference, Context context) {
+    public GroupAdapter(Context context, ArrayList<Group> groups) {
         this.context = context;
+        this.groups = groups;
 
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+        //Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
-        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Group group = dataSnapshot.getValue(Group.class);
-
-                if (group.getIsPublic()) {
-                    group.setGroupId(dataSnapshot.getKey());
-                    groupArrayList.add(group);
-                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
-                }
-                notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                Group group = dataSnapshot.getValue(Group.class);
+//
+//                if (group.getIsPublic()) {
+//                    group.setGroupId(dataSnapshot.getKey());
+//                    groupArrayList.add(group);
+//                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
+//                }
+//                notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -103,7 +104,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        final Group group = groupArrayList.get(position);
+        final Group group = groups.get(position);
 
         setFields(group, holder);
         setSubjectImage(group, holder);
@@ -112,7 +113,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
     @Override
     public int getItemCount() {
-        return groupArrayList.size();
+        return groups.size();
     }
     
     private void setFields(Group group, GroupViewHolder holder) {
@@ -168,7 +169,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
                 break;
 
-            case "Natural Science" :
+            case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
                 break;
 
@@ -208,7 +209,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                                         FirebaseFunctionsException.Code code = ffe.getCode();
                                         //Object details = ffe.getDetails();
                                         String message = ffe.getMessage();
-                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
+                                        Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
                                     }
 
                                     Log.w("TAG", "onFailure", e);

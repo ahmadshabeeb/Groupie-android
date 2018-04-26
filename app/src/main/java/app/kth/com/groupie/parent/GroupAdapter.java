@@ -28,7 +28,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Map;
 import java.util.TimeZone;
 
 import app.kth.com.groupie.R;
@@ -38,8 +37,9 @@ import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groupArrayList = new ArrayList<>();
-    private Long[] dayReference = new Long[7];
-    private Map<String,Integer> daysInUNIX;
+    private long[] daysInUNIX = new long[7];
+    private int[] daysReference = new int[7];
+
     private final Long DAY_IN_SECONDS = 86400l;
     private Context context;
     private static int NUM_GROUPS_TO_LOAD = 10;
@@ -51,22 +51,21 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     }
 
     private void calculateDaysInUNIX(){
-        Long todayUnix = getTodayUnix();
+        long todayUnix = getTodayUnix();
 //        Log.d("TAG", todayUnix + " ...");
-        dayReference[0] = todayUnix;
+        daysInUNIX[0] = todayUnix;
 
-        for(int i=1; i<dayReference.length; i++){
-            dayReference[i] = dayReference[i-1] + DAY_IN_SECONDS;
+        for(int i=1; i<daysInUNIX.length; i++){
+            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
 //            Log.d("TAG" , dayReference[i] + " ...");
         }
     }
-
-    private Long getTodayUnix(){
+    private long getTodayUnix(){
         Date today = new Date();
         DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String todayDate = sdf.format(today);
-        Long todayUnix = null;
+        long todayUnix = 0;
 
         try {
             todayUnix = sdf.parse(todayDate).getTime()/1000;
@@ -75,6 +74,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
         }
         return todayUnix;
     }
+
 
     private void setGroups(final DatabaseReference databaseReference){
 
@@ -87,8 +87,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
 
                 if (group.getIsPublic()) {
                     group.setGroupId(dataSnapshot.getKey());
-                    groupArrayList.add(group);
-                    Log.d("TAG", "GROUP KEY: " + group.getGroupId());
+                    addGroupToDataSet(group);
+                    //groupArrayList.add(group);
                 }
                 notifyDataSetChanged();
             }
@@ -114,6 +114,58 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
             }
         });
 
+    }
+
+    private void addGroupToDataSet(Group group){
+        long groupMeetingDay = group.getMeetingDateTimeStamp();
+        Log.d("TAG", "group meeting day:" + groupMeetingDay);
+
+        if(groupMeetingDay == daysInUNIX[0]){
+            groupArrayList.add(0,group);
+            modifyReferences(1,6);
+            Log.d("TAG" , "added to Day1" + " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[1]){
+            groupArrayList.add(daysReference[1],group);
+            modifyReferences(2,6);
+            Log.d("TAG" , "added to Day2" + " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[2]){
+            groupArrayList.add(daysReference[2],group);
+            modifyReferences(3,6);
+            Log.d("TAG" , "added to Day3" + " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[3]){
+            groupArrayList.add(daysReference[3],group);
+            modifyReferences(4,6);
+            Log.d("TAG" ,  "added to Day4"+ " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[4]){
+            groupArrayList.add(daysReference[4],group);
+            modifyReferences(5,6);
+            Log.d("TAG" , "added to Day5" + " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[5]){
+            groupArrayList.add(daysReference[5],group);
+            modifyReferences(6,6);
+            Log.d("TAG" , "added to Day6" + " ..." );
+
+        }else if(groupMeetingDay == daysInUNIX[6]){
+            groupArrayList.add(daysReference[6],group);
+            Log.d("TAG" , "added to Day7" + " ..." );
+
+        }else {
+            // do not add the group
+            Log.d("TAG" , " NOT ADDED ..." );
+        }
+
+    }
+
+    private void modifyReferences(int start, int end){
+        for(int i=start; i<=end; i++){
+            daysReference[i] += 1;
+            Log.d("TAG" , "updated ref " + i + "   value: " + daysReference[i] );
+        }
     }
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
@@ -146,8 +198,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         final Group group = groupArrayList.get(position);
 
+        Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
+
         setFields(group, holder);
-            setSubjectImage(group, holder);
+        setSubjectImage(group, holder);
         setJoinGroupButton(group, holder);
     }
 

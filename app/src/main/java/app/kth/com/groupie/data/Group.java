@@ -1,12 +1,6 @@
 package app.kth.com.groupie.data;
 
-import android.location.Location;
-
-import java.text.DateFormat;
-import java.util.List;
 import java.util.Map;
-
-import app.kth.com.groupie.data.structure.Profile;
 
 /**
  * Created by Ahmad on 4/11/2018.
@@ -27,6 +21,7 @@ public class Group {
     private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
+    private long meetingDateTimeStamp;
 
     public String getGroupId() {
         return groupId;
@@ -121,4 +116,9 @@ public class Group {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
+
+    public long getMeetingDateTimeStamp() { return meetingDateTimeStamp; }
+
+    public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
 }

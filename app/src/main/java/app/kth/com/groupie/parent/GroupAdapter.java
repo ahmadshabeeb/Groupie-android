@@ -209,7 +209,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
     public int getItemCount() {
         return groupArrayList.size();
     }
-    
+
     private void setFields(Group group, GroupViewHolder holder) {
         holder.subject.setText(group.getSubject());
 

@@ -110,8 +110,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="18dp"
-        android:background="@drawable/layout_join_button"
-        android:text="JOIN"
+        android:background="@drawable/join_group"
         />
 
 </RelativeLayout>

@@ -11,8 +11,11 @@ import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -21,6 +24,7 @@ import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.firstLogin.FirstLoginActivity;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
@@ -32,6 +36,8 @@ public class ParentActivity extends AppCompatActivity {
     BrowserFragment browserFragment;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    DatabaseReference databaseReference;
+    PrivateProfile currentUserProfile;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,7 +62,7 @@ public class ParentActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        //Check if user already signed in and update UI
+       // Check if user already signed in and update UI
         currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -64,17 +70,20 @@ public class ParentActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser){
         if (currentUser == null){
             toLoginActivity();
+        } else{
+            getUserProfile();
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         homeFragment = new HomeFragment();
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -148,5 +157,18 @@ public class ParentActivity extends AppCompatActivity {
     public void toRegistrationActivity(){
         Intent intent = new Intent(this, RegistrationActivity.class);
         startActivity(intent);
+    }
+
+    public void getUserProfile(){
+        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

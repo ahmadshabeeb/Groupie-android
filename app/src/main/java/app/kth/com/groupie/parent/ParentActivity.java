@@ -142,6 +142,7 @@ public class ParentActivity extends AppCompatActivity {
     }
     public void toEditProfileActivity(){
         Intent intent = new Intent(this, EditProfileActivity.class);
+        intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);
     }
     public void toSettingActivity(){

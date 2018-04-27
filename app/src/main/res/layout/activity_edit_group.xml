@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".editGroup.EditGroupActivity"
+    android:background="@color/offWhite">
+
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="36dp"
+        android:gravity="center"
+        android:text="Edit a group"
+        android:textColor="@color/darkNavy"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.056" />
+
+    <TextView
+        android:id="@+id/subject_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="Subject: "
+        android:textColor="@color/darkNavy"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+    <TextView
+        android:id="@+id/topic_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Topic: "
+        android:textColor="@color/darkNavy"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subject_textview" />
+
+    <Button
+        android:id="@+id/day1_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day2_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day2_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day3_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day4_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/meetingday_textview" />
+
+    <Button
+        android:id="@+id/day5_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day4_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day6_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day5_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day3_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/day4_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <Button
+        android:id="@+id/day7_button"
+        android:layout_width="52dp"
+        android:layout_height="34dp"
+        android:background="@color/offWhite"
+        android:textColor="@color/darkNavy"
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/day6_button"
+        app:layout_constraintTop_toTopOf="@+id/day4_button" />
+
+    <TextView
+        android:id="@+id/groupsubject_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/subject_textview"
+        app:layout_constraintTop_toTopOf="@+id/subject_textview" />
+
+    <TextView
+        android:id="@+id/grouptopic_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/topic_textview"
+        app:layout_constraintTop_toTopOf="@+id/topic_textview" />
+
+    <TextView
+        android:id="@+id/meetingday_textview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Day of meeting"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line" />
+
+    <EditText
+        android:id="@+id/location_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:ems="10"
+        android:hint="Location"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/location_textview"
+        app:layout_constraintTop_toBottomOf="@+id/day4_button" />
+
+    <EditText
+        android:id="@+id/description_edittext"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Description"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/description_textview" />
+
+    <TextView
+        android:id="@+id/location_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Location:"
+        android:textColor="@color/darkNavy"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/day2_button"
+        app:layout_constraintTop_toBottomOf="@+id/day4_button" />
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="300dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/darkNavy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grouptopic_textview" />
+
+    <TextView
+        android:id="@+id/line2"
+        android:layout_width="300dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/darkNavy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_textview" />
+
+    <TextView
+        android:id="@+id/description_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:text="Description"
+        android:textColor="@color/darkNavy"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/maxmember_textview" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/maxmember_textview" />
+
+    <TextView
+        android:id="@+id/maxmember_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Max members"
+        app:layout_constraintBottom_toBottomOf="@+id/save_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_edittext"
+        app:layout_constraintVertical_bias="0.105" />
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/darkNavy"
+        android:text="Save changes"
+        android:textColor="@color/offWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/addmember"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/maxmember_textview" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/person"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/maxmember_textview" />
+
+
+</android.support.constraint.ConstraintLayout>

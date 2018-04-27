@@ -26,6 +26,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        Button editGroup = (Button) rootView.findViewById(R.id.editgroup_button);
+        editGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.goToEditGroup();
+            }
+        });
+
         return rootView;
     }
 

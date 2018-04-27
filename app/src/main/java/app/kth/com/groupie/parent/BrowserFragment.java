@@ -23,12 +23,12 @@ public class BrowserFragment extends Fragment {
     private FilterChoice filterChoice;
     private Resources resources;
     private RecyclerView mRecycleView;
+    private boolean[] filterTriggers = new boolean[9];
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState) {
         ViewGroup rootView = createRecycleView(inflater, container);
-        //filterChoice.addSubject("Math");
         subjectClickableListener(rootView);
         filterChoice.printSubjects();
         return rootView;
@@ -50,24 +50,96 @@ public class BrowserFragment extends Fragment {
         filterLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("TAG", "CLICK HERE!!!!!");
-                filterChoice.addSubject("Language");
-                filterChoice.printSubjects();
+                filterBy(0,R.string.language);
                 initializeAdapter();
             }
         });
 
+        filterProgramming.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(1,R.string.programming);
+                initializeAdapter();
+            }
+        });
+
+        filterMath.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(2,R.string.math);
+                initializeAdapter();
+            }
+        });
+
+        filterScience.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(3,R.string.naturalSciences);
+                initializeAdapter();
+            }
+        });
+
+        filterEnginerring.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(4,R.string.engineering);
+                initializeAdapter();
+            }
+        });
+
+        filterBusiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(5,R.string.buisnessAndEconomics);
+                initializeAdapter();
+            }
+        });
+
+        filterLaw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(6,R.string.lawAndPoliticalScience);
+                initializeAdapter();
+            }
+        });
+
+        filterMusic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(7,R.string.artAndMusic);
+                initializeAdapter();
+            }
+        });
+
+        filterOther.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterBy(8,R.string.other);
+                initializeAdapter();
+            }
+        });
+    }
+
+
+    private void filterBy(int position, int subject){
+        if(!filterTriggers[position])
+        {
+            filterChoice.addSubject(getResources().getString(subject));
+            filterChoice.printSubjects();
+            filterTriggers[position] = true;
+        }else {
+            filterChoice.removeSubject(getResources().getString(subject));
+            filterChoice.printSubjects();
+            filterTriggers[position] = false;
+        }
     }
 
     private ViewGroup createRecycleView(LayoutInflater inflater, ViewGroup container) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_browser, container, false);
 
         mRecycleView = (RecyclerView) rootView.findViewById(R.id.group_list_recycle);
-
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-
         mRecycleView.setLayoutManager(mLayoutManager);
-
         this.filterChoice = activity.filterChoice;
 
         initializeAdapter();
@@ -103,10 +175,12 @@ public class BrowserFragment extends Fragment {
             subjects.put(subject, true);
         }
 
+        public void removeSubject(String subject) {subjects.remove(subject); }
+
         public void printSubjects() {
-            Log.d("TAG", "PRINTING SUBJECTS");
+            Log.d("filter", "PRINTING SUBJECTS");
             for (String subject: subjects.keySet()) {
-                Log.d("TAG", "SUBJECT : " + subject);
+                Log.d("filter", "SUBJECT : " + subject);
             }
         }
 

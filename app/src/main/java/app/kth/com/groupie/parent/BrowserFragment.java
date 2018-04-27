@@ -37,20 +37,21 @@ public class BrowserFragment extends Fragment {
     private void subjectClickableListener(ViewGroup rootView) {
         resources = getResources();
 
-        ImageView filterLanguage = (ImageView) rootView.findViewById(R.id.language_filter_icon);
-        ImageView filterProgramming = (ImageView) rootView.findViewById(R.id.programming_filter_icon);
-        ImageView filterMath = (ImageView) rootView.findViewById(R.id.math_filter_icon);
-        ImageView filterScience = (ImageView) rootView.findViewById(R.id.science_filter_icon);
-        ImageView filterEnginerring = (ImageView) rootView.findViewById(R.id.engineering_filter_icon);
-        ImageView filterBusiness = (ImageView) rootView.findViewById(R.id.business_filter_icon);
-        ImageView filterLaw = (ImageView) rootView.findViewById(R.id.law_filter_icon);
-        ImageView filterMusic = (ImageView) rootView.findViewById(R.id.music_filter_icon);
-        ImageView filterOther = (ImageView) rootView.findViewById(R.id.other_filter_icon);
+        final ImageView filterLanguage = (ImageView) rootView.findViewById(R.id.language_filter_icon);
+        final ImageView filterProgramming = (ImageView) rootView.findViewById(R.id.programming_filter_icon);
+        final ImageView filterMath = (ImageView) rootView.findViewById(R.id.math_filter_icon);
+        final ImageView filterScience = (ImageView) rootView.findViewById(R.id.science_filter_icon);
+        final ImageView filterEnginerring = (ImageView) rootView.findViewById(R.id.engineering_filter_icon);
+        final ImageView filterBusiness = (ImageView) rootView.findViewById(R.id.business_filter_icon);
+        final ImageView filterLaw = (ImageView) rootView.findViewById(R.id.law_filter_icon);
+        final ImageView filterMusic = (ImageView) rootView.findViewById(R.id.music_filter_icon);
+        final ImageView filterOther = (ImageView) rootView.findViewById(R.id.other_filter_icon);
 
         filterLanguage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(0,R.string.language);
+                filterBy(0,R.string.language, filterLanguage);
+                Log.d("HHH", "here");
                 initializeAdapter();
             }
         });
@@ -58,7 +59,7 @@ public class BrowserFragment extends Fragment {
         filterProgramming.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(1,R.string.programming);
+                filterBy(1,R.string.programming, filterProgramming );
                 initializeAdapter();
             }
         });
@@ -66,7 +67,7 @@ public class BrowserFragment extends Fragment {
         filterMath.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(2,R.string.math);
+                filterBy(2,R.string.math, filterMath);
                 initializeAdapter();
             }
         });
@@ -74,7 +75,7 @@ public class BrowserFragment extends Fragment {
         filterScience.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(3,R.string.naturalSciences);
+                filterBy(3,R.string.naturalSciences, filterScience);
                 initializeAdapter();
             }
         });
@@ -82,7 +83,7 @@ public class BrowserFragment extends Fragment {
         filterEnginerring.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(4,R.string.engineering);
+                filterBy(4,R.string.engineering, filterEnginerring);
                 initializeAdapter();
             }
         });
@@ -90,7 +91,7 @@ public class BrowserFragment extends Fragment {
         filterBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(5,R.string.buisnessAndEconomics);
+                filterBy(5,R.string.buisnessAndEconomics, filterBusiness);
                 initializeAdapter();
             }
         });
@@ -98,7 +99,7 @@ public class BrowserFragment extends Fragment {
         filterLaw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(6,R.string.lawAndPoliticalScience);
+                filterBy(6,R.string.lawAndPoliticalScience, filterLaw);
                 initializeAdapter();
             }
         });
@@ -106,7 +107,7 @@ public class BrowserFragment extends Fragment {
         filterMusic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(7,R.string.artAndMusic);
+                filterBy(7,R.string.artAndMusic, filterMusic);
                 initializeAdapter();
             }
         });
@@ -114,23 +115,26 @@ public class BrowserFragment extends Fragment {
         filterOther.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                filterBy(8,R.string.other);
+                filterBy(8,R.string.other, filterOther);
                 initializeAdapter();
             }
         });
     }
 
 
-    private void filterBy(int position, int subject){
+    private void filterBy(int position, int subject, ImageView view){
         if(!filterTriggers[position])
         {
             filterChoice.addSubject(getResources().getString(subject));
             filterChoice.printSubjects();
             filterTriggers[position] = true;
+            view.setBackgroundColor(resources.getColor(R.color.lightGrey));
+
         }else {
             filterChoice.removeSubject(getResources().getString(subject));
             filterChoice.printSubjects();
             filterTriggers[position] = false;
+            view.setBackgroundColor(resources.getColor(R.color.offWhite));
         }
     }
 

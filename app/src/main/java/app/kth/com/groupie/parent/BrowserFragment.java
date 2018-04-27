@@ -1,6 +1,7 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,36 +11,73 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import app.kth.com.groupie.R;
-import app.kth.com.groupie.data.Group;
 
 public class BrowserFragment extends Fragment {
     ParentActivity activity;
     private RecyclerView.Adapter mAdapter;
+    private FilterChoice filterChoice;
+    private Resources resources;
+    private RecyclerView mRecycleView;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState) {
+        ViewGroup rootView = createRecycleView(inflater, container);
+        //filterChoice.addSubject("Math");
+        subjectClickableListener(rootView);
+        filterChoice.printSubjects();
+        return rootView;
+    }
+
+    private void subjectClickableListener(ViewGroup rootView) {
+        resources = getResources();
+
+        ImageView filterLanguage = (ImageView) rootView.findViewById(R.id.language_filter_icon);
+        ImageView filterProgramming = (ImageView) rootView.findViewById(R.id.programming_filter_icon);
+        ImageView filterMath = (ImageView) rootView.findViewById(R.id.math_filter_icon);
+        ImageView filterScience = (ImageView) rootView.findViewById(R.id.science_filter_icon);
+        ImageView filterEnginerring = (ImageView) rootView.findViewById(R.id.engineering_filter_icon);
+        ImageView filterBusiness = (ImageView) rootView.findViewById(R.id.business_filter_icon);
+        ImageView filterLaw = (ImageView) rootView.findViewById(R.id.law_filter_icon);
+        ImageView filterMusic = (ImageView) rootView.findViewById(R.id.music_filter_icon);
+        ImageView filterOther = (ImageView) rootView.findViewById(R.id.other_filter_icon);
+
+        filterLanguage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("TAG", "CLICK HERE!!!!!");
+                filterChoice.addSubject("Language");
+                filterChoice.printSubjects();
+                initializeAdapter();
+            }
+        });
+
+    }
+
+    private ViewGroup createRecycleView(LayoutInflater inflater, ViewGroup container) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_browser, container, false);
-        RecyclerView mRecycleView = (RecyclerView) rootView.findViewById(R.id.group_list_recycle);
+
+        mRecycleView = (RecyclerView) rootView.findViewById(R.id.group_list_recycle);
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+
         mRecycleView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new GroupAdapter(getActivity());
-        mRecycleView.setAdapter(mAdapter);
+        this.filterChoice = activity.filterChoice;
+
+        initializeAdapter();
 
         return rootView;
+    }
+
+    private void initializeAdapter() {
+        mAdapter = new GroupAdapter(getActivity(), filterChoice);
+        mRecycleView.setAdapter(mAdapter);
     }
 
     @Override
@@ -53,4 +91,36 @@ public class BrowserFragment extends Fragment {
         super.onDetach();
         activity = null;
     }
+
+    public static class FilterChoice {
+        private HashMap<String, Boolean> subjects;
+
+        public FilterChoice() {
+            subjects = new HashMap<>();
+        }
+
+        public void addSubject(String subject) {
+            subjects.put(subject, true);
+        }
+
+        public void printSubjects() {
+            Log.d("TAG", "PRINTING SUBJECTS");
+            for (String subject: subjects.keySet()) {
+                Log.d("TAG", "SUBJECT : " + subject);
+            }
+        }
+
+        public boolean isChosenSubject(String groupSubject) {
+            if (subjects.isEmpty())
+                return true;
+
+            for (String subject: subjects.keySet()) {
+                if (subject.equals(groupSubject))
+                    return true;
+            }
+
+            return false;
+        }
+    }
+
 }

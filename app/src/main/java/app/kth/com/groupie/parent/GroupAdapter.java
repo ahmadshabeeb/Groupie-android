@@ -2,6 +2,7 @@ package app.kth.com.groupie.parent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,41 +51,19 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
+    private BrowserFragment.FilterChoice filterChoice;
+    private Resources resources;
 
-    public GroupAdapter(Context context) {
+    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice) {
         this.context = context;
+        resources = context.getResources();
         calculateDaysInUNIX();
+        this.filterChoice = filterChoice;
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         setGroups(databaseReference);
     }
 
-    private long getTodayUnix(){
-        Date today = new Date();
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String todayDate = sdf.format(today);
-        long todayUnix = 0;
-
-        try {
-            todayUnix = sdf.parse(todayDate).getTime()/1000;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return todayUnix;
-    }
-    private void calculateDaysInUNIX(){
-        long todayUnix = getTodayUnix();
-//        Log.d("TAG", todayUnix + " ...");
-        daysInUNIX[0] = todayUnix;
-
-        for(int i=1; i<daysInUNIX.length; i++){
-            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
-//            Log.d("TAG" , dayReference[i] + " ...");
-        }
-    }
-
-    private void setGroups(final DatabaseReference databaseReference){
-
+    private void setGroups(final DatabaseReference databaseReference) {
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
         nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
@@ -93,9 +72,10 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Group group = dataSnapshot.getValue(Group.class);
 
                 if (group.getIsPublic()) {
-                    group.setGroupId(dataSnapshot.getKey());
-                    addGroupToDataSet(group);
-                    //groupArrayList.add(group);
+                    if (filterChoice.isChosenSubject(group.getSubject())) {
+                        group.setGroupId(dataSnapshot.getKey());
+                        addGroupToDataSet(group);
+                    }
                 }
                 notifyDataSetChanged();
             }
@@ -216,10 +196,36 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         Log.d("Week day" , weekDay + "..." );
         return weekDay;
     }
+
     private void updateReferences(int start, int end){
         for(int i=start; i<=end; i++){
             daysReference[i] += 1;
             Log.d("TAG" , "updated ref " + i + "   value: " + daysReference[i] );
+        }
+    }
+
+    private long getTodayUnix(){
+        Date today = new Date();
+        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String todayDate = sdf.format(today);
+        long todayUnix = 0;
+
+        try {
+            todayUnix = sdf.parse(todayDate).getTime()/1000;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return todayUnix;
+    }
+    private void calculateDaysInUNIX(){
+        long todayUnix = getTodayUnix();
+//        Log.d("TAG", todayUnix + " ...");
+        daysInUNIX[0] = todayUnix;
+
+        for(int i=1; i<daysInUNIX.length; i++){
+            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
+//            Log.d("TAG" , dayReference[i] + " ...");
         }
     }
 
@@ -281,6 +287,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerListItem item = groupArrayList.get(position);
+
         if (item.isHeader()){
             RecyclerHeader header = (RecyclerHeader) item;
             ((HeaderViewHolder) holder).header.setText(header.getDay());
@@ -331,8 +338,9 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private void setSubjectImage(Group group, GroupViewHolder holder) {
         // show right image based on the subject
+
         switch (group.getSubject()){
-            case "Language" :
+            case "Language":
                 //replace by the right image
                 holder.subjectImage.setBackgroundResource(R.drawable.language);
                 break;

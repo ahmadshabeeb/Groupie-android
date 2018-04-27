@@ -28,8 +28,6 @@ import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 
 public class CreateGroupActivity extends AppCompatActivity {
-
-
     Button currentDayButton;
     String currentDate;
     FirebaseAuth mAuth;

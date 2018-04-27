@@ -1,9 +1,7 @@
 package app.kth.com.groupie.groupMessaging;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +32,8 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,6 +41,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.gson.Gson;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -49,6 +53,7 @@ import app.kth.com.groupie.data.structure.Message;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
+import app.kth.com.groupie.utilities.Utility;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GroupMessagingActivity extends AppCompatActivity
@@ -107,9 +112,9 @@ public class GroupMessagingActivity extends AppCompatActivity
     private final String CHILD_USERS = "users";
     private String mConversationId;
     private Group mGroup;
-    private String mGroupID;
-    private int mPublicSwitchCounter =0;
-    private ArrayList<Profile> memberNames;
+    private String mGroupId;
+    private int mPublicSwitchCounter = 0;
+    private ArrayList<Profile> mMemberProfiles;
     private DatabaseReference mGroupConversationRef;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -134,6 +139,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
+    private boolean isFirst =true;
 
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
@@ -168,7 +174,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void updateGroup() {
-        mFirebaseDatabaseReference.child(CHILD_GROUPS).child(mGroupID)
+        mFirebaseDatabaseReference.child(CHILD_GROUPS).child(mGroupId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -180,6 +186,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void updateGroupInfo() {
+        mMemberProfiles.addAll(getGroupMembers());
         mEditableSubjectTextView.setText(mGroup.getSubject());
         mEditableTopicTextView.setText(mGroup.getTopic());
         mEditableLocationTextView.setText(mGroup.getLocation());
@@ -188,7 +195,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         mPublicSwitch.setChecked(mGroup.getIsPublic());
     }
 
-    private void initViews() {
+    private void initialize() {
         mMessageRecyclerView = (RecyclerView) findViewById(R.id.messageRecyclerView);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setStackFromEnd(true);
@@ -208,21 +215,71 @@ public class GroupMessagingActivity extends AppCompatActivity
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
     }
 
+    private ArrayList<Profile> getGroupMembers() {
+        for (String userId: mGroup.getMembers().keySet()) {
+            Log.d(TAG, userId+" user IDDDD");
+            Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
+                    .addOnCompleteListener(new OnCompleteListener<String>() {
+                @Override
+                public void onComplete(@NonNull Task<String> task) {
+                    if (!task.isSuccessful()) {
+                        Exception e = task.getException();
+                        if (e instanceof FirebaseFunctionsException) {
+                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                            FirebaseFunctionsException.Code code = ffe.getCode();
+                            String message = ffe.getMessage();
+                            Log.d(TAG, "ERROR CODE: " + code + " ... " + message);
+                        }
+                        Log.w(TAG, "onFailure", e);
+                    } else {
+                        String result = task.getResult();
+                        result.trim();
+                        Log.d(TAG, "profile result as a string: "+result);
+                        Gson profileGson = new Gson();
+                        Profile profile = profileGson.fromJson(result, Profile.class);
+                        Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
+                    }
+                }
+            });
+        }
+        return new ArrayList<Profile>();
+    }
 
+    private int getProfileIndexFromMsg(Message msg) {
+        int i=0;
+        for (Profile profile : mMemberProfiles) {
+            if (profile.getUserId().equals(msg.getSenderUserId())) return i;
+            i++;
+        }
+        return 0;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_group_messaging);
-        initDrawer();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        initViews();
-
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
-        mGroupID = "-LB0ipl3XmWPBSf01Cbn";
-
+        Log.d(TAG, "Object Group ID " + mGroup.getGroupId());
         Log.d(TAG, "onCreate called.");
+        mGroupId = mGroup.getGroupId();
+        Log.d(TAG, "Global var Group ID " + mGroup.getGroupId());
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_group_messaging);
+
+        initDrawer();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        initialize();
+//        mPublicSwitch.setChecked(mGroup.getIsPublic());
+        Profile profile = new Profile();
+        profile.setFirstName("Dummy first name");
+        profile.setLastName("Dummy last name");
+        profile.setBio("Dummy bio");
+        profile.setFieldOfStudy("dummy field of study");
+        profile.setSchool("Dummy school");
+        profile.setUserId("Dummy userID");
+        profile.setProfilePicture("Dummy profile pic path");
+        mMemberProfiles = getGroupMembers();
+        mMemberProfiles.add(0,profile);
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -240,8 +297,17 @@ public class GroupMessagingActivity extends AppCompatActivity
             mPublicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Log.d(TAG, "onCheckChanged for publicSwitch;");
-                    mPublicSwitchCounter++;
+                    if(isFirst){
+                        mPublicSwitchCounter =1;
+                        Log.d(TAG,"11111111111111111");
+                        mPublicSwitchCounter++;
+                        Log.d(TAG,mPublicSwitchCounter+"counter");
+                        isFirst =false;
+                    }else {
+                        Log.d(TAG, "11111111111111111");
+                        mPublicSwitchCounter++;
+                        Log.d(TAG, mPublicSwitchCounter + "counter");
+                    }
                 }
             });
             // set color different for owner
@@ -310,10 +376,11 @@ public class GroupMessagingActivity extends AppCompatActivity
                         mViewHolder.setClickable(true);
                         holder.messageItemSentTextView.setVisibility(View.GONE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
-//                    holder.senderTextView.setText(msg.getName());
+//                        holder.senderTextView.setText(mMemberProfiles.get(getProfileIndexFromMsg(msg)).getFirstName());
 //                    holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
                     }
                 }
+               // mMemberProfiles = getGroupMembers();
                 updateGroup();
             }
         };
@@ -331,13 +398,11 @@ public class GroupMessagingActivity extends AppCompatActivity
         });
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
 
-        ArrayList<String> profiles = new ArrayList<String>();
-        for (int i=0; i<5; i++){ profiles.add("BEN BAI");}
-
         class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
-            private ArrayList<String> profileCards;
+            private ArrayList<Profile> profileCards;
             private Context context;
-            private ProfileRecyclerViewAdapter(Context context, ArrayList<String> profileCards) {
+
+            private ProfileRecyclerViewAdapter(Context context, ArrayList<Profile> profileCards) {
                 this.profileCards = profileCards;
                 this.context = context;
                 Log.d(TAG, "Adaptor");
@@ -359,8 +424,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
             @Override
             public void onBindViewHolder(ProfileViewHolder holder, int position) {
-               // ((ProfileViewHolder) holder).mProfileNameTextView.setText(mGroup.getMembers());
-                holder.mProfileNameTextView.setText(profileCards.get(position));
+                holder.mProfileNameTextView.setText(profileCards.get(position).getFirstName());
             }
 
             @Override
@@ -369,7 +433,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         }
 
-        mProfileRecyclerView.setAdapter(new ProfileRecyclerViewAdapter(this, profiles));
+        mProfileRecyclerView.setAdapter(new ProfileRecyclerViewAdapter(this, mMemberProfiles));
 
         mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(140)});
         mMessageEditText.addTextChangedListener(new TextWatcher() {
@@ -396,6 +460,8 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onClick(View v) {
                 //cloud function
                 Log.d(TAG,"LEAVE GROUP");
+                Utility.callCloudFunctions("dbGroupsLeave", mGroupId);
+                goToParentActivity();
             }
         });
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -419,12 +485,23 @@ public class GroupMessagingActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.END)) {
             drawer.closeDrawer(GravityCompat.END);
+            if (mPublicSwitchCounter%2!=0) {
+                Log.d(TAG, "onCheckChanged for publicSwitch;");
+                Log.d(TAG, "Inside the public switch " + mGroupId);
+                Utility.callCloudFunctions("dbGroupsTogglePublic", mGroupId );
+                mPublicSwitchCounter=0;
+                Log.d(TAG,mPublicSwitchCounter+"counter");
+                Log.d(TAG,mPublicSwitchCounter+"change public status");
+
+            }
+            mPublicSwitchCounter=0;
+            Log.d(TAG,mPublicSwitchCounter+"drawer");
+
         } else {
             super.onBackPressed();
+            mPublicSwitchCounter=0;
+            Log.d(TAG,mPublicSwitchCounter+"super backbutton");
         }
-        //if (mPublicSwitchCounter%2==0) // don't call cloud function
-        //else // call cloud function
-        mPublicSwitchCounter=0;
     }
 
     @Override

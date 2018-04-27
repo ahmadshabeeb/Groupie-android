@@ -217,6 +217,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHol
                                 } else {
                                     String result = task.getResult();
                                     Intent intent = new Intent(context , GroupMessagingActivity.class);
+                                    Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
                                     intent.putExtra("group", group);
                                     context.startActivity(intent);
                                 }

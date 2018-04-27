@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:padding="10dp"
     android:id="@+id/messageItemLayout"
-    android:layout_marginTop="10dp">
+    android:layout_marginTop="10dp"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilePictureImageView"
@@ -23,7 +24,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_marginRight="10dp"
         android:maxWidth="240dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:background="@drawable/layout_sender_messageview_background"
+        android:textColor="@color/offWhite"
+        />
 
 
     <TextView
@@ -35,6 +39,7 @@
         android:layout_toRightOf="@id/profilePictureImageView"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
+        android:background="@drawable/layout_receiver_messageview_background"
         android:maxWidth="240dp"/>
 
     <TextView
@@ -42,7 +47,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fred Robinson"
         android:layout_toRightOf="@id/profilePictureImageView"
         />
 

@@ -12,19 +12,19 @@
     sothree:umanoParallaxOffset="100dp"
     sothree:umanoDragView="@+id/dragView"
     sothree:umanoOverlay="true"
-    sothree:umanoScrollableView="@+id/list"
+    sothree:umanoScrollableView="@+id/subject_filter"
     >
 
-<FrameLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/lightGrey"
-    android:orientation="vertical"
-    android:paddingTop="36dp">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightGrey"
+        android:orientation="vertical"
+        android:paddingTop="36dp">
 
-    <include layout="@layout/list_group_recycle" />
+        <include layout="@layout/list_group_recycle" />
 
-</FrameLayout>
+    </FrameLayout>
 
 
     <!-- SLIDING LAYOUT -->
@@ -36,35 +36,119 @@
         android:focusable="false"
         android:id="@+id/dragView">
 
-        <ListView
-            android:id="@+id/list"
+        <RelativeLayout
+            android:id="@+id/subject_filter"
+            android:padding="50dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-        </ListView>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:clickable="true">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="40sp"
-            android:textStyle="bold"
-            android:text="¯\\_(ツ)_/¯"
-            android:layout_centerInParent="true"
-            />
+            <!-- subject list -->
+                <!-- TOP ROW -->
+                <ImageView
+                    android:id="@+id/language_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/language"
+                    />
 
+                <ImageView
+                    android:id="@+id/programming_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/language_filter_icon"
+                    android:layout_toLeftOf="@id/math_filter_icon"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/programming"
+                    />
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Filter"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:paddingBottom="6dp"
-            android:visibility="gone"
-            />
+                <ImageView
+                    android:id="@+id/math_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/math"
+                    />
+
+                <!-- MIDDLE ROW -->
+
+                <ImageView
+                    android:id="@+id/science_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/language_filter_icon"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/science"
+                    />
+
+                <ImageView
+                    android:id="@+id/engineering_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/science_filter_icon"
+                    android:layout_toLeftOf="@id/business_filter_icon"
+                    android:layout_below="@id/programming_filter_icon"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/engineering"
+                    />
+
+                <ImageView
+                    android:id="@+id/business_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/math_filter_icon"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="30dp"
+                    android:padding="5dp"
+                    android:src="@drawable/business"
+                    />
+
+                <!-- BOTTOM ROW -->
+
+                <ImageView
+                    android:id="@+id/law_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/science_filter_icon"
+                    android:layout_alignParentLeft="true"
+                    android:padding="5dp"
+                    android:src="@drawable/law"
+                    />
+
+                <ImageView
+                    android:id="@+id/music_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/law_filter_icon"
+                    android:layout_toLeftOf="@id/other_filter_icon"
+                    android:layout_below="@id/engineering_filter_icon"
+                    android:padding="5dp"
+                    android:src="@drawable/music"
+                    />
+
+                <ImageView
+                    android:id="@+id/other_filter_icon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/business_filter_icon"
+                    android:layout_alignParentRight="true"
+                    android:padding="5dp"
+                    android:background="#89cff0"
+                    android:src="@drawable/other"
+                    />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/filter_icon"

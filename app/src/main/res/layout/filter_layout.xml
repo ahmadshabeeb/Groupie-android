@@ -160,7 +160,7 @@
         <Button
             android:id="@+id/filter_day1_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -173,7 +173,7 @@
         <Button
             android:id="@+id/filter_day2_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -185,7 +185,7 @@
         <Button
             android:id="@+id/filter_day3_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -197,7 +197,7 @@
         <Button
             android:id="@+id/filter_day4_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -209,7 +209,7 @@
         <Button
             android:id="@+id/filter_day5_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -221,7 +221,7 @@
         <Button
             android:id="@+id/filter_day6_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"
@@ -233,7 +233,7 @@
         <Button
             android:id="@+id/filter_day7_button"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Today"
             android:background="@color/offWhite"

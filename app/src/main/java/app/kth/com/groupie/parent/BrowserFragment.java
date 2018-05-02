@@ -178,7 +178,7 @@ public class BrowserFragment extends Fragment {
         daysOfMeeting.get(6).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                filterByDayOfMeeting(0, daysOfMeeting.get(6));
+                filterByDayOfMeeting(6, daysOfMeeting.get(6));
                 initializeAdapter();
             }
         });

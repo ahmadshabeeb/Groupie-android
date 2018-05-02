@@ -221,6 +221,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void updateInDatabase(){
         databaseReference.child("users").child(currentUser.getUid()).child("profile").setValue(currentUserProfile);
+        finish();
     }
 
 }

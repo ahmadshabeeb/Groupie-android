@@ -2,6 +2,7 @@ package app.kth.com.groupie.groupMessaging;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,7 +27,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -43,9 +43,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import org.json.JSONObject;
-
+import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import app.kth.com.groupie.data.Group;
@@ -131,7 +132,6 @@ public class GroupMessagingActivity extends AppCompatActivity
     private TextView mEditableLocationTextView;
     private TextView mEditableDayTextView;
     private TextView mEditableDescriptionTextView;
-    private Switch mPublicSwitch;
     private Button mLeaveGroupBtn;
     private Button mEditGroupBtn;
 
@@ -186,13 +186,12 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void updateGroupInfo() {
-        mMemberProfiles.addAll(getGroupMembers());
+        getGroupMembers();
         mEditableSubjectTextView.setText(mGroup.getSubject());
         mEditableTopicTextView.setText(mGroup.getTopic());
         mEditableLocationTextView.setText(mGroup.getLocation());
         mEditableDayTextView.setText(mGroup.getDateOfMeeting());
         mEditableDescriptionTextView.setText(mGroup.getDescription());
-        mPublicSwitch.setChecked(mGroup.getIsPublic());
     }
 
     private void initialize() {
@@ -208,7 +207,6 @@ public class GroupMessagingActivity extends AppCompatActivity
         mEditableLocationTextView = (TextView) findViewById(R.id.editableLocationTextView);
         mEditableDayTextView = (TextView) findViewById(R.id.editableDayTextView);
         mEditableDescriptionTextView = (TextView) findViewById(R.id.editableDescriptionTextView);
-        mPublicSwitch = (Switch) findViewById(R.id.publicSwitch);
         mSendButton = (Button) findViewById(R.id.sendButton);
         mLeaveGroupBtn = (Button) findViewById(R.id.leaveGroupButton);
         mEditGroupBtn =(Button) findViewById(R.id.editGroupButton);
@@ -216,31 +214,42 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private ArrayList<Profile> getGroupMembers() {
+        int j=0;
+        ArrayList<String> currentMemberIds = new ArrayList<String>();
+        for (Profile profile: mMemberProfiles) {
+            currentMemberIds.add(mMemberProfiles.get(j++).getUserId());
+        }
         for (String userId: mGroup.getMembers().keySet()) {
-            Log.d(TAG, userId+" user IDDDD");
-            Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
-                    .addOnCompleteListener(new OnCompleteListener<String>() {
-                @Override
-                public void onComplete(@NonNull Task<String> task) {
-                    if (!task.isSuccessful()) {
-                        Exception e = task.getException();
-                        if (e instanceof FirebaseFunctionsException) {
-                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                            FirebaseFunctionsException.Code code = ffe.getCode();
-                            String message = ffe.getMessage();
-                            Log.d(TAG, "ERROR CODE: " + code + " ... " + message);
-                        }
-                        Log.w(TAG, "onFailure", e);
-                    } else {
-                        String result = task.getResult();
-                        result.trim();
-                        Log.d(TAG, "profile result as a string: "+result);
-                        Gson profileGson = new Gson();
-                        Profile profile = profileGson.fromJson(result, Profile.class);
-                        Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
-                    }
-                }
-            });
+            if (!currentMemberIds.contains(userId)) {
+                Log.d(TAG, userId + " user IDDDD");
+                Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Exception e = task.getException();
+                                    if (e instanceof FirebaseFunctionsException) {
+                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                        FirebaseFunctionsException.Code code = ffe.getCode();
+                                        String message = ffe.getMessage();
+                                        Log.d(TAG, "ERROR CODE: " + code + " ... " + message);
+                                    }
+                                    Log.w(TAG, "onFailure", e);
+                                } else {
+                                    String result = task.getResult();
+                                    Log.d(TAG, "profile result as a string: " + result);
+                                    Gson profileGson = new Gson();
+                                    JsonReader reader = new JsonReader(new StringReader(result));
+                                    reader.setLenient(true);
+                                    Type profileType = new TypeToken<Profile>() {
+                                    }.getType();
+                                    Profile profile = profileGson.fromJson(result, profileType);
+                                    mMemberProfiles.add(profile);
+                                    Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
+                                }
+                            }
+                        });
+            }
         }
         return new ArrayList<Profile>();
     }
@@ -258,10 +267,10 @@ public class GroupMessagingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
-        Log.d(TAG, "Object Group ID " + mGroup.getGroupId());
-        Log.d(TAG, "onCreate called.");
+//        Log.d(TAG, "Object Group ID " + mGroup.getGroupId());
+//        Log.d(TAG, "onCreate called.");
         mGroupId = mGroup.getGroupId();
-        Log.d(TAG, "Global var Group ID " + mGroup.getGroupId());
+//        Log.d(TAG, "Global var Group ID " + mGroup.getGroupId());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
@@ -269,17 +278,8 @@ public class GroupMessagingActivity extends AppCompatActivity
         initDrawer();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initialize();
-//        mPublicSwitch.setChecked(mGroup.getIsPublic());
-        Profile profile = new Profile();
-        profile.setFirstName("Dummy first name");
-        profile.setLastName("Dummy last name");
-        profile.setBio("Dummy bio");
-        profile.setFieldOfStudy("dummy field of study");
-        profile.setSchool("Dummy school");
-        profile.setUserId("Dummy userID");
-        profile.setProfilePicture("Dummy profile pic path");
-        mMemberProfiles = getGroupMembers();
-        mMemberProfiles.add(0,profile);
+        mMemberProfiles = new ArrayList<Profile>();
+        getGroupMembers();
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -293,23 +293,6 @@ public class GroupMessagingActivity extends AppCompatActivity
             mGroupNotificationTextView.setVisibility(View.VISIBLE);
             mGroupNotificationTextView.setText("Private - this group is no longer accepting new members.");
 
-            mPublicSwitch.setClickable(true);
-            mPublicSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isFirst){
-                        mPublicSwitchCounter =1;
-                        Log.d(TAG,"11111111111111111");
-                        mPublicSwitchCounter++;
-                        Log.d(TAG,mPublicSwitchCounter+"counter");
-                        isFirst =false;
-                    }else {
-                        Log.d(TAG, "11111111111111111");
-                        mPublicSwitchCounter++;
-                        Log.d(TAG, mPublicSwitchCounter + "counter");
-                    }
-                }
-            });
             // set color different for owner
             mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -485,22 +468,8 @@ public class GroupMessagingActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.END)) {
             drawer.closeDrawer(GravityCompat.END);
-            if (mPublicSwitchCounter%2!=0) {
-                Log.d(TAG, "onCheckChanged for publicSwitch;");
-                Log.d(TAG, "Inside the public switch " + mGroupId);
-                Utility.callCloudFunctions("dbGroupsTogglePublic", mGroupId );
-                mPublicSwitchCounter=0;
-                Log.d(TAG,mPublicSwitchCounter+"counter");
-                Log.d(TAG,mPublicSwitchCounter+"change public status");
-
-            }
-            mPublicSwitchCounter=0;
-            Log.d(TAG,mPublicSwitchCounter+"drawer");
-
         } else {
             super.onBackPressed();
-            mPublicSwitchCounter=0;
-            Log.d(TAG,mPublicSwitchCounter+"super backbutton");
         }
     }
 

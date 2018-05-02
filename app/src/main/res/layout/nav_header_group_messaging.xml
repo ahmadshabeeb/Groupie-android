@@ -25,30 +25,11 @@
         <!--/>-->
 
 
-    <TextView
-        android:id="@+id/fixedPublicTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Public"
-        android:textAlignment="viewStart"
-        android:layout_gravity="start"
-        android:textColor="@color/darkNavy"
-        android:textStyle="bold"
-        />
 
-    <Switch
-        android:id="@+id/publicSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/fixedPublicTextView"
-        android:layout_alignParentRight="true"
-        android:clickable="false"
-        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/fixedPublicTextView"
         android:text="Subject:"
         android:textColor="@color/darkNavy"
         android:id="@+id/fixedSubjectTextView"
@@ -62,7 +43,6 @@
         android:id="@+id/editableSubjectTextView"
         android:textColor="@color/darkNavy"
         android:text="Dummy Subject"
-        android:layout_below="@id/fixedPublicTextView"
         android:paddingTop="10dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"

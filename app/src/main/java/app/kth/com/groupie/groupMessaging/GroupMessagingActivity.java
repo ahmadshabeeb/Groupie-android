@@ -53,6 +53,7 @@ import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.Message;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.editGroup.EditGroupActivity;
 import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.utilities.Utility;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -150,10 +151,12 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private boolean isNotificationMsg(Message msg) {
         Log.d(TAG, "isNotificationMsg called.");
-        if (msg.getSenderUserId()!=null &&
-                msg.getSenderUserId().equals(NOTIFICATION_MESSAGE_ID)) return true;
+        if (msg.getSenderUserId().equals(NOTIFICATION_MESSAGE_ID)){
+            return true;
+        }
         return false;
     }
+
     private void goToParentActivity() {
         Intent intent = new Intent(this, ParentActivity.class);
         startActivity(intent);
@@ -187,6 +190,15 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private void updateGroupInfo() {
         getGroupMembers();
+        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
+            if (!mGroup.getIsPublic()) {
+                mGroupNotificationTextView.bringToFront();
+                mGroupNotificationTextView.setVisibility(View.VISIBLE);
+                mGroupNotificationTextView.setText("Private - this group is no longer accepting new members.");
+            } else {
+                mGroupNotificationTextView.setVisibility(View.GONE);
+            }
+        }
         mEditableSubjectTextView.setText(mGroup.getSubject());
         mEditableTopicTextView.setText(mGroup.getTopic());
         mEditableLocationTextView.setText(mGroup.getLocation());
@@ -267,10 +279,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
-//        Log.d(TAG, "Object Group ID " + mGroup.getGroupId());
-//        Log.d(TAG, "onCreate called.");
         mGroupId = mGroup.getGroupId();
-//        Log.d(TAG, "Global var Group ID " + mGroup.getGroupId());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
@@ -289,31 +298,16 @@ public class GroupMessagingActivity extends AppCompatActivity
         mConversationId = mGroup.getConversationId();
 
         if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
-            mGroupNotificationTextView.bringToFront();
-            mGroupNotificationTextView.setVisibility(View.VISIBLE);
-            mGroupNotificationTextView.setText("Private - this group is no longer accepting new members.");
-
-            // set color different for owner
             mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    goToParentActivity();
-//                    Intent intent = new Intent(this , EditGroupActivity.class);
-//                    intent.putExtra("group", mGroup);
-//                    startActivity(intent);
+                    Log.d(TAG, "edit group button clicked. group id: "+mGroupId);
+                    goToEditGroupActivity();
                 }
             });
-        } else {
-            mGroupNotificationTextView.setVisibility(View.GONE);
         }
 
-        if (conversationsRef.child(mConversationId)!= null) {
-            mGroupConversationRef = conversationsRef.child(mConversationId);
-        } else {
-            // edit
-            mGroupConversationRef = mFirebaseDatabaseReference.child(CHILD_MESSAGES);
-            goToParentActivity();
-        }
+        mGroupConversationRef = conversationsRef.child(mConversationId);
 
         SnapshotParser<Message> parser = new SnapshotParser<Message>() {
             @Override
@@ -333,38 +327,47 @@ public class GroupMessagingActivity extends AppCompatActivity
             @Override
             public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 Log.d(TAG, "messageViewHolder created - means user is not the sender");
-                mViewHolder = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
-                mViewHolder.findViewById(R.id.profilePictureImageView).setOnClickListener(mOnClickListener);
-                return new messageViewHolder(mViewHolder);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
+                view.findViewById(R.id.profilePictureImageView).setOnClickListener(mOnClickListener);
+                return new messageViewHolder(view);
             }
             @Override
             protected void onBindViewHolder(messageViewHolder holder, int position, Message msg) {
                 Log.d(TAG, "onBindViewHolder called.");
-                if (isNotificationMsg(msg)) {
-                    updateGroup();
-                    mViewHolder.setClickable(false);
-                    holder.messageItemReceivedTextView.setVisibility(View.GONE);
-                    holder.senderTextView.setVisibility(View.GONE);
-                    holder.profilePictureImageView.setVisibility(View.GONE);
-                    holder.messageItemSentTextView.setVisibility(View.GONE);
-                    holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
-                } else {
+                if (!isNotificationMsg(msg)) {
                     if (userIsSender(msg)) {
-                        mViewHolder.setClickable(false);
+//                        holder.setClickable(false);
                         holder.messageItemReceivedTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.GONE);
                         holder.profilePictureImageView.setVisibility(View.GONE);
+                        holder.notificationMessageTextView.setVisibility(View.GONE);
+                        holder.messageItemSentTextView.setVisibility(View.VISIBLE);
                         holder.messageItemSentTextView.setText(msg.getText());
                     } else {
-                        mViewHolder.setClickable(true);
+//                        mViewHolder.setClickable(true);
                         holder.messageItemSentTextView.setVisibility(View.GONE);
+                        holder.notificationMessageTextView.setVisibility(View.GONE);
+                        holder.senderTextView.setVisibility(View.VISIBLE);
+                        holder.profilePictureImageView.setVisibility(View.VISIBLE);
+                        holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
-//                        holder.senderTextView.setText(mMemberProfiles.get(getProfileIndexFromMsg(msg)).getFirstName());
+                        if (!mMemberProfiles.isEmpty()) {
+                            holder.senderTextView.setText(mMemberProfiles.get(getProfileIndexFromMsg(msg)).getFirstName());
 //                    holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
+                        }
                     }
+                } else {
+                    updateGroup();
+//                    mViewHolder.setClickable(false);
+                    holder.messageItemSentTextView.setVisibility(View.GONE);
+                    holder.notificationMessageTextView.setVisibility(View.VISIBLE);
+                    holder.senderTextView.setVisibility(View.GONE);
+                    holder.profilePictureImageView.setVisibility(View.GONE);
+                    holder.messageItemReceivedTextView.setVisibility(View.GONE);
+                    holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
                 }
                // mMemberProfiles = getGroupMembers();
-                updateGroup();
+              //  updateGroup();
             }
         };
 
@@ -461,6 +464,13 @@ public class GroupMessagingActivity extends AppCompatActivity
         });
         Log.d(TAG, "end.");
 
+    }
+
+    private void goToEditGroupActivity() {
+        Intent intent = new Intent(this, EditGroupActivity.class);
+        intent.putExtra("group", mGroup);
+        intent.putExtra("groupId", mGroupId);
+        startActivity(intent);
     }
 
     @Override

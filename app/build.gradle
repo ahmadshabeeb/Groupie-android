@@ -52,5 +52,7 @@ dependencies {
     //Sliding panel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 
+    //swipe refresh layout
+    implementation 'com.android.support:support-v4:27.1.1'
 }
 apply plugin: 'com.google.gms.google-services'

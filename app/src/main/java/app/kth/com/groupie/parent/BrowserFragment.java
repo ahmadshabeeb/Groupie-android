@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -34,15 +35,28 @@ public class BrowserFragment extends Fragment {
     private boolean[] filterDayOfMeetingTriggers = new boolean[7];
     private final Long DAY_IN_SECONDS = 86400l;
     private long[] daysInUNIX = new long[7];
+    private SwipeRefreshLayout swipe;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState) {
         calculateDaysInUNIX();
+
         ViewGroup rootView = createRecycleView(inflater, container);
+
+        swipe = (SwipeRefreshLayout) rootView.findViewById(R.id.browser_swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeAdapter();
+                swipe.setRefreshing(false);
+            }
+        });
+
+        //Click logic for filters
         subjectClickableListener(rootView);
         dayOfMeetingClickableListener(rootView);
-        filterChoice.printSubjects();
+
         return rootView;
     }
 

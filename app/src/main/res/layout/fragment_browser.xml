@@ -22,7 +22,14 @@
         android:orientation="vertical"
         android:paddingTop="36dp">
 
-        <include layout="@layout/list_group_recycle" />
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/browser_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/list_group_recycle" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </FrameLayout>
 

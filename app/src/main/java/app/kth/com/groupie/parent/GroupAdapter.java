@@ -74,9 +74,9 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
+                        notifyDataSetChanged();
                     }
                 }
-                notifyDataSetChanged();
             }
 
             @Override
@@ -99,6 +99,8 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             }
         });
+
+
     }
 
     private void addGroupToDataSet(Group group){
@@ -186,15 +188,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         header.setDay(day);
         groupArrayList.add(position, header);
     }
-
-//    private String getWeekDay(long day){
-//        Date date = new Date(day * 1000l);
-//        DateFormat sdf = new SimpleDateFormat("EEEE");
-//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-//        String weekDay = sdf.format(date);
-//        Log.d("Week day" , weekDay + "..." );
-//        return weekDay;
-//    }
 
     private void updateReferences(int start, int end){
         for(int i=start; i<=end; i++){

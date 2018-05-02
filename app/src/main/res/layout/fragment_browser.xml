@@ -22,6 +22,8 @@
         android:orientation="vertical"
         android:paddingTop="36dp">
 
+        <include layout="@layout/layout_circular_progress_bar"/>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/browser_swipe"
             android:layout_width="match_parent"

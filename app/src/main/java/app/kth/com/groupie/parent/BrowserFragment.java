@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,6 +43,7 @@ public class BrowserFragment extends Fragment {
     private List<ImageView> subjects;
     private List<Integer> subjectResourceIds;
     private Button reset;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -69,6 +71,7 @@ public class BrowserFragment extends Fragment {
         mRecycleView.setLayoutManager(mLayoutManager);
         this.filterChoice = activity.filterChoice;
 
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         initializeAdapter();
 
         return rootView;
@@ -314,7 +317,7 @@ public class BrowserFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX);
+        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX, progressBar);
         mRecycleView.setAdapter(mAdapter);
     }
 

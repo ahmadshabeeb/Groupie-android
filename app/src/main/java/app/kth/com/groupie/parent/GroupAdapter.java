@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,12 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.TimeZone;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -52,17 +48,20 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
     private Resources resources;
+    private ProgressBar progressBar;
 
-    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX) {
+    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
-        resources = context.getResources();
         this.filterChoice = filterChoice;
+        this.progressBar = progressBar;
+        resources = context.getResources();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
-        setGroups(databaseReference);
+        getGroupsFromDataBase(databaseReference);
     }
 
-    private void setGroups(final DatabaseReference databaseReference) {
+    //--------------DATASET-----------------------
+    private void getGroupsFromDataBase(final DatabaseReference databaseReference) {
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
         nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
@@ -75,6 +74,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
                         notifyDataSetChanged();
+                        StopLoadingProgressBar();
                     }
                 }
             }
@@ -100,90 +100,78 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
         });
 
-
     }
 
     private void addGroupToDataSet(Group group){
         long groupMeetingDay = group.getMeetingDateTimeStamp();
-        Log.d("TAG", "group meeting day:" + groupMeetingDay);
 
         if(groupMeetingDay == daysInUNIX[0]){
             groupArrayList.add(daysReference[0],group);
             updateReferences(1,6);
             if(!headers[0]){
-                addHeader("Today",  daysReference[0]);
+                addHeaderToDataSet("Today",  daysReference[0]);
                 headers[0] = true;
                 updateReferences(0,6);
             }
-            Log.d("TAG" , "added to Day1" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[1]){
             groupArrayList.add(daysReference[1],group);
             updateReferences(2,6);
             if(!headers[1]){
-                addHeader("Tomorrow", daysReference[1]);
+                addHeaderToDataSet("Tomorrow", daysReference[1]);
                 headers[1] = true;
                 updateReferences(1,6);
             }
-            Log.d("TAG" , "added to Day2" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[2]){
             groupArrayList.add(daysReference[2],group);
             updateReferences(3,6);
             if(!headers[2]){
-                addHeader(Utility.getWeekDay(daysInUNIX[2], true) , daysReference[2]);
+                addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[2], true) , daysReference[2]);
                 headers[2] = true;
                 updateReferences(2,6);
             }
-            Log.d("TAG" , "added to Day3" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[3]){
             groupArrayList.add(daysReference[3],group);
             updateReferences(4,6);
             if(!headers[3]){
-                addHeader(Utility.getWeekDay(daysInUNIX[3], true), daysReference[3]);
+                addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[3], true), daysReference[3]);
                 headers[3] = true;
                 updateReferences(3,6);
             }
-            Log.d("TAG" ,  "added to Day4"+ " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[4]){
             groupArrayList.add(daysReference[4],group);
             updateReferences(5,6);
             if(!headers[4]){
-                addHeader(Utility.getWeekDay(daysInUNIX[4], true), daysReference[4]);
+                addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[4], true), daysReference[4]);
                 headers[4] = true;
                 updateReferences(4,6);
             }
-            Log.d("TAG" , "added to Day5" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[5]){
             groupArrayList.add(daysReference[5],group);
             updateReferences(6,6);
             if(!headers[5]){
-                addHeader(Utility.getWeekDay(daysInUNIX[5], true), daysReference[5]);
+                addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[5], true), daysReference[5]);
                 headers[5] = true;
                 updateReferences(5,6);
             }
-            Log.d("TAG" , "added to Day6" + " ..." );
 
         }else if(groupMeetingDay == daysInUNIX[6]){
             groupArrayList.add(daysReference[6],group);
             if(!headers[6]){
-                addHeader(Utility.getWeekDay(daysInUNIX[6], true), daysReference[6]);
+                addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[6], true), daysReference[6]);
                 headers[6] = true;
                 updateReferences(6,6);
             }
-            Log.d("TAG" , "added to Day7" + " ..." );
 
         }else {
-            // do not add the group
-            Log.d("TAG" , " NOT ADDED ..." );
-        }
-
+            /* do not add the group */}
     }
 
-    private void addHeader(String day, int position){
+    private void addHeaderToDataSet(String day, int position){
         RecyclerHeader header = new RecyclerHeader();
         header.setDay(day);
         groupArrayList.add(position, header);
@@ -192,12 +180,18 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private void updateReferences(int start, int end){
         for(int i=start; i<=end; i++){
             daysReference[i] += 1;
-            Log.d("TAG" , "updated ref " + i + "   value: " + daysReference[i] );
+        }
+    }
+
+    private void StopLoadingProgressBar() {
+        if(groupArrayList != null && groupArrayList.size() > 0){
+            progressBar.setVisibility(View.GONE);
+        } else{
+            progressBar.setVisibility(View.VISIBLE);
         }
     }
 
     //-------------------BINDING DATA----------------------//
-
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout parent = (RelativeLayout) itemView.findViewById(R.id.group_card_view);
         ImageView subjectImage = (ImageView) itemView.findViewById(R.id.subject_imageview);
@@ -273,6 +267,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return groupArrayList.size();
     }
 
+    //-----------------HELPER METHODS--------------
     private void setFields(Group group, GroupViewHolder holder) {
         holder.subject.setText(group.getSubject());
 

@@ -23,7 +23,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -115,7 +114,6 @@ public class GroupMessagingActivity extends AppCompatActivity
     private String mConversationId;
     private Group mGroup;
     private String mGroupId;
-    private int mPublicSwitchCounter = 0;
     private ArrayList<Profile> mMemberProfiles;
     private DatabaseReference mGroupConversationRef;
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -125,7 +123,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             goToParentActivity();
         }
     };
-    private View mViewHolder;
+
     private TextView mGroupNotificationTextView;
     private EditText mMessageEditText;
     private TextView mEditableSubjectTextView;
@@ -163,9 +161,6 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private void initDrawer() {
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -248,14 +243,11 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     }
                                     Log.w(TAG, "onFailure", e);
                                 } else {
-                                    String result = task.getResult();
+                                    String result = task.getResult().replaceAll("\\s", "" +
+                                            "");
                                     Log.d(TAG, "profile result as a string: " + result);
                                     Gson profileGson = new Gson();
-                                    JsonReader reader = new JsonReader(new StringReader(result));
-                                    reader.setLenient(true);
-                                    Type profileType = new TypeToken<Profile>() {
-                                    }.getType();
-                                    Profile profile = profileGson.fromJson(result, profileType);
+                                    Profile profile = profileGson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
                                     Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
                                 }
@@ -285,7 +277,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         setContentView(R.layout.activity_group_messaging);
 
         initDrawer();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initialize();
         mMemberProfiles = new ArrayList<Profile>();
         getGroupMembers();
@@ -334,7 +326,17 @@ public class GroupMessagingActivity extends AppCompatActivity
             @Override
             protected void onBindViewHolder(messageViewHolder holder, int position, Message msg) {
                 Log.d(TAG, "onBindViewHolder called.");
-                if (!isNotificationMsg(msg)) {
+                if (isNotificationMsg(msg)) {
+                    Log.d(TAG, "isNotificationMsg if statement triggered1111111");
+                    updateGroup();
+//                    mViewHolder.setClickable(false);
+                    holder.messageItemSentTextView.setVisibility(View.GONE);
+                    holder.notificationMessageTextView.setVisibility(View.VISIBLE);
+                    holder.senderTextView.setVisibility(View.GONE);
+                    holder.profilePictureImageView.setVisibility(View.GONE);
+                    holder.messageItemReceivedTextView.setVisibility(View.GONE);
+                    holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
+                } else {
                     if (userIsSender(msg)) {
 //                        holder.setClickable(false);
                         holder.messageItemReceivedTextView.setVisibility(View.GONE);
@@ -356,18 +358,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 //                    holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
                         }
                     }
-                } else {
-                    updateGroup();
-//                    mViewHolder.setClickable(false);
-                    holder.messageItemSentTextView.setVisibility(View.GONE);
-                    holder.notificationMessageTextView.setVisibility(View.VISIBLE);
-                    holder.senderTextView.setVisibility(View.GONE);
-                    holder.profilePictureImageView.setVisibility(View.GONE);
-                    holder.messageItemReceivedTextView.setVisibility(View.GONE);
-                    holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
                 }
-               // mMemberProfiles = getGroupMembers();
-              //  updateGroup();
             }
         };
 

@@ -33,7 +33,8 @@
             android:name=".login.LoginActivity" />
         <activity
             android:name=".groupMessaging.GroupMessagingActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize"/>
         <activity
             android:name=".EditProfileActivity"
             android:label="Edit Profile"

@@ -48,9 +48,9 @@ public class BrowserFragment extends Fragment {
 
     private void dayOfMeetingClickableListener(ViewGroup rootView) {
         final Button day1 = (Button) rootView.findViewById(R.id.filter_day1_button);
-        day1.setText(Utility.getWeekDay(daysInUNIX[0], false));
+        day1.setText("Today");
         final Button day2 = (Button) rootView.findViewById(R.id.filter_day2_button);
-        day2.setText(Utility.getWeekDay(daysInUNIX[1], false));
+        day2.setText("Tmrw");
         final Button day3 = (Button) rootView.findViewById(R.id.filter_day3_button);
         day3.setText(Utility.getWeekDay(daysInUNIX[2], false));
         final Button day4 = (Button) rootView.findViewById(R.id.filter_day4_button);
@@ -66,9 +66,57 @@ public class BrowserFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 filterByDayOfMeeting(0, (Button)v);
+                initializeAdapter();
             }
         });
 
+        day2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(1, (Button)v);
+                initializeAdapter();
+            }
+        });
+
+        day3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(2, (Button)v);
+                initializeAdapter();
+            }
+        });
+
+        day4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(3, (Button)v);
+                initializeAdapter();
+            }
+        });
+
+        day5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(4, (Button)v);
+                initializeAdapter();
+            }
+        });
+
+        day6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(5, (Button)v);
+                initializeAdapter();
+            }
+        });
+
+        day7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterByDayOfMeeting(6, (Button)v);
+                initializeAdapter();
+            }
+        });
     }
 
     private void subjectClickableListener(ViewGroup rootView) {
@@ -164,6 +212,7 @@ public class BrowserFragment extends Fragment {
             filterDayOfMeetingTriggers[position] = true;
             button.setBackgroundColor(resources.getColor(R.color.darkNavy));
             button.setTextColor(resources.getColor(R.color.offWhite));
+
         } else {
             filterChoice.removeDay(daysInUNIX[position]);
             filterDayOfMeetingTriggers[position] = false;

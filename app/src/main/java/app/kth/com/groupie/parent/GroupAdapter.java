@@ -71,7 +71,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Group group = dataSnapshot.getValue(Group.class);
 
                 if (group.getIsPublic()) {
-                    if (filterChoice.isChosenSubject(group.getSubject())) {
+                    if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
                     }

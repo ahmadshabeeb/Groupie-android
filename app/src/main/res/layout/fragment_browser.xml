@@ -36,15 +36,26 @@
         android:focusable="false"
         android:id="@+id/dragView">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SUBJECTS"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            />
+
+        <!-- SUBJECTS -->
         <RelativeLayout
             android:id="@+id/subject_filter"
             android:padding="50dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true">
 
-            <!-- subject list -->
                 <!-- TOP ROW -->
                 <ImageView
                     android:id="@+id/language_filter_icon"
@@ -145,6 +156,111 @@
                     android:src="@drawable/other"
                     />
         </RelativeLayout>
+
+        <!-- DAY OF MEETING -->
+
+        <TextView
+            android:id="@+id/day_of_meeting_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DAY OF MEETING"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_below="@id/subject_filter"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/day_of_meeting_title"
+            android:padding="10dp">
+
+            <Button
+                android:id="@+id/filter_day1_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                android:elevation="10dp"
+                />
+
+            <Button
+                android:id="@+id/filter_day2_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+
+            <Button
+                android:id="@+id/filter_day3_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+
+            <Button
+                android:id="@+id/filter_day4_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+
+            <Button
+                android:id="@+id/filter_day5_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+
+            <Button
+                android:id="@+id/filter_day6_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+
+            <Button
+                android:id="@+id/filter_day7_button"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:text="Today"
+                android:background="@color/offWhite"
+                android:textColor="@color/darkNavy"
+                android:textSize="10dp"
+                android:clickable="true"
+                />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/filter_icon"

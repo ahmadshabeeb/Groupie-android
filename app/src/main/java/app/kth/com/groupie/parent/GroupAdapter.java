@@ -44,20 +44,19 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
 
-    private long[] daysInUNIX = new long[7];
+    private long[] daysInUNIX;
     private int[] daysReference = new int[7];
     private boolean[] headers = new boolean[7];
-    private final Long DAY_IN_SECONDS = 86400l;
     private Context context;
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
     private Resources resources;
 
-    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice) {
+    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX) {
         this.context = context;
+        this.daysInUNIX = daysInUNIX;
         resources = context.getResources();
-        calculateDaysInUNIX();
         this.filterChoice = filterChoice;
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         setGroups(databaseReference);
@@ -130,7 +129,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             groupArrayList.add(daysReference[2],group);
             updateReferences(3,6);
             if(!headers[2]){
-                addHeader(getWeekDay(daysInUNIX[2]) , daysReference[2]);
+                addHeader(Utility.getWeekDay(daysInUNIX[2], true) , daysReference[2]);
                 headers[2] = true;
                 updateReferences(2,6);
             }
@@ -140,7 +139,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             groupArrayList.add(daysReference[3],group);
             updateReferences(4,6);
             if(!headers[3]){
-                addHeader(getWeekDay(daysInUNIX[3]), daysReference[3]);
+                addHeader(Utility.getWeekDay(daysInUNIX[3], true), daysReference[3]);
                 headers[3] = true;
                 updateReferences(3,6);
             }
@@ -150,7 +149,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             groupArrayList.add(daysReference[4],group);
             updateReferences(5,6);
             if(!headers[4]){
-                addHeader(getWeekDay(daysInUNIX[4]), daysReference[4]);
+                addHeader(Utility.getWeekDay(daysInUNIX[4], true), daysReference[4]);
                 headers[4] = true;
                 updateReferences(4,6);
             }
@@ -160,7 +159,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             groupArrayList.add(daysReference[5],group);
             updateReferences(6,6);
             if(!headers[5]){
-                addHeader(getWeekDay(daysInUNIX[5]), daysReference[5]);
+                addHeader(Utility.getWeekDay(daysInUNIX[5], true), daysReference[5]);
                 headers[5] = true;
                 updateReferences(5,6);
             }
@@ -169,7 +168,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }else if(groupMeetingDay == daysInUNIX[6]){
             groupArrayList.add(daysReference[6],group);
             if(!headers[6]){
-                addHeader(getWeekDay(daysInUNIX[6]), daysReference[6]);
+                addHeader(Utility.getWeekDay(daysInUNIX[6], true), daysReference[6]);
                 headers[6] = true;
                 updateReferences(6,6);
             }
@@ -188,14 +187,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         groupArrayList.add(position, header);
     }
 
-    private String getWeekDay(long day){
-        Date date = new Date(day * 1000l);
-        DateFormat sdf = new SimpleDateFormat("EEEE");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String weekDay = sdf.format(date);
-        Log.d("Week day" , weekDay + "..." );
-        return weekDay;
-    }
+//    private String getWeekDay(long day){
+//        Date date = new Date(day * 1000l);
+//        DateFormat sdf = new SimpleDateFormat("EEEE");
+//        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//        String weekDay = sdf.format(date);
+//        Log.d("Week day" , weekDay + "..." );
+//        return weekDay;
+//    }
 
     private void updateReferences(int start, int end){
         for(int i=start; i<=end; i++){
@@ -203,32 +202,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Log.d("TAG" , "updated ref " + i + "   value: " + daysReference[i] );
         }
     }
-
-    private long getTodayUnix(){
-        Date today = new Date();
-        DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String todayDate = sdf.format(today);
-        long todayUnix = 0;
-
-        try {
-            todayUnix = sdf.parse(todayDate).getTime()/1000;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return todayUnix;
-    }
-    private void calculateDaysInUNIX(){
-        long todayUnix = getTodayUnix();
-//        Log.d("TAG", todayUnix + " ...");
-        daysInUNIX[0] = todayUnix;
-
-        for(int i=1; i<daysInUNIX.length; i++){
-            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
-//            Log.d("TAG" , dayReference[i] + " ...");
-        }
-    }
-
 
     //-------------------BINDING DATA----------------------//
 

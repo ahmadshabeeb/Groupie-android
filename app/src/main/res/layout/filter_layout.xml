@@ -1,0 +1,268 @@
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_sliding_panel"
+    android:clickable="false"
+    android:focusable="false"
+    android:id="@+id/dragView"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/subject_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SUBJECTS"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="5dp"
+        />
+
+    <!-- SUBJECTS -->
+    <RelativeLayout
+        android:id="@+id/subject_filter"
+        android:paddingTop="15dp"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingBottom="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:layout_below="@id/subject_title"
+       >
+
+        <!-- TOP ROW -->
+        <ImageView
+            android:id="@+id/language_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/language"
+            />
+
+        <ImageView
+            android:id="@+id/programming_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/programming"
+            />
+
+        <ImageView
+            android:id="@+id/math_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/math"
+            />
+
+        <!-- MIDDLE ROW -->
+
+        <ImageView
+            android:id="@+id/science_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/language_filter_icon"
+            android:layout_alignParentLeft="true"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/science"
+            />
+
+        <ImageView
+            android:id="@+id/engineering_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/programming_filter_icon"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/engineering"
+            />
+
+        <ImageView
+            android:id="@+id/business_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/math_filter_icon"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="30dp"
+            android:padding="5dp"
+            android:src="@drawable/business"
+            />
+
+        <!-- BOTTOM ROW -->
+
+        <ImageView
+            android:id="@+id/law_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/science_filter_icon"
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:src="@drawable/law"
+            />
+
+        <ImageView
+            android:id="@+id/music_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/engineering_filter_icon"
+            android:padding="5dp"
+            android:src="@drawable/music"
+            />
+
+        <ImageView
+            android:id="@+id/other_filter_icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/business_filter_icon"
+            android:layout_alignParentRight="true"
+            android:padding="5dp"
+            android:src="@drawable/other"
+            />
+    </RelativeLayout>
+
+    <!-- DAY OF MEETING -->
+
+    <TextView
+        android:id="@+id/day_of_meeting_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DAY OF MEETING"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textSize="16sp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/subject_filter"
+        />
+
+    <LinearLayout
+        android:id="@+id/day_of_meeting_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/day_of_meeting_title"
+        android:padding="10dp">
+
+        <Button
+            android:id="@+id/filter_day1_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            android:elevation="10dp"
+            />
+
+        <Button
+            android:id="@+id/filter_day2_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+
+        <Button
+            android:id="@+id/filter_day3_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+
+        <Button
+            android:id="@+id/filter_day4_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+
+        <Button
+            android:id="@+id/filter_day5_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+
+        <Button
+            android:id="@+id/filter_day6_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+
+        <Button
+            android:id="@+id/filter_day7_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Today"
+            android:background="@color/offWhite"
+            android:textColor="@color/darkNavy"
+            android:textSize="10dp"
+            android:clickable="true"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/day_of_meeting_filter"
+        android:text="RESET"
+        android:background="@drawable/button_reset"
+        android:textColor="@color/offWhite"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:clickable="true"
+        />
+
+    <ImageView
+        android:id="@+id/filter_icon"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/filter_groups"
+        />
+
+</RelativeLayout>

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/action_create_group"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/addbox"
         android:title="Create group"
         app:showAsAction="always" />
 

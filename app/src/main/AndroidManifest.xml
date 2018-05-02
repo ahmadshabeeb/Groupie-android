@@ -39,17 +39,17 @@
             android:label="Edit Profile"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".SettingsActivity"
-            android:label="Group Messaging"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".createGroup.CreateGroupActivity"
             android:label="@string/title_activity_create_group"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".firstLogin.FirstLoginActivity" />
         <activity
             android:name=".editGroup.EditGroupActivity"
-            android:label="@string/title_activity_edit_group"></activity>
+            android:label="@string/title_activity_edit_group" />
+        <activity
+            android:name=".otherProfile.OtherProfieActivity"
+            android:label="@string/title_activity_other_profie"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

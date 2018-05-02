@@ -85,4 +85,5 @@
 
     <string name="chooseSubject">Please choose your favorite subject from one of the nine below. You can change this at any time in your profile.</string>
     <string name="title_activity_edit_group">EditGroupActivity</string>
+    <string name="title_activity_other_profie">otherProfieActivity</string>
 </resources>

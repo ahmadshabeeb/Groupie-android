@@ -74,7 +74,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
                         notifyDataSetChanged();
-                        StopLoadingProgressBar();
+                        stopLoadingProgressBar();
                     }
                 }
             }
@@ -99,7 +99,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             }
         });
-
     }
 
     private void addGroupToDataSet(Group group){
@@ -183,12 +182,8 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private void StopLoadingProgressBar() {
-        if(groupArrayList != null && groupArrayList.size() > 0){
-            progressBar.setVisibility(View.GONE);
-        } else{
-            progressBar.setVisibility(View.VISIBLE);
-        }
+    private void stopLoadingProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     //-------------------BINDING DATA----------------------//

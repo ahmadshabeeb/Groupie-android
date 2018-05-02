@@ -434,6 +434,10 @@ public class BrowserFragment extends Fragment {
                 Log.d("filter", "SUBJECT : " + subject);
             }
         }
+
+        public boolean isEmpty(){
+            return subjects.isEmpty() && daysOfMeeting.isEmpty();
+        }
     }
 
     //-------------FRAGMENT RELATED METHODS---------------

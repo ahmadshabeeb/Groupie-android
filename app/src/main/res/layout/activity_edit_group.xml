@@ -22,7 +22,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.056" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/subject_textview"
@@ -157,7 +157,7 @@
         android:id="@+id/meetingday_textview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="44dp"
         android:gravity="center"
         android:text="Day of meeting"
         app:layout_constraintEnd_toEndOf="parent"
@@ -212,7 +212,7 @@
         android:id="@+id/line"
         android:layout_width="300dp"
         android:layout_height="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@color/darkNavy"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -298,6 +298,18 @@
         android:src="@drawable/person"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/maxmember_textview" />
+
+    <Switch
+        android:id="@+id/private_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/groupsubject_textview"
+        app:layout_constraintTop_toTopOf="@+id/groupsubject_textview" />
 
 
 </android.support.constraint.ConstraintLayout>

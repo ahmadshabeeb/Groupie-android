@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +34,7 @@ public class EditGroupActivity extends Activity {
     EditText descriptionEditText;
     SeekBar seek_bar;
     DatabaseReference dbr;
+    Switch privateSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +43,10 @@ public class EditGroupActivity extends Activity {
 
         //Group group = (Group) getIntent().getSerializableExtra("group");
         group = getFakeGroup();
+
         initButtons();
         membersSeekBar();
+        initSwitch();
 
         try {
             setDayButton();
@@ -70,6 +75,26 @@ public class EditGroupActivity extends Activity {
 
     }
 
+    private void initSwitch(){
+        privateSwitch = (Switch) findViewById(R.id.private_switch);
+        if(group.getIsPublic()){
+            privateSwitch.setChecked(true);
+            privateSwitch.setText("public");
+        } else{
+            privateSwitch.setText("private");
+        }
+        privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!privateSwitch.isChecked()){
+                    privateSwitch.setText("private");
+                } else {
+                   privateSwitch.setText("public");
+                }
+            }
+        });
+    }
+
     private Group getFakeGroup(){
         Group group = new Group();
         group.setGroupId("-LB5FW2THw2tC7Z2sG-N");
@@ -77,7 +102,7 @@ public class EditGroupActivity extends Activity {
         group.setTopic("Kalkulus");
         group.setSubject("Math");
         group.setMaxNumberOfMembers(7);
-        group.setDateOfMeeting("01-05-2018");
+        group.setDateOfMeeting("04-05-2018");
         group.setHasMeetingDate(true);
         group.setLocation("KTH KISTA");
         group.setDescription("I want to do math");
@@ -269,23 +294,16 @@ public class EditGroupActivity extends Activity {
         if(members < 2){
             members = 2;
         }
-        group.setDescription(descriptionEditText.getText().toString());
-        group.setLocation(locationEditText.getText().toString());
-        group.setMaxNumberOfMembers(members);
-        group.setDateOfMeeting(currentDate);
-        Toast toast = Toast.makeText(getApplicationContext(), group.isHasMeetingDate() + group.getDescription() + group.getLocation() + group.getMaxNumberOfMembers() + group.getDateOfMeeting(), Toast.LENGTH_LONG);
-        toast.show();
-
         dbr = FirebaseDatabase.getInstance().getReference();
-
         Map<String, Object> updatedvalues = new HashMap<String, Object>();
-        updatedvalues.put("description", group.getDescription());
-        updatedvalues.put("location", group.getLocation());
-        updatedvalues.put("maxNumberOfMembers", group.getMaxNumberOfMembers());
-        updatedvalues.put("dateOfMeeting", group.getDateOfMeeting());
+        updatedvalues.put("description", descriptionEditText.getText().toString());
+        updatedvalues.put("location", locationEditText.getText().toString());
+        updatedvalues.put("maxNumberOfMembers", members);
+        updatedvalues.put("dateOfMeeting", currentDate);
+        updatedvalues.put("hasMeetingDate", group.isHasMeetingDate());
+        updatedvalues.put("public", privateSwitch.isChecked());
 
         dbr.child("groups").child(group.getGroupId()).updateChildren(updatedvalues);
-
-
+        finish();
     }
 }

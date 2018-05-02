@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -140,7 +141,7 @@ public class ParentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GroupMessagingActivity.class);
         startActivity(intent);
     }
-    public void toEditProfileActivity(){
+    public void toEditProfileActivity(PrivateProfile currentUserProfile){
         Intent intent = new Intent(this, EditProfileActivity.class);
         intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);

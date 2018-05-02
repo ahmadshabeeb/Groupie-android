@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
@@ -30,6 +33,7 @@ import app.kth.com.groupie.data.structure.Profile;
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
     private ImageView settingsButton;
+    private ImageView profilePicture;
     private Button editProfileButton;
     private TextView schoolName;
     private TextView majorName;
@@ -39,6 +43,8 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference databaseReference;
     private FirebaseUser currentUser;
     private FirebaseAuth mAuth;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
     private PrivateProfile currentUserProfile;
 
     @Nullable
@@ -46,6 +52,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
         settingsButton = (ImageView) rootView.findViewById(R.id.settings_icon);
+        profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         editProfileButton = (Button) rootView.findViewById(R.id.to_edit_profile);
         schoolName = (TextView) rootView.findViewById(R.id.profile_school_name);
         majorName = (TextView) rootView.findViewById(R.id.profile_major_name);
@@ -53,6 +60,8 @@ public class ProfileFragment extends Fragment {
         firstName = (TextView) rootView.findViewById(R.id.profile_first_name);
         lastName = (TextView) rootView.findViewById(R.id.profile_last_name);
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
@@ -72,7 +81,7 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                activity.toEditProfileActivity();
+                activity.toEditProfileActivity(currentUserProfile);
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +116,7 @@ public class ProfileFragment extends Fragment {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                //Database Error
             }
         });
     }
@@ -118,6 +127,10 @@ public class ProfileFragment extends Fragment {
         defaultLocation.setText(currentUserProfile.getStudyLocation());
         firstName.setText(currentUserProfile.getFirstName());
         lastName.setText(currentUserProfile.getLastName());
+        String urlImage = currentUserProfile.getProfilePicture();
+        Glide.with(ProfileFragment.this)
+                .load(urlImage)
+                .into(profilePicture);
     }
 
     public void printBar(String message, View view){

@@ -1,12 +1,9 @@
 package app.kth.com.groupie.parent;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TimeZone;
 
 import app.kth.com.groupie.R;
@@ -40,72 +38,82 @@ public class BrowserFragment extends Fragment {
     private final Long DAY_IN_SECONDS = 86400l;
     private long[] daysInUNIX = new long[7];
     private SwipeRefreshLayout swipe;
-    private ArrayList<Button> daysOfMeeting = new ArrayList<>();
-    private ArrayList<ImageView> subjects = new ArrayList<>();
-    private ArrayList<Integer> subjectResourceIds = new ArrayList<>();
-    int[] y;
+    private List<Button> daysOfMeeting;
+    private List<ImageView> subjects;
+    private List<Integer> subjectResourceIds;
     private Button reset;
 
-    @TargetApi(Build.VERSION_CODES.N)
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState) {
-        Log.d("create", "here");
-        calculateDaysInUNIX();
-
+        //initialize views
         ViewGroup rootView = createRecycleView(inflater, container);
-
         initViews(rootView);
         initSubjectResourceIds();
-
-        //logic for refreshing groups
         refreshPulldown(rootView);
 
-        //Click logic for filters
-        subjectClickableListener(rootView);
-        dayOfMeetingClickableListener(rootView);
-
-        //click logic for reset button
+        //set filter listeners
+        subjectClickableListeners();
+        dayOfMeetingClickableListeners();
         resetFilterClickableListener(rootView);
 
         return rootView;
     }
 
-    private void initSubjectResourceIds() {
-        subjectResourceIds.add(R.string.language);
-        subjectResourceIds.add(R.string.programming);
-        subjectResourceIds.add(R.string.math);
-        subjectResourceIds.add(R.string.naturalSciences);
-        subjectResourceIds.add(R.string.engineering);
-        subjectResourceIds.add(R.string.buisnessAndEconomics);
-        subjectResourceIds.add(R.string.lawAndPoliticalScience);
-        subjectResourceIds.add(R.string.artAndMusic);
-        subjectResourceIds.add(R.string.other);
+    // ----------------MAIN METHODS--------------
+    private ViewGroup createRecycleView(LayoutInflater inflater, ViewGroup container) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_browser, container, false);
+
+        mRecycleView = rootView.findViewById(R.id.group_list_recycle);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleView.setLayoutManager(mLayoutManager);
+        this.filterChoice = activity.filterChoice;
+
+        initializeAdapter();
+
+        return rootView;
     }
 
     private void initViews(ViewGroup rootView) {
+        ArrayList<Button> buttonArrayList = new ArrayList<>();
         //DAY OF MEETING VIEWS
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day1_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day2_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day3_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day4_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day5_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day6_button));
-        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day7_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day1_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day2_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day3_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day4_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day5_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day6_button));
+        buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day7_button));
+        daysOfMeeting = buttonArrayList;
 
         //SUBJECT VIEWS
-        subjects.add((ImageView) rootView.findViewById(R.id.language_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.programming_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.math_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.science_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.engineering_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.business_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.law_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.music_filter_icon));
-        subjects.add((ImageView) rootView.findViewById(R.id.other_filter_icon));
+        ArrayList<ImageView> imageViewArrayList = new ArrayList<>();
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.language_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.programming_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.math_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.science_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.engineering_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.business_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.law_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.music_filter_icon));
+        imageViewArrayList.add((ImageView) rootView.findViewById(R.id.other_filter_icon));
+        subjects = imageViewArrayList;
 
         resources = getResources();
+    }
+
+    private void initSubjectResourceIds() {
+        ArrayList<Integer> integerArrayList = new ArrayList<>();
+        integerArrayList.add(R.string.language);
+        integerArrayList.add(R.string.programming);
+        integerArrayList.add(R.string.math);
+        integerArrayList.add(R.string.naturalSciences);
+        integerArrayList.add(R.string.engineering);
+        integerArrayList.add(R.string.buisnessAndEconomics);
+        integerArrayList.add(R.string.lawAndPoliticalScience);
+        integerArrayList.add(R.string.artAndMusic);
+        integerArrayList.add(R.string.other);
+        subjectResourceIds = integerArrayList;
     }
 
     private void refreshPulldown(ViewGroup rootView) {
@@ -119,72 +127,7 @@ public class BrowserFragment extends Fragment {
         });
     }
 
-    private void dayOfMeetingClickableListener(ViewGroup rootView) {
-        daysOfMeeting.get(0).setText("Today");
-        daysOfMeeting.get(1).setText("Tmrw");
-
-        for (int i = 2; i <= 6; i++) {
-            daysOfMeeting.get(i).setText(Utility.getWeekDay(daysInUNIX[i], false));
-        }
-
-        daysOfMeeting.get(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(0, daysOfMeeting.get(0));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(1, daysOfMeeting.get(1));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(2, daysOfMeeting.get(2));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(3, daysOfMeeting.get(3));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(4, daysOfMeeting.get(4));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(5, daysOfMeeting.get(5));
-                initializeAdapter();
-            }
-        });
-
-        daysOfMeeting.get(6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                filterByDayOfMeeting(6, daysOfMeeting.get(6));
-                initializeAdapter();
-            }
-        });
-    }
-
-    private void subjectClickableListener(ViewGroup rootView) {
+    private void subjectClickableListeners() {
         subjects.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,6 +201,103 @@ public class BrowserFragment extends Fragment {
         });
     }
 
+    private void dayOfMeetingClickableListeners() {
+        calculateDaysInUNIX();
+
+        daysOfMeeting.get(0).setText("Today");
+        daysOfMeeting.get(1).setText("Tmrw");
+
+        for (int i = 2; i <= 6; i++) {
+            daysOfMeeting.get(i).setText(Utility.getWeekDay(daysInUNIX[i], false));
+        }
+
+        daysOfMeeting.get(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(0, daysOfMeeting.get(0));
+                initializeAdapter();
+                Log.d("TAGG", "called 1st listner");
+            }
+        });
+
+        daysOfMeeting.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(1, daysOfMeeting.get(1));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(2, daysOfMeeting.get(2));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(3, daysOfMeeting.get(3));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(4, daysOfMeeting.get(4));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(5, daysOfMeeting.get(5));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(6, daysOfMeeting.get(6));
+                initializeAdapter();
+            }
+        });
+    }
+
+    private void resetFilterClickableListener(ViewGroup rootView) {
+        reset = rootView.findViewById(R.id.reset_button);
+
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterChoice.reset();
+                resetFilterViews();
+                initializeAdapter();
+                Log.d("TAGG" , "called listner");
+            }
+        });
+    }
+
+    //----------------HELPER METHODS-------------
+    private void filterBySubject(int position, int subject, ImageView view){
+        if (!filterSubjectTriggers[position]) {
+            filterChoice.addSubject(getResources().getString(subject));
+            filterChoice.printSubjects();
+            filterSubjectTriggers[position] = true;
+            view.setBackgroundColor(resources.getColor(R.color.lightGrey));
+        } else {
+            filterChoice.removeSubject(getResources().getString(subject));
+            filterChoice.printSubjects();
+            filterSubjectTriggers[position] = false;
+            view.setBackgroundColor(resources.getColor(R.color.offWhite));
+        }
+    }
+
     private void filterByDayOfMeeting(int position, Button button) {
         if (!filterDayOfMeetingTriggers[position]) {
             filterChoice.addDay(daysInUNIX[position]);
@@ -273,76 +313,51 @@ public class BrowserFragment extends Fragment {
         }
     }
 
-    private void filterBySubject(int position, int subject, ImageView view){
-        if (!filterSubjectTriggers[position]) {
-            filterChoice.addSubject(getResources().getString(subject));
-            filterChoice.printSubjects();
-            filterSubjectTriggers[position] = true;
-            view.setBackgroundColor(resources.getColor(R.color.lightGrey));
-        } else {
-            filterChoice.removeSubject(getResources().getString(subject));
-            filterChoice.printSubjects();
-            filterSubjectTriggers[position] = false;
-            view.setBackgroundColor(resources.getColor(R.color.offWhite));
-        }
-    }
-
-    private ViewGroup createRecycleView(LayoutInflater inflater, ViewGroup container) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_browser, container, false);
-
-        mRecycleView = rootView.findViewById(R.id.group_list_recycle);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(mLayoutManager);
-        this.filterChoice = activity.filterChoice;
-
-        initializeAdapter();
-
-        return rootView;
-    }
-
     private void initializeAdapter() {
         mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX);
         mRecycleView.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        activity = (ParentActivity) getActivity();
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        activity = null;
-    }
-
-    private void resetFilterClickableListener(ViewGroup rootView) {
-        reset = rootView.findViewById(R.id.reset_button);
-
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterChoice.reset();
-                resetFilterViews();
-            }
-        });
-    }
-
     private void resetFilterViews() {
-        for(int i=0; i<subjects.size(); i++ ){
-            subjects.get(i).setBackgroundColor(resources.getColor(R.color.offWhite));
-            filterSubjectTriggers[i] = false;
-        }
+        subjects.get(0).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(1).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(2).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(3).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(4).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(5).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(6).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(7).setBackgroundColor(resources.getColor(R.color.offWhite));
+        subjects.get(8).setBackgroundColor(resources.getColor(R.color.offWhite));
+        filterSubjectTriggers = new boolean[9];
 
-        for(int i=0; i<daysOfMeeting.size(); i++ ){
-            daysOfMeeting.get(i).setBackgroundColor(resources.getColor(R.color.offWhite));
-            daysOfMeeting.get(i).setTextColor(resources.getColor(R.color.darkNavy));
-            filterDayOfMeetingTriggers[i] = false;
+        daysOfMeeting.get(0).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(0).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(1).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(1).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(2).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(2).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(3).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(3).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(4).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(4).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(5).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(5).setTextColor(resources.getColor(R.color.darkNavy));
+        daysOfMeeting.get(6).setBackgroundColor(resources.getColor(R.color.offWhite));
+        daysOfMeeting.get(6).setTextColor(resources.getColor(R.color.darkNavy));
+
+        filterDayOfMeetingTriggers = new boolean[7];
+    }
+
+    private void calculateDaysInUNIX() {
+        long todayUnix = getTodayInUNIX();
+        daysInUNIX[0] = todayUnix;
+
+        for(int i=1; i<daysInUNIX.length; i++) {
+            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
         }
     }
 
-    private long getTodayUnix(){
+    private long getTodayInUNIX(){
         Date today = new Date();
         DateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -357,15 +372,7 @@ public class BrowserFragment extends Fragment {
         return todayUnix;
     }
 
-    private void calculateDaysInUNIX() {
-        long todayUnix = getTodayUnix();
-        daysInUNIX[0] = todayUnix;
-
-        for(int i=1; i<daysInUNIX.length; i++) {
-            daysInUNIX[i] = daysInUNIX[i-1] + DAY_IN_SECONDS;
-        }
-    }
-
+    //-----------FILTER CLASS-------------
     public static class FilterChoice {
         private HashMap<String, Boolean> subjects;
         private HashMap<Long, Boolean> daysOfMeeting;
@@ -375,25 +382,18 @@ public class BrowserFragment extends Fragment {
             daysOfMeeting = new HashMap<>();
         }
 
-        public void addSubject(String subject) {
+        private void addSubject(String subject) {
             subjects.put(subject, true);
         }
 
-        public void removeSubject(String subject) {subjects.remove(subject); }
+        private void removeSubject(String subject) {subjects.remove(subject); }
 
-        public void addDay (Long day) {
+        private void addDay (Long day) {
             daysOfMeeting.put(day, true);
         }
 
-        public void removeDay (Long day) {
+        private void removeDay (Long day) {
             daysOfMeeting.remove(day);
-        }
-
-        public void printSubjects() {
-            Log.d("filter", "PRINTING SUBJECTS");
-            for (String subject: subjects.keySet()) {
-                Log.d("filter", "SUBJECT : " + subject);
-            }
         }
 
         public boolean isChosenSubject(String groupSubject) {
@@ -420,14 +420,31 @@ public class BrowserFragment extends Fragment {
             return false;
         }
 
-
         public void reset() {
             subjects.clear();
             daysOfMeeting.clear();
         }
+
+        private void printSubjects() {
+            Log.d("filter", "PRINTING SUBJECTS");
+            for (String subject: subjects.keySet()) {
+                Log.d("filter", "SUBJECT : " + subject);
+            }
+        }
     }
 
+    //-------------FRAGMENT RELATED METHODS---------------
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        activity = (ParentActivity) getActivity();
+    }
 
-
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        resetFilterViews();
+        filterChoice.reset();
+        activity = null;
+    }
 }

@@ -8,7 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
+import app.kth.com.groupie.EditProfileActivity;
+import app.kth.com.groupie.R;
+import app.kth.com.groupie.SettingsActivity;
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -16,12 +21,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-import app.kth.com.groupie.CreateGroupActivity;
 import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.editGroup.EditGroupActivity;
 import app.kth.com.groupie.firstLogin.FirstLoginActivity;
+
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.registration.RegistrationActivity;
@@ -90,36 +96,12 @@ public class ParentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_create_group:
-//                Intent intent = new Intent(this, CreateGroupActivity.class);
-//                startActivity(intent);
-                createGroup();
+                Intent intent = new Intent(this, CreateGroupActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void createGroup() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
-
-        Group group = new Group();
-        group.setSubject("Math");
-        group.setTopic("Calculus");
-        group.setDescription("In the library");
-        group.setDateOfMeeting("20-04-2018");
-        group.setTimeOfCreation("19-04-18");
-        group.setHasMeetingDate(true);
-        group.setLocation("KTH kista");
-        group.setMaxNumberOfMembers(8);
-        group.setOwner(mAuth.getUid());
-        group.setPublic(true);
-
-        HashMap<String, Boolean> members = new HashMap<>();
-        members.put(mAuth.getUid(), true);
-        group.setMembers(members);
-
-        String groupKey = db.child("groups").push().getKey();
-        db.child("groups/" + groupKey).setValue(group);
     }
 
     public void signOut(){
@@ -145,8 +127,10 @@ public class ParentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void toRegistrationActivity(){
-        Intent intent = new Intent(this, RegistrationActivity.class);
+    public void goToEditGroup(){
+        Intent intent = new Intent(this, EditGroupActivity.class);
         startActivity(intent);
     }
+
+
 }

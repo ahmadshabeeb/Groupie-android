@@ -51,8 +51,8 @@ public class BrowserFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState) {
+        Log.d("create", "here");
         calculateDaysInUNIX();
-        y = new int[]{0};
 
         ViewGroup rootView = createRecycleView(inflater, container);
 
@@ -86,24 +86,24 @@ public class BrowserFragment extends Fragment {
 
     private void initViews(ViewGroup rootView) {
         //DAY OF MEETING VIEWS
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day1_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day2_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day3_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day4_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day5_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day6_button));
-        daysOfMeeting.add(rootView.findViewById(R.id.filter_day7_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day1_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day2_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day3_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day4_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day5_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day6_button));
+        daysOfMeeting.add((Button) rootView.findViewById(R.id.filter_day7_button));
 
         //SUBJECT VIEWS
-        subjects.add(rootView.findViewById(R.id.language_filter_icon));
-        subjects.add(rootView.findViewById(R.id.programming_filter_icon));
-        subjects.add(rootView.findViewById(R.id.math_filter_icon));
-        subjects.add(rootView.findViewById(R.id.science_filter_icon));
-        subjects.add(rootView.findViewById(R.id.engineering_filter_icon));
-        subjects.add(rootView.findViewById(R.id.business_filter_icon));
-        subjects.add(rootView.findViewById(R.id.law_filter_icon));
-        subjects.add(rootView.findViewById(R.id.music_filter_icon));
-        subjects.add(rootView.findViewById(R.id.other_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.language_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.programming_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.math_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.science_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.engineering_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.business_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.law_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.music_filter_icon));
+        subjects.add((ImageView) rootView.findViewById(R.id.other_filter_icon));
 
         resources = getResources();
     }
@@ -119,8 +119,6 @@ public class BrowserFragment extends Fragment {
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.N)
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void dayOfMeetingClickableListener(ViewGroup rootView) {
         daysOfMeeting.get(0).setText("Today");
         daysOfMeeting.get(1).setText("Tmrw");
@@ -129,41 +127,138 @@ public class BrowserFragment extends Fragment {
             daysOfMeeting.get(i).setText(Utility.getWeekDay(daysInUNIX[i], false));
         }
 
-        int i = 0;
-        for (Button v: daysOfMeeting) {
-            Log.d("subpos", i + " ...");
-            if (i > 6) { i = 0;}
-            int finalI = i;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    filterByDayOfMeeting(finalI, daysOfMeeting.get(finalI));
-                    initializeAdapter();
-                }
-            });
-            i++;
-        }
+        daysOfMeeting.get(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(0, daysOfMeeting.get(0));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(1, daysOfMeeting.get(1));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(2, daysOfMeeting.get(2));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(3, daysOfMeeting.get(3));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(4, daysOfMeeting.get(4));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(5, daysOfMeeting.get(5));
+                initializeAdapter();
+            }
+        });
+
+        daysOfMeeting.get(6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterByDayOfMeeting(0, daysOfMeeting.get(6));
+                initializeAdapter();
+            }
+        });
     }
 
     private void subjectClickableListener(ViewGroup rootView) {
-        int i = 0;
-        for (ImageView v: subjects) {
-            Log.d("subpos", i + " ...");
-            if (i > 8) { i = 0; }
-            int finalI = i;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    filterBySubject(finalI, subjectResourceIds.get(finalI), subjects.get(finalI));
-                    initializeAdapter();
-                }
-            });
-            i++;
-        }
+        subjects.get(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(0, subjectResourceIds.get(0), subjects.get(0));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(1, subjectResourceIds.get(1), subjects.get(1));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(2, subjectResourceIds.get(2), subjects.get(2));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(3, subjectResourceIds.get(3), subjects.get(3));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(4, subjectResourceIds.get(4), subjects.get(4));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(5, subjectResourceIds.get(5), subjects.get(5));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(6, subjectResourceIds.get(6), subjects.get(6));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(7, subjectResourceIds.get(7), subjects.get(7));
+                initializeAdapter();
+            }
+        });
+
+        subjects.get(8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                filterBySubject(8, subjectResourceIds.get(8), subjects.get(8));
+                initializeAdapter();
+            }
+        });
     }
 
     private void filterByDayOfMeeting(int position, Button button) {
-        Log.d("POSITION", position + " ASDF");
         if (!filterDayOfMeetingTriggers[position]) {
             filterChoice.addDay(daysInUNIX[position]);
             filterDayOfMeetingTriggers[position] = true;
@@ -235,7 +330,16 @@ public class BrowserFragment extends Fragment {
     }
 
     private void resetFilterViews() {
-       // for()
+        for(int i=0; i<subjects.size(); i++ ){
+            subjects.get(i).setBackgroundColor(resources.getColor(R.color.offWhite));
+            filterSubjectTriggers[i] = false;
+        }
+
+        for(int i=0; i<daysOfMeeting.size(); i++ ){
+            daysOfMeeting.get(i).setBackgroundColor(resources.getColor(R.color.offWhite));
+            daysOfMeeting.get(i).setTextColor(resources.getColor(R.color.darkNavy));
+            filterDayOfMeetingTriggers[i] = false;
+        }
     }
 
     private long getTodayUnix(){

@@ -25,6 +25,7 @@ import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.editGroup.EditGroupActivity;
 import app.kth.com.groupie.firstLogin.FirstLoginActivity;
 
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
@@ -131,5 +132,11 @@ public class ParentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
+
+    public void goToEditGroup(){
+        Intent intent = new Intent(this, EditGroupActivity.class);
+        startActivity(intent);
+    }
+
 
 }

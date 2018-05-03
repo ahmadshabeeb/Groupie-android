@@ -18,4 +18,10 @@
         android:layout_height="wrap_content"
         android:text="Sign OUt"/>
 
+    <Button
+        android:id="@+id/editgroup_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit group" />
+
 </LinearLayout>

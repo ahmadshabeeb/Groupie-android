@@ -1,12 +1,24 @@
 package app.kth.com.groupie.otherProfile;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.Profile;
@@ -20,22 +32,12 @@ public class OtherProfieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_other_profie);
 
-        //profile = GET FROM INTENT
-
-        profile = getFakeProfile();
+        profile = (Profile) getIntent().getSerializableExtra("profile");
+        profile.setProfilePicture("h");
         initTextviews();
 
     }
 
-    private Profile getFakeProfile(){
-        Profile fake = new Profile();
-        fake.setFirstName("Daniel");
-        fake.setLastName("Muresu");
-        fake.setSchool("Kungliga Tekniska Högskolan");
-        fake.setBio("I like to study math and programming and stuff like that and more stuff and more stuff and more stuff and more stuff and more stuff");
-        fake.setFieldOfStudy("ICT");
-        return fake;
-    }
 
     private void initTextviews(){
         TextView firstname = (TextView) findViewById(R.id.profilename_textview);
@@ -53,6 +55,11 @@ public class OtherProfieActivity extends AppCompatActivity {
         TextView field = (TextView) findViewById(R.id.profilefield_textview);
         field.setText(profile.getFieldOfStudy());
 
+        if(profile.getProfilePicture() != null){
+            new DownloadImageTask((ImageView) findViewById(R.id.profilepic_imageview))
+                    .execute("https://firebasestorage.googleapis.com/v0/b/parent-test-e6612.appspot.com/o/images%2Fcf5cbeeb-36fa-47f2-a3fd-b748d83599b4?alt=media&token=4baef8bf-72af-424d-bd5d-e3b59b006f9b");
+        }
+
         ImageView report = (ImageView) findViewById(R.id.reportuser_imageview);
         report.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,5 +68,32 @@ public class OtherProfieActivity extends AppCompatActivity {
                 toast.show();
             }
         });
+    }
+
+
+    // show The Image in a ImageView
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 }

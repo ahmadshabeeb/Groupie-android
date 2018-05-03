@@ -31,6 +31,7 @@ import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 
 
+import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.otherProfile.OtherProfieActivity;
@@ -142,6 +143,14 @@ public class ParentActivity extends AppCompatActivity {
 
     public void goToEditGroup(){
         Intent intent = new Intent(this, OtherProfieActivity.class);
+        Profile fake = new Profile();
+        fake.setFirstName("Daniel");
+        fake.setLastName("Muresu");
+        fake.setSchool("Kungliga Tekniska Högskolan");
+        fake.setBio("I like to study math and programming and stuff like that and more stuff and more stuff and more stuff and more stuff and more stuff");
+        fake.setFieldOfStudy("ICT");
+        intent.putExtra("profile", fake);
+
         startActivity(intent);
     }
 

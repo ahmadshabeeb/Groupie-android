@@ -90,5 +90,17 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_create_group">CreateGroupActivity</string>
     <string name="chooseSubject">Please choose your favorite subject from one of the nine below. You can change this at any time in your profile.</string>
+
     <string name="title_activity_edit_group">EditGroupActivity</string>
+
+    <!-- SUBJECT STRINGS -->
+    <string name="language">Language</string>
+    <string name="programming">Programming</string>
+    <string name="math">Math</string>
+    <string name="naturalSciences">Natural Sciences</string>
+    <string name="engineering">Engineering</string>
+    <string name="buisnessAndEconomics">Business and Economics</string>
+    <string name="lawAndPoliticalScience">Law and Political Science</string>
+    <string name="artAndMusic">Art and Music</string>
+    <string name="other">Other</string>
 </resources>

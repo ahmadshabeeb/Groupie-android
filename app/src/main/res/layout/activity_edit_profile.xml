@@ -4,6 +4,243 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/offWhite"
     tools:context=".EditProfileActivity">
+
+
+    <TextView
+        android:id="@+id/school_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="School:"
+        android:textColor="@color/darkNavy"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_textView" />
+
+    <TextView
+        android:id="@+id/email_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Email:"
+        android:textStyle="bold"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.025"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/profile_picture_imageView"
+        android:layout_width="70dp"
+        android:layout_height="77dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/save_changes_button"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_subject_textView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/school_textView"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@mipmap/ic_profile" />
+
+    <TextView
+        android:id="@+id/favorite_subject_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:text="Favorite Subject: "
+        android:textColor="@color/darkNavy"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/name_editText"
+        app:layout_constraintTop_toBottomOf="@+id/school_textView" />
+
+    <EditText
+        android:id="@+id/name_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="First and Last name"
+        android:inputType="textPersonName|textFilter"
+        android:text="Name"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_picture_imageView" />
+
+    <EditText
+        android:id="@+id/default_location_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Preferred Study Location"
+        android:inputType="text|textPersonName"
+        android:text="Default location"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/field_of_study_editText" />
+
+    <EditText
+        android:id="@+id/field_of_study_editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:hint="Field of Study"
+        android:inputType="text|textPersonName"
+        android:text="Field of Study"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_editText" />
+
+    <TextView
+        android:id="@+id/bio_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:text="Bio:"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/default_location_editText"
+        android:layout_marginLeft="8dp" />
+
+    <EditText
+        android:id="@+id/bio_editText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="textMultiLine"
+        android:maxLength="140"
+        android:maxLines="5"
+        android:textColor="@color/darkNavy"
+        app:layout_constraintEnd_toStartOf="@+id/radioGroup"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bio_textview"
+        />
+
+    <Button
+        android:id="@+id/save_changes_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@color/darkNavy"
+        android:text="Save Changes"
+        android:gravity="center"
+        android:textColor="@color/offWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@+id/errorTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/field_of_study_editText"
+        app:layout_constraintTop_toBottomOf="@+id/favorite_subject_textView">
+
+        <RadioButton
+            android:id="@+id/languageRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Language" />
+
+        <RadioButton
+            android:id="@+id/mathematicsRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mathematics" />
+
+        <RadioButton
+            android:id="@+id/law_and_political_science_RB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Law and Political Science" />
+
+        <RadioButton
+            android:id="@+id/art_and_music_RB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Art and Music" />
+
+        <RadioButton
+            android:id="@+id/engineeringRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Engineering" />
+
+        <RadioButton
+            android:id="@+id/natural_science_RB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Natural Science" />
+
+        <RadioButton
+            android:id="@+id/programmingRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Programming" />
+
+
+        <RadioButton
+            android:id="@+id/business_and_economics_RB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Business and Economics" />
+
+        <RadioButton
+            android:id="@+id/otherRB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Other" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/save_changes_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bio_editText" />
+
 
 </android.support.constraint.ConstraintLayout>

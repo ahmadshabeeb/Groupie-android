@@ -1,10 +1,15 @@
 package app.kth.com.groupie.data.structure;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Ahmad on 4/11/2018.
  */
 
-public class Profile {
+public class Profile implements Serializable{
     private String userId;
     private String firstName;
     private String lastName;
@@ -15,7 +20,7 @@ public class Profile {
 
     public Profile() {}
 
-    public String getUserId() {
+    public String getUserId()  {
         return userId;
     }
 
@@ -70,4 +75,5 @@ public class Profile {
     public void setFieldOfStudy(String fieldOfStudy) {
         this.fieldOfStudy = fieldOfStudy;
     }
+
 }

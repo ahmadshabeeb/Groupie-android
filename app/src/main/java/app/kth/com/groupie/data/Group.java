@@ -1,15 +1,15 @@
 package app.kth.com.groupie.data;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.HashMap;
 import java.util.Map;
+import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 
-/**
- * Created by Ahmad on 4/11/2018.
- */
 
-public class Group implements Parcelable {
+public class Group implements Parcelable, RecyclerListItem {
     private String groupId;
     private String subject;
     private String topic;
@@ -24,6 +24,7 @@ public class Group implements Parcelable {
     private String dateOfMeeting;
     private boolean hasMeetingDate;
     private String owner;
+    private long meetingDateTimeStamp;
 
     @Override
     public int describeContents() {
@@ -162,6 +163,11 @@ public class Group implements Parcelable {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+    public long getMeetingDateTimeStamp() { return meetingDateTimeStamp; }
+    public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
 
+    @Override
+    public boolean isHeader() {
+        return false;
+    }
 }
-

@@ -20,7 +20,6 @@
         android:id="@+id/subject_textview_fixed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Subject: "
         android:textStyle="bold"
         android:textSize="16sp"
         android:layout_toRightOf="@id/subject_imageview"
@@ -110,8 +109,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="18dp"
-        android:background="@drawable/layout_join_button"
-        android:text="JOIN"
+        android:background="@drawable/join_group"
         />
 
 </RelativeLayout>

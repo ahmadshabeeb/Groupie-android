@@ -53,6 +53,9 @@ dependencies {
     //Glide for images
     implementation 'com.github.bumptech.glide:glide:4.3.1'
 
+    //circular images
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     //Sliding panel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
 

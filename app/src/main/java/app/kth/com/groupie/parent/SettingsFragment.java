@@ -20,7 +20,6 @@ public class SettingsFragment extends Fragment {
         ViewGroup rootview = (ViewGroup) inflater.inflate(R.layout.fragment_settings, container, false);
         // Inflate the layout for this fragment
 
-
         Button signOut = (Button) rootview.findViewById(R.id.signout_button);
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override

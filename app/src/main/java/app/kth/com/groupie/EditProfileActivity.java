@@ -108,6 +108,39 @@ public class EditProfileActivity extends AppCompatActivity {
         if(currentUserProfile.getBio() != null){
             bioET.setText(currentUserProfile.getBio());
         }
+        preChooseFavoriteSubject();
+    }
+
+    public void preChooseFavoriteSubject(){
+        switch(currentUserProfile.getFavoriteSubject()){
+            case "Mathematics" :
+                radioGroup.check(R.id.mathematicsRB);
+                break;
+            case "Language" :
+                radioGroup.check(R.id.languageRB);
+                break;
+            case "Programming" :
+                radioGroup.check(R.id.programmingRB);
+                break;
+            case "Law and Political Science" :
+                radioGroup.check(R.id.law_and_political_science_RB);
+                break;
+            case "Art and Music" :
+                radioGroup.check(R.id.art_and_music_RB);
+                break;
+            case "Engineering" :
+                radioGroup.check(R.id.engineeringRB);
+                break;
+            case "Business and Economics" :
+                radioGroup.check(R.id.business_and_economics_RB);
+                break;
+            case "Natural Sciences" :
+                radioGroup.check(R.id.natural_science_RB);
+                break;
+            case "Other":
+                radioGroup.check(R.id.otherRB);
+                break;
+        }
     }
 
     public void modifyCurrentUserProfile(){

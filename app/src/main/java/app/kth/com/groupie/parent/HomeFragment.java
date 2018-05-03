@@ -23,11 +23,11 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
-
         mRecycleView = rootView.findViewById(R.id.group_list_recycle_home);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecycleView.setLayoutManager(mLayoutManager);
         progressBar = rootView.findViewById(R.id.progressBar);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        mRecycleView.setLayoutManager(mLayoutManager);
         initializeAdapter();
 
         return rootView;

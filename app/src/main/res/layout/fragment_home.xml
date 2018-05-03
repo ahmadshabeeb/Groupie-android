@@ -4,8 +4,23 @@
     android:layout_height="match_parent"
     android:background="@color/offWhite"
     android:orientation="vertical">
-
-    <include layout="@layout/list_group_recycle_home"/>
+    <TextView
+        android:id="@+id/title_textview"
+        android:layout_width="75dp"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="My groups"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        />
+    <include layout="@layout/list_group_recycle_home"
+        android:layout_below="@id/title_textview"
+        android:layout_height="150dp"
+        android:layout_width="match_parent"/>
 
     <include layout="@layout/layout_circular_progress_bar"/>
 

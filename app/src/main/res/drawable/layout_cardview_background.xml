@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <solid android:color="@color/offWhite"/>
-    <stroke android:width="2dp" android:color="@color/darkGrey" />
-    <corners android:radius="20dp"/>
-    <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
-
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- SHADOW BELOW GROUP SHAPE -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#757575" />
+            <corners android:radius="20dp" />
+        </shape>
+    </item>
+    <!-- GROUP CARD -->
+    <item android:bottom="5px">
+        <shape android:shape="rectangle">
+            <solid android:color="#FFFFFF"/>
+            <corners android:radius="20dp"/>
+            <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
+        </shape>
+    </item>
+</layer-list>

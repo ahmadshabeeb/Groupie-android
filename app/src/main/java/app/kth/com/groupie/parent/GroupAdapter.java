@@ -57,11 +57,11 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.progressBar = progressBar;
         resources = context.getResources();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
-        getGroupsFromDataBase(databaseReference);
+        getGroupsFromDatabase(databaseReference);
     }
 
     //--------------DATASET-----------------------
-    private void getGroupsFromDataBase(final DatabaseReference databaseReference) {
+    private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
         nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {

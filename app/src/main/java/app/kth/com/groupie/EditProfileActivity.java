@@ -160,7 +160,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 msgText.setText("Enter study location and field of study please!");
             }
         } else {
-            msgText.setText("Please fill in First and Last name in this format (First Last)");
+            msgText.setText("Please fill in First and Last name in this format (FirstName LastName)");
         }
     }
 

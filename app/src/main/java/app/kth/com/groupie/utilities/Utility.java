@@ -11,6 +11,11 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class Utility {
 
     // Converting any JAVA object to a JSON object
@@ -46,5 +51,20 @@ public class Utility {
                         }
                     }
                 });
+    }
+
+    public static String getWeekDay(long day, boolean fullName){
+        Date date = new Date(day * 1000l);
+        DateFormat sdf;
+
+        if (fullName)
+            sdf = new SimpleDateFormat("EEEE");
+        else
+            sdf = new SimpleDateFormat("EEE");
+
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String weekDay = sdf.format(date);
+        Log.d("Week day" , weekDay + "..." );
+        return weekDay;
     }
 }

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- SHADOW BELOW GROUP SHAPE -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#757575" />
-            <corners android:radius="20dp" />
+            <solid android:color="#BDBDBD" />
+            <corners android:radius="10dp" />
         </shape>
     </item>
-    <!-- GROUP CARD -->
-    <item android:bottom="5px">
+
+    <item android:bottom="10px">
         <shape android:shape="rectangle">
-            <solid android:color="#FFFFFF"/>
-            <corners android:radius="20dp"/>
+            <solid android:color="@color/offWhite"/>
+            <corners
+                android:bottomLeftRadius="10dp"
+                android:bottomRightRadius="10dp"/>
             <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
         </shape>
     </item>

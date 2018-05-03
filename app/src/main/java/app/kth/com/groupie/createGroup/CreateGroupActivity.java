@@ -28,8 +28,6 @@ import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 
 public class CreateGroupActivity extends AppCompatActivity {
-
-
     Button currentDayButton;
     String currentDate;
     FirebaseAuth mAuth;
@@ -46,7 +44,6 @@ public class CreateGroupActivity extends AppCompatActivity {
 
         initButtons();
         initImageButtons();
-
     }
 
     private String getDay(int dayOfWeek){
@@ -70,6 +67,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             case 1:
                 return "SUN";
         }
+
         return null;
     }
 
@@ -314,6 +312,7 @@ public class CreateGroupActivity extends AppCompatActivity {
             }
         });
     }
+
     private void changeImageButton(ImageView imageview){
         if(currentImageview != null){
             currentImageview.setBackgroundColor(getResources().getColor(R.color.offWhite));

@@ -38,6 +38,8 @@ public class ParentActivity extends AppCompatActivity {
     BrowserFragment browserFragment;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    public BrowserFragment.FilterChoice filterChoice;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -81,6 +83,10 @@ public class ParentActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+
+        //Filtering for groups in browser
+        filterChoice= new BrowserFragment.FilterChoice();
+
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

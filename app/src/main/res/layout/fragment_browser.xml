@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/offWhite"
-    android:orientation="vertical">
+    android:gravity="top"
+    sothree:umanoPanelHeight="40dp"
+    sothree:umanoShadowHeight="0dp"
+    sothree:umanoParallaxOffset="100dp"
+    sothree:umanoDragView="@+id/dragView"
+    sothree:umanoOverlay="true"
+    sothree:umanoScrollableView="@+id/subject_filter"
+    >
 
-    <include layout="@layout/list_group_recycle" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightGrey"
+        android:orientation="vertical"
+        android:paddingTop="40dp">
 
-</LinearLayout>
+        <include layout="@layout/layout_circular_progress_bar"/>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/browser_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/list_group_recycle" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </FrameLayout>
+
+    <include layout="@layout/filter_layout"/>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

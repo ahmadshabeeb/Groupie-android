@@ -19,7 +19,9 @@
         <activity
             android:name=".parent.ParentActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,28 +30,44 @@
         </activity>
         <activity
             android:name=".registration.RegistrationActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".login.LoginActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".login.LoginActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".groupMessaging.GroupMessagingActivity"
             android:label="Group Messaging"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".EditProfileActivity"
             android:label="Edit Profile"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".SettingsActivity"
             android:label="Group Messaging"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:name=".createGroup.CreateGroupActivity"
             android:label="@string/title_activity_create_group"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".firstLogin.FirstLoginActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".firstLogin.FirstLoginActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".editGroup.EditGroupActivity"
-            android:label="@string/title_activity_edit_group"></activity>
+            android:label="@string/title_activity_edit_group"
+            android:screenOrientation="portrait"
+            >
+        </activity>
     </application>
 
 </manifest>

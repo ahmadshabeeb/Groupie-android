@@ -1,6 +1,7 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -127,10 +128,14 @@ public class ProfileFragment extends Fragment {
         defaultLocation.setText(currentUserProfile.getStudyLocation());
         firstName.setText(currentUserProfile.getFirstName());
         lastName.setText(currentUserProfile.getLastName());
-        String urlImage = currentUserProfile.getProfilePicture();
-        Glide.with(ProfileFragment.this)
-                .load(urlImage)
-                .into(profilePicture);
+        if(currentUserProfile.getProfilePicture() != null){
+            String urlImage = currentUserProfile.getProfilePicture();
+            Glide.with(ProfileFragment.this)
+                    .load(urlImage)
+                    .into(profilePicture);
+        } else{
+            profilePicture.setImageResource(R.mipmap.ic_profile);
+        }
     }
 
     public void printBar(String message, View view){

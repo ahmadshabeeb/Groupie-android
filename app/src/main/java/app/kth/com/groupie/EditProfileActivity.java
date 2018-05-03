@@ -60,12 +60,14 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
+    private TextView msgText;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+        msgText = findViewById(R.id.errorTextView);
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
@@ -103,49 +105,63 @@ public class EditProfileActivity extends AppCompatActivity {
         nameET.setText(currentUserProfile.getFirstName() + " " + currentUserProfile.getLastName());
         fieldOfStudyET.setText(currentUserProfile.getFieldOfStudy());
         defaultLocationET.setText(currentUserProfile.getStudyLocation());
-        bioET.setText(currentUserProfile.getBio());
+        if(currentUserProfile.getBio() != null){
+            bioET.setText(currentUserProfile.getBio());
+        }
     }
 
     public void modifyCurrentUserProfile(){
+        msgText.setText(" ");
+        String fos = fieldOfStudyET.getText().toString();
+        String bio = bioET.getText().toString();
+        String studyLocation = defaultLocationET.getText().toString();
         checkedButtonID = radioGroup.getCheckedRadioButtonId();
         String[] firstAndLastName = nameET.getText().toString().split(" ", 2);
-        currentUserProfile.setFirstName(capitalFirst(firstAndLastName[0]));
-        currentUserProfile.setLastName(capitalFirst(firstAndLastName[1]));
-        currentUserProfile.setBio(bioET.getText().toString());
-        currentUserProfile.setFieldOfStudy(fieldOfStudyET.getText().toString());
-        currentUserProfile.setStudyLocation(defaultLocationET.getText().toString());
-
-        switch(checkedButtonID){
-            case R.id.mathematicsRB :
-                currentUserProfile.setFavoriteSubject("Mathematics");
-                break;
-            case R.id.languageRB :
-                currentUserProfile.setFavoriteSubject("Language");
-                break;
-            case R.id.programmingRB :
-                currentUserProfile.setFavoriteSubject("Programming");
-                break;
-            case R.id.law_and_political_science_RB :
-                currentUserProfile.setFavoriteSubject("Law and Political Science");
-                break;
-            case R.id.art_and_music_RB :
-                currentUserProfile.setFavoriteSubject("Art and Music");
-                break;
-            case R.id.engineeringRB :
-                currentUserProfile.setFavoriteSubject("Engineering");
-                break;
-            case R.id.business_and_economics_RB :
-                currentUserProfile.setFavoriteSubject("Business and Economics");
-                break;
-            case R.id.natural_science_RB :
-                currentUserProfile.setFavoriteSubject("Natural Sciences");
-                break;
-            case R.id.otherRB :
-                currentUserProfile.setFavoriteSubject("Other");
-                break;
+        if(firstAndLastName.length > 1 && !firstAndLastName[0].isEmpty() && !firstAndLastName[1].isEmpty()){
+            currentUserProfile.setFirstName(capitalFirst(firstAndLastName[0]));
+            currentUserProfile.setLastName(capitalFirst(firstAndLastName[1]));
+            if (!bio.isEmpty()){
+                currentUserProfile.setBio(bio);
+            }
+            if(!fos.isEmpty() && !studyLocation.isEmpty()){
+                currentUserProfile.setStudyLocation(studyLocation);
+                currentUserProfile.setFieldOfStudy(fos);
+                switch(checkedButtonID){
+                    case R.id.mathematicsRB :
+                        currentUserProfile.setFavoriteSubject("Mathematics");
+                        break;
+                    case R.id.languageRB :
+                        currentUserProfile.setFavoriteSubject("Language");
+                        break;
+                    case R.id.programmingRB :
+                        currentUserProfile.setFavoriteSubject("Programming");
+                        break;
+                    case R.id.law_and_political_science_RB :
+                        currentUserProfile.setFavoriteSubject("Law and Political Science");
+                        break;
+                    case R.id.art_and_music_RB :
+                        currentUserProfile.setFavoriteSubject("Art and Music");
+                        break;
+                    case R.id.engineeringRB :
+                        currentUserProfile.setFavoriteSubject("Engineering");
+                        break;
+                    case R.id.business_and_economics_RB :
+                        currentUserProfile.setFavoriteSubject("Business and Economics");
+                        break;
+                    case R.id.natural_science_RB :
+                        currentUserProfile.setFavoriteSubject("Natural Sciences");
+                        break;
+                    case R.id.otherRB :
+                        currentUserProfile.setFavoriteSubject("Other");
+                        break;
+                }
+                updateInDatabase();
+            } else {
+                msgText.setText("Enter study location and field of study please!");
+            }
+        } else {
+            msgText.setText("Please fill in First and Last name in this format (First Last)");
         }
-        Log.d("tag", "first : " + currentUserProfile.getFirstName() + " last: " + currentUserProfile.getLastName() + " subject: " + currentUserProfile.getFavoriteSubject() + " location: " + currentUserProfile.getStudyLocation() + " profile Pic :" + currentUserProfile.getProfilePicture());
-        updateInDatabase();
     }
 
     private String capitalFirst(String string){

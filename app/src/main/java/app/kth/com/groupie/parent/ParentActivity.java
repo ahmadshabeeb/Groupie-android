@@ -39,7 +39,7 @@ public class ParentActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
     public BrowserFragment.FilterChoice filterChoice;
-
+    private boolean isCreateGroupPressed = false;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -102,8 +102,14 @@ public class ParentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_create_group:
-                Intent intent = new Intent(this, CreateGroupActivity.class);
-                startActivity(intent);
+                if (!isCreateGroupPressed) {
+                    isCreateGroupPressed = true;
+                    Intent intent = new Intent(this, CreateGroupActivity.class);
+                    startActivity(intent);
+                } else {
+                    isCreateGroupPressed = false;
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

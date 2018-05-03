@@ -27,6 +27,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -356,6 +358,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                holder.joinGroupBtn.setEnabled(false);
+                holder.joinGroupBtn.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        holder.joinGroupBtn.setEnabled(true);
+                    }
+                }, 5000);
+
                 final String groupId = group.getGroupId();
 
                 Utility.callCloudFunctions("dbGroupsJoin", groupId)

@@ -368,13 +368,13 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.profilePictureImageView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
-                        if (!mMemberProfiles.isEmpty()) {
-                            int profileIndex = getProfileIndexFromMsg(msg);
-                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
-                            if (mCurrentUser.getPhotoUrl() != null){
-                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
-                            }
-                        }
+//                        if (!mMemberProfiles.isEmpty()) {
+//                            int profileIndex = getProfileIndexFromMsg(msg);
+//                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
+//                            if (mCurrentUser.getPhotoUrl() != null){
+//                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
+//                            }
+//                        }
                     }
                 }
             }

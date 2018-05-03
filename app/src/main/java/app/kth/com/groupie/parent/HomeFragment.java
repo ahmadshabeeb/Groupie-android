@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,8 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdapter;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout swipe;
+
 
     @Nullable
     @Override
@@ -30,6 +33,8 @@ public class HomeFragment extends Fragment {
         mRecycleView.setLayoutManager(mLayoutManager);
         initializeAdapter();
 
+        refreshPulldown(rootView);
+
         return rootView;
     }
 
@@ -37,6 +42,17 @@ public class HomeFragment extends Fragment {
     private void initializeAdapter() {
         mAdapter = new HomeAdapter(getActivity(), progressBar);
         mRecycleView.setAdapter(mAdapter);
+    }
+
+    private void refreshPulldown(ViewGroup rootView) {
+        swipe = rootView.findViewById(R.id.browser_swipe);
+        swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initializeAdapter();
+                swipe.setRefreshing(false);
+            }
+        });
     }
 
     @Override

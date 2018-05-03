@@ -101,4 +101,5 @@
         android:layout_toRightOf="@id/description_textview_fixed"
         android:layout_below="@id/group_location_textview"
         />
+
 </RelativeLayout>

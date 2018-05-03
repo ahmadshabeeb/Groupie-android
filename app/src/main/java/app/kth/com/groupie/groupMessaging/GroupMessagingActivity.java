@@ -188,6 +188,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private void updateGroupInfo() {
         getGroupMembers();
+        mEditGroupBtn.setVisibility(View.GONE);
         if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
             if (!mGroup.getIsPublic()) {
                 mGroupNotificationTextView.bringToFront();
@@ -196,6 +197,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             } else {
                 mGroupNotificationTextView.setVisibility(View.GONE);
             }
+            mEditGroupBtn.setVisibility(View.VISIBLE);
         }
         mEditableSubjectTextView.setText(mGroup.getSubject());
         mEditableTopicTextView.setText(mGroup.getTopic());

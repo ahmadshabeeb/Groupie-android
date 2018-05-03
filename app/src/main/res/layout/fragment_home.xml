@@ -16,7 +16,7 @@
         android:id="@+id/sign_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign OUt"/>
+        android:text="Sign Out"/>
 
     <Button
         android:id="@+id/editgroup_button"

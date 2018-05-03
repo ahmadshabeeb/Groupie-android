@@ -313,7 +313,7 @@ public class BrowserFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX, progressBar);
+        mAdapter = new BrowserAdapter(getActivity(), filterChoice, daysInUNIX, progressBar);
         mRecycleView.setAdapter(mAdapter);
     }
 

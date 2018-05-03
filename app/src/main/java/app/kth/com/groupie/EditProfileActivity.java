@@ -9,6 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.content.Context;
@@ -38,6 +41,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.UUID;
 
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.firstLogin.ProfilePictureFragment;
 
@@ -98,6 +102,29 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_profile_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.settings:
+                toSettingActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void toSettingActivity(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
 
     public void displayThings(){
         emailTV.setText("Email: " + currentUser.getEmail());
@@ -105,7 +132,8 @@ public class EditProfileActivity extends AppCompatActivity {
         nameET.setText(currentUserProfile.getFirstName() + " " + currentUserProfile.getLastName());
         fieldOfStudyET.setText(currentUserProfile.getFieldOfStudy());
         defaultLocationET.setText(currentUserProfile.getStudyLocation());
-        if(currentUserProfile.getBio() != null){
+
+        if(currentUserProfile.getBio() != null) {
             bioET.setText(currentUserProfile.getBio());
         }
         preChooseFavoriteSubject();

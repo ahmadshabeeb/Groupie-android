@@ -133,10 +133,6 @@ public class ParentActivity extends AppCompatActivity {
         intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);
     }
-    public void toSettingActivity(){
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
-    }
 
     public void toLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);

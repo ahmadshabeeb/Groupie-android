@@ -10,17 +10,17 @@
 
     <Button
         android:id="@+id/to_edit_profile"
-        android:layout_width="107dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:background="@color/darkNavy"
         android:gravity="center"
         android:text="Edit profile"
         android:textColor="@color/offWhite"
-        app:layout_constraintEnd_toStartOf="@+id/settings_icon"
-        app:layout_constraintHorizontal_bias="0.801"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toBottomOf="@+id/profile_default_location" />
 
@@ -112,23 +112,6 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_first_name"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
-        android:id="@+id/settings_icon"
-        android:layout_width="54dp"
-        android:layout_height="44dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:clickable="true"
-        android:foregroundGravity="center"
-        android:src="@drawable/settingsicon"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.961"
-        app:layout_constraintStart_toStartOf="@+id/profile_major_name"
-        app:layout_constraintTop_toBottomOf="@+id/profile_default_location" />
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
@@ -144,5 +127,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/to_edit_profile" />
 
+    <include layout="@layout/list_group_recycle" />
 
 </android.support.constraint.ConstraintLayout>

@@ -6,17 +6,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,12 +51,14 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private PrivateProfile currentUserProfile;
+    private RecyclerView.Adapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
-        settingsButton = (ImageView) rootView.findViewById(R.id.settings_icon);
+        createRecycleView(rootView);
+
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         editProfileButton = (Button) rootView.findViewById(R.id.to_edit_profile);
         schoolName = (TextView) rootView.findViewById(R.id.profile_school_name);
@@ -66,18 +72,20 @@ public class ProfileFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
-        if (currentUserProfile == null){
+
+        if (currentUserProfile == null) {
            getUserProfile();
         } else {
             displayProfileValues(currentUserProfile);
         }
+
         //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
-//        toGroup.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                //go to group activity
-//                activity.toGroupMessagingActivity();
-//            }
-//        });
+        //        toGroup.setOnClickListener(new View.OnClickListener() {
+        //            public void onClick(View view){
+        //                //go to group activity
+        //                activity.toGroupMessagingActivity();
+        //            }
+        //        });
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -85,14 +93,20 @@ public class ProfileFragment extends Fragment {
                 activity.toEditProfileActivity(currentUserProfile);
             }
         });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                //go to group activity
-                activity.toSettingActivity();
-            }
-        });
 
         return rootView;
+    }
+
+    private void createRecycleView(ViewGroup rootView) {
+        RecyclerView mRecycleView = rootView.findViewById(R.id.group_list_recycle);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+
+        mRecycleView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new BrowserAdapter();
+        mRecycleView.setAdapter(mAdapter);
     }
 
     @Override
@@ -107,17 +121,17 @@ public class ProfileFragment extends Fragment {
         activity = null;
     }
 
-
-    public void getUserProfile(){
-        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getUserProfile() {
+        databaseReference.child("users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);
                 displayProfileValues(currentUserProfile);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //Database Error
+
             }
         });
     }
@@ -128,12 +142,13 @@ public class ProfileFragment extends Fragment {
         defaultLocation.setText(currentUserProfile.getStudyLocation());
         firstName.setText(currentUserProfile.getFirstName());
         lastName.setText(currentUserProfile.getLastName());
-        if(currentUserProfile.getProfilePicture() != null){
+
+        if (currentUserProfile.getProfilePicture() != null){
             String urlImage = currentUserProfile.getProfilePicture();
             Glide.with(ProfileFragment.this)
                     .load(urlImage)
                     .into(profilePicture);
-        } else{
+        } else {
             profilePicture.setImageResource(R.mipmap.ic_profile);
         }
     }
@@ -142,6 +157,4 @@ public class ProfileFragment extends Fragment {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
-
 }

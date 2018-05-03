@@ -35,7 +35,7 @@ import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.utilities.Utility;
 
-public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
@@ -50,7 +50,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Resources resources;
     private ProgressBar progressBar;
 
-    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
+    public BrowserAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
         this.filterChoice = filterChoice;
@@ -62,7 +62,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     //--------------DATASET-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+        Query nearestGroupMeetingQuery = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
 
         nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
             @Override
@@ -70,13 +70,11 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Group group = dataSnapshot.getValue(Group.class);
 
                 //Add group to browser if it is public and matches user subject and date selection
-                if (group.getIsPublic()) {
-                    if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
-                        group.setGroupId(dataSnapshot.getKey());
-                        addGroupToDataSet(group);
-                        notifyDataSetChanged();
-                        stopLoadingProgressBar();
-                    }
+                if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
+                    group.setGroupId(dataSnapshot.getKey());
+                    addGroupToDataSet(group);
+                    notifyDataSetChanged();
+                    stopLoadingProgressBar();
                 }
             }
 
@@ -254,8 +252,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((HeaderViewHolder) holder).header.setText(header.getDay());
         } else {
             Group group = (Group) item;
-            Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
-
             setFields(group, (GroupViewHolder) holder);
             setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);

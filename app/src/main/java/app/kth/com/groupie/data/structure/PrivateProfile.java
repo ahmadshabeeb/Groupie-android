@@ -9,6 +9,7 @@ public class PrivateProfile extends Profile implements Serializable {
     private String favoriteSubject;
     private String studyLocation;
 
+    public PrivateProfile() { }
 
     public String getFavoriteSubject() {
         return favoriteSubject;

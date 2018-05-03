@@ -1,8 +1,14 @@
 package app.kth.com.groupie.data.structure;
 
-public class PrivateProfile extends Profile {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class PrivateProfile extends Profile implements Serializable {
     private String favoriteSubject;
     private String studyLocation;
+
 
     public String getFavoriteSubject() {
         return favoriteSubject;
@@ -19,4 +25,5 @@ public class PrivateProfile extends Profile {
     public void setStudyLocation(String studyLocation) {
         this.studyLocation = studyLocation;
     }
+
 }

@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -47,5 +52,11 @@ dependencies {
 
     //Glide for images
     implementation 'com.github.bumptech.glide:glide:4.3.1'
+
+    //Sliding panel
+    implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    //swipe refresh layout
+    implementation 'com.android.support:support-v4:27.1.1'
 }
 apply plugin: 'com.google.gms.google-services'

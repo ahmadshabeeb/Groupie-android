@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -37,6 +38,7 @@ import java.net.URL;
 import java.util.UUID;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.parent.ParentActivity;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,11 +49,13 @@ public class ProfilePictureFragment extends Fragment {
     private ImageView chooseImage;
     private Button uploadImageButton;
     private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 1234;
+    private final int PICK_IMAGE_REQUEST = 12;
     private  Button skipButton;
     private View view;
     private ImageView testImage;
     private String imageStorageRef;
+    private FirebaseAuth mAuth;
+    private ParentActivity activity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +70,7 @@ public class ProfilePictureFragment extends Fragment {
         view = rootView;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        mAuth = FirebaseAuth.getInstance();
         uploadImageButton = (Button) rootView.findViewById(R.id.upload_image_button);
         chooseImage = (ImageView) rootView.findViewById(R.id.choose_image_imageView);
         skipButton = (Button) rootView.findViewById(R.id.skip_button);
@@ -73,7 +78,8 @@ public class ProfilePictureFragment extends Fragment {
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               setProfilePicture(null);
+                Log.d("tag skip", mAuth.getCurrentUser() + " ...");
+                setProfilePicture(null);
             }
         });
 
@@ -113,7 +119,9 @@ public class ProfilePictureFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
+        Log.d("tag on Activity result", mAuth.getCurrentUser() + " ...");
         super.onActivityResult(requestCode,resultCode,data);
+
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null
                 && data.getData() != null){
             filePath = data.getData();
@@ -130,6 +138,8 @@ public class ProfilePictureFragment extends Fragment {
             final ProgressDialog progressDialog = new ProgressDialog(this.getContext());
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
+            Log.d("tag", mAuth.getCurrentUser() + " ...");
+
 
             // create cloud storage ref for image being uploaded
 
@@ -140,6 +150,8 @@ public class ProfilePictureFragment extends Fragment {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(ProfilePictureFragment.this.getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            imageStorageRef = ref.toString();
+                            setProfilePicture(imageStorageRef);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -147,6 +159,7 @@ public class ProfilePictureFragment extends Fragment {
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
                             Toast.makeText(ProfilePictureFragment.this.getContext(), "Upload Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.d("tag", mAuth.getCurrentUser() + " ...");
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -156,9 +169,6 @@ public class ProfilePictureFragment extends Fragment {
                             progressDialog.setMessage("Uploaded " + (int)progress + "%");
                         }
                     });
-           imageStorageRef = ref.toString();
-           setProfilePicture(imageStorageRef);
-
         }
     }
 
@@ -167,6 +177,7 @@ public class ProfilePictureFragment extends Fragment {
         FirstLoginActivity activity = (FirstLoginActivity) getActivity();
         activity.addProfilePicture(ref);
     }
+
     public void printBar(String message, View view){
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();

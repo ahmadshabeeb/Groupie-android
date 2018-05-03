@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +78,7 @@ public class BrowserFragment extends Fragment {
 
     private void initViews(ViewGroup rootView) {
         ArrayList<Button> buttonArrayList = new ArrayList<>();
+
         //DAY OF MEETING VIEWS
         buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day1_button));
         buttonArrayList.add((Button) rootView.findViewById(R.id.filter_day2_button));
@@ -219,7 +219,6 @@ public class BrowserFragment extends Fragment {
             public void onClick(View view) {
                 filterByDayOfMeeting(0, daysOfMeeting.get(0));
                 initializeAdapter();
-                Log.d("TAGG", "called 1st listner");
             }
         });
 
@@ -281,7 +280,6 @@ public class BrowserFragment extends Fragment {
                 filterChoice.reset();
                 resetFilterViews();
                 initializeAdapter();
-                Log.d("TAGG" , "called listner");
             }
         });
     }
@@ -290,12 +288,10 @@ public class BrowserFragment extends Fragment {
     private void filterBySubject(int position, int subject, ImageView view){
         if (!filterSubjectTriggers[position]) {
             filterChoice.addSubject(getResources().getString(subject));
-            filterChoice.printSubjects();
             filterSubjectTriggers[position] = true;
             view.setBackgroundColor(resources.getColor(R.color.lightGrey));
         } else {
             filterChoice.removeSubject(getResources().getString(subject));
-            filterChoice.printSubjects();
             filterSubjectTriggers[position] = false;
             view.setBackgroundColor(resources.getColor(R.color.offWhite));
         }
@@ -321,6 +317,7 @@ public class BrowserFragment extends Fragment {
         mRecycleView.setAdapter(mAdapter);
     }
 
+    //FRONT END FOR RESET BUTTON THAT DESELECTS USER INPUTS
     private void resetFilterViews() {
         subjects.get(0).setBackgroundColor(resources.getColor(R.color.offWhite));
         subjects.get(1).setBackgroundColor(resources.getColor(R.color.offWhite));
@@ -426,13 +423,6 @@ public class BrowserFragment extends Fragment {
         public void reset() {
             subjects.clear();
             daysOfMeeting.clear();
-        }
-
-        private void printSubjects() {
-            Log.d("filter", "PRINTING SUBJECTS");
-            for (String subject: subjects.keySet()) {
-                Log.d("filter", "SUBJECT : " + subject);
-            }
         }
 
         public boolean isEmpty(){

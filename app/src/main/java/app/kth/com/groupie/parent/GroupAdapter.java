@@ -60,7 +60,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         getGroupsFromDatabase(databaseReference);
     }
 
-    //--------------DATASET-----------------------
+    //--------------DATASET-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
         Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
 
@@ -69,6 +69,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
 
+                //Add group to browser if it is public and matches user subject and date selection
                 if (group.getIsPublic()) {
                     if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
                         group.setGroupId(dataSnapshot.getKey());
@@ -81,102 +82,105 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
 
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
 
-    private void addGroupToDataSet(Group group){
+    /**
+     *
+     * @param group
+     * Order the groups in the browser by the date of meeting set in the group
+     * If the group does not have a meeting date in next 7 days it does not get added
+     */
+    private void addGroupToDataSet(Group group) {
+
         long groupMeetingDay = group.getMeetingDateTimeStamp();
 
-        if(groupMeetingDay == daysInUNIX[0]){
+        if(groupMeetingDay == daysInUNIX[0]) {
             groupArrayList.add(daysReference[0],group);
             updateReferences(1,6);
-            if(!headers[0]){
+            if (!headers[0]) {
                 addHeaderToDataSet("Today",  daysReference[0]);
                 headers[0] = true;
                 updateReferences(0,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[1]){
+        } else if(groupMeetingDay == daysInUNIX[1]) {
             groupArrayList.add(daysReference[1],group);
             updateReferences(2,6);
-            if(!headers[1]){
+            if (!headers[1]) {
                 addHeaderToDataSet("Tomorrow", daysReference[1]);
                 headers[1] = true;
                 updateReferences(1,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[2]){
+        } else if(groupMeetingDay == daysInUNIX[2]) {
             groupArrayList.add(daysReference[2],group);
             updateReferences(3,6);
-            if(!headers[2]){
+            if (!headers[2]) {
                 addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[2], true) , daysReference[2]);
                 headers[2] = true;
                 updateReferences(2,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[3]){
+        } else if(groupMeetingDay == daysInUNIX[3]) {
             groupArrayList.add(daysReference[3],group);
             updateReferences(4,6);
-            if(!headers[3]){
+            if (!headers[3]) {
                 addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[3], true), daysReference[3]);
                 headers[3] = true;
                 updateReferences(3,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[4]){
+        } else if(groupMeetingDay == daysInUNIX[4]) {
             groupArrayList.add(daysReference[4],group);
             updateReferences(5,6);
-            if(!headers[4]){
+            if (!headers[4]) {
                 addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[4], true), daysReference[4]);
                 headers[4] = true;
                 updateReferences(4,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[5]){
+        } else if(groupMeetingDay == daysInUNIX[5]) {
             groupArrayList.add(daysReference[5],group);
             updateReferences(6,6);
-            if(!headers[5]){
+            if (!headers[5]) {
                 addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[5], true), daysReference[5]);
                 headers[5] = true;
                 updateReferences(5,6);
             }
 
-        }else if(groupMeetingDay == daysInUNIX[6]){
+        } else if(groupMeetingDay == daysInUNIX[6]) {
             groupArrayList.add(daysReference[6],group);
-            if(!headers[6]){
+            if (!headers[6]) {
                 addHeaderToDataSet(Utility.getWeekDay(daysInUNIX[6], true), daysReference[6]);
                 headers[6] = true;
                 updateReferences(6,6);
             }
+        }
 
-        }else {
-            /* do not add the group */}
+
     }
 
-    private void addHeaderToDataSet(String day, int position){
+    private void addHeaderToDataSet(String day, int position) {
         RecyclerHeader header = new RecyclerHeader();
         header.setDay(day);
         groupArrayList.add(position, header);
     }
 
-    private void updateReferences(int start, int end){
+    private void updateReferences(int start, int end) {
         for(int i=start; i<=end; i++){
             daysReference[i] += 1;
         }
@@ -186,7 +190,9 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         progressBar.setVisibility(View.GONE);
     }
 
-    //-------------------BINDING DATA----------------------//
+    /**
+     *  THIS SECTION OF CODE IS WHERE GROUP DATA IS BOUND TO THE VIEWS
+     */
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout parent = (RelativeLayout) itemView.findViewById(R.id.group_card_view);
         ImageView subjectImage = (ImageView) itemView.findViewById(R.id.subject_imageview);
@@ -243,11 +249,10 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerListItem item = groupArrayList.get(position);
 
-        if (item.isHeader()){
+        if (item.isHeader()) {
             RecyclerHeader header = (RecyclerHeader) item;
             ((HeaderViewHolder) holder).header.setText(header.getDay());
-
-        }else {
+        } else {
             Group group = (Group) item;
             Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
 
@@ -339,6 +344,14 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
+    /**
+     *
+     * @param group
+     * @param holder
+     *
+     * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
+     *
+     */
     private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override

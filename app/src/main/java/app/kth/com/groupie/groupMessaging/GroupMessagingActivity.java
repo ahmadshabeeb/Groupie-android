@@ -277,7 +277,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         setContentView(R.layout.activity_group_messaging);
 
         initDrawer();
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initialize();
         mMemberProfiles = new ArrayList<Profile>();
         getGroupMembers();

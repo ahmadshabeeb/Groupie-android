@@ -55,7 +55,7 @@ public class Group implements Parcelable {
             group.setSubject(source.readString());
             group.setTopic(source.readString());
             group.setDescription(source.readString());
-            group.setMembers(source.readHashMap(HashMap.class.getClassLoader()));
+            group.setMembers((HashMap<String, Boolean>) source.readHashMap(HashMap.class.getClassLoader()));
             group.setNumberOfMembers(source.readInt());
             group.setMaxNumberOfMembers(source.readInt());
             group.setTimeOfCreation(source.readString());

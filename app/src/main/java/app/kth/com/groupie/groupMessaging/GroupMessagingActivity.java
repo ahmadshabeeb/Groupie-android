@@ -1,6 +1,7 @@
 package app.kth.com.groupie.groupMessaging;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.functions.FirebaseFunctionsException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.StringReader;
@@ -133,6 +135,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     private TextView mEditableDescriptionTextView;
     private Button mLeaveGroupBtn;
     private Button mEditGroupBtn;
+    private DrawerLayout mDrawerLayout;
 
     private RecyclerView mProfileRecyclerView;
 
@@ -218,16 +221,27 @@ public class GroupMessagingActivity extends AppCompatActivity
         mLeaveGroupBtn = (Button) findViewById(R.id.leaveGroupButton);
         mEditGroupBtn =(Button) findViewById(R.id.editGroupButton);
         mMessageEditText = (EditText) findViewById(R.id.messageEditText);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    }
+
+    private boolean containsProfile(ArrayList<Profile> profiles, Profile profile) {
+        int i=0;
+        for (Profile pro: profiles) {
+            if (profiles.get(i++).getUserId().equals(pro.getUserId())) return true;
+        }
+        return false;
     }
 
     private ArrayList<Profile> getGroupMembers() {
-        int j=0;
-        ArrayList<String> currentMemberIds = new ArrayList<String>();
-        for (Profile profile: mMemberProfiles) {
-            currentMemberIds.add(mMemberProfiles.get(j++).getUserId());
-        }
+//        int j=0;
+//        ArrayList<String> currentMemberIds = new ArrayList<String>();
+//        for (Profile profile: mMemberProfiles) {
+//            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
+//            j++;
+//        }
+        mMemberProfiles.clear();
         for (String userId: mGroup.getMembers().keySet()) {
-            if (!currentMemberIds.contains(userId)) {
+//            if (!currentMemberIds.contains(userId)) {
                 Log.d(TAG, userId + " user IDDDD");
                 Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
                         .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -243,17 +257,18 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     }
                                     Log.w(TAG, "onFailure", e);
                                 } else {
-                                    String result = task.getResult().replaceAll("\\s", "" +
-                                            "");
+                                    String result = task.getResult().replaceAll("\\s", "_");
                                     Log.d(TAG, "profile result as a string: " + result);
-                                    Gson profileGson = new Gson();
-                                    Profile profile = profileGson.fromJson(result, Profile.class);
+                                    GsonBuilder profileGson = new GsonBuilder();
+                                    profileGson.setLenient();
+                                    Gson gson = profileGson.create();
+                                    Profile profile = gson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
                                     Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
                                 }
                             }
                         });
-            }
+            //}
         }
         return new ArrayList<Profile>();
     }
@@ -354,8 +369,11 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
                         if (!mMemberProfiles.isEmpty()) {
-                            holder.senderTextView.setText(mMemberProfiles.get(getProfileIndexFromMsg(msg)).getFirstName());
-//                    holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
+                            int profileIndex = getProfileIndexFromMsg(msg);
+                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
+                            if (mCurrentUser.getPhotoUrl() != null){
+                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
+                            }
                         }
                     }
                 }
@@ -432,6 +450,20 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
 
+        mDrawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                Log.d(TAG, "onDrawerOpened called.");
+                updateGroupInfo();
+            }
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {}
+            @Override
+            public void onDrawerStateChanged(int newState) {}
+        });
+
         mLeaveGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -466,9 +498,8 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.END)) {
-            drawer.closeDrawer(GravityCompat.END);
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            mDrawerLayout.closeDrawer(GravityCompat.END);
         } else {
             super.onBackPressed();
         }
@@ -487,15 +518,11 @@ public class GroupMessagingActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            drawer.openDrawer(GravityCompat.END);
-            updateGroupInfo();
+            mDrawerLayout.openDrawer(GravityCompat.END);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -504,9 +531,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.END);
+        mDrawerLayout.closeDrawer(GravityCompat.END);
         return true;
     }
 

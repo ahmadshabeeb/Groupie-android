@@ -13,6 +13,8 @@ public class Profile {
     private String school;
     private String fieldOfStudy;
 
+    public Profile() {}
+
     public String getUserId() {
         return userId;
     }

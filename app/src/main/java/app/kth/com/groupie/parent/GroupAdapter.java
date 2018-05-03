@@ -33,7 +33,7 @@ import app.kth.com.groupie.utilities.Utility;
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groupArrayList = new ArrayList<>();
     private Context context;
-    private static int NUM_GROUPS_TO_LOAD = 10;
+    private static int NUM_GROUPS_TO_LOAD = 100;
 
     public GroupAdapter(final DatabaseReference databaseReference, Context context) {
         this.context = context;

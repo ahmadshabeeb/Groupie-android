@@ -359,6 +359,38 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (holder.joinGroupBtn.isEnabled()) {
+                    final String groupId = group.getGroupId();
+
+                    Utility.callCloudFunctions("dbGroupsJoin", groupId)
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Exception e = task.getException();
+
+                                        if (e instanceof FirebaseFunctionsException) {
+                                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                            FirebaseFunctionsException.Code code = ffe.getCode();
+                                            //Object details = ffe.getDetails();
+                                            String message = ffe.getMessage();
+                                            Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
+                                        }
+
+                                        Log.w("TAG", "onFailure", e);
+                                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        return;
+                                    } else {
+                                        String result = task.getResult();
+                                        Intent intent = new Intent(context, GroupMessagingActivity.class);
+                                        Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
+                                        intent.putExtra("group", group);
+                                        context.startActivity(intent);
+                                    }
+                                }
+                            });
+                }
+
                 holder.joinGroupBtn.setEnabled(false);
                 holder.joinGroupBtn.postDelayed(new Runnable() {
                     @Override
@@ -366,36 +398,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         holder.joinGroupBtn.setEnabled(true);
                     }
                 }, 5000);
-
-                final String groupId = group.getGroupId();
-
-                Utility.callCloudFunctions("dbGroupsJoin", groupId)
-                        .addOnCompleteListener(new OnCompleteListener<String>() {
-                            @Override
-                            public void onComplete(@NonNull Task<String> task) {
-                                if (!task.isSuccessful()) {
-                                    Exception e = task.getException();
-
-                                    if (e instanceof FirebaseFunctionsException) {
-                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                        FirebaseFunctionsException.Code code = ffe.getCode();
-                                        //Object details = ffe.getDetails();
-                                        String message = ffe.getMessage();
-                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
-                                    }
-
-                                    Log.w("TAG", "onFailure", e);
-                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    return;
-                                } else {
-                                    String result = task.getResult();
-                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
-                                    Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
-                                    intent.putExtra("group", group);
-                                    context.startActivity(intent);
-                                }
-                            }
-                        });
             }
         });
     }

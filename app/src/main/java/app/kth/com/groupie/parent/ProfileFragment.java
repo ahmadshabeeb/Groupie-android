@@ -66,6 +66,7 @@ public class ProfileFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
+
         if (currentUserProfile == null){
            getUserProfile();
         } else {
@@ -82,7 +83,16 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                activity.toEditProfileActivity(currentUserProfile);
+                if (editProfileButton.isEnabled())
+                    activity.toEditProfileActivity(currentUserProfile);
+
+                editProfileButton.setEnabled(false);
+                editProfileButton.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        editProfileButton.setEnabled(true);
+                    }
+                }, 5000);
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {

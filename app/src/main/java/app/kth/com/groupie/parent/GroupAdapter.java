@@ -248,17 +248,23 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerListItem item = groupArrayList.get(position);
-
         if (item.isHeader()) {
             RecyclerHeader header = (RecyclerHeader) item;
             ((HeaderViewHolder) holder).header.setText(header.getDay());
         } else {
             Group group = (Group) item;
             Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
-
             setFields(group, (GroupViewHolder) holder);
             setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);
+
+            ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent
+                    context.startActivity(new Intent(context, Preview.class));
+                }
+            });
         }
     }
 

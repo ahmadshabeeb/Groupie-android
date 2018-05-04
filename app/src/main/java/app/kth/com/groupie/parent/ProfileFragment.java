@@ -51,13 +51,18 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private PrivateProfile currentUserProfile;
+    private RecyclerView mRecycleView;
     private RecyclerView.Adapter mAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
-        createRecycleView(rootView);
+        mRecycleView = rootView.findViewById(R.id.group_list_recycle_profile);
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        mRecycleView.setLayoutManager(mLayoutManager);
+        initializeAdapter();
 
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         editProfileButton = (Button) rootView.findViewById(R.id.to_edit_profile);
@@ -97,15 +102,8 @@ public class ProfileFragment extends Fragment {
         return rootView;
     }
 
-    private void createRecycleView(ViewGroup rootView) {
-        RecyclerView mRecycleView = rootView.findViewById(R.id.group_list_recycle);
-
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-
-        mRecycleView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new BrowserAdapter();
+    private void initializeAdapter() {
+        mAdapter = new ProfileAdapter();
         mRecycleView.setAdapter(mAdapter);
     }
 

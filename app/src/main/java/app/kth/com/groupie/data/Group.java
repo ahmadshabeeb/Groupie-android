@@ -1,5 +1,7 @@
 package app.kth.com.groupie.data;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Map;
 
 import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
@@ -117,6 +119,7 @@ public class Group implements RecyclerListItem {
 
     public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
 
+    @Exclude
     @Override
     public boolean isHeader() {
         return false;

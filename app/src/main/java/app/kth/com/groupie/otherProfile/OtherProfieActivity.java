@@ -34,7 +34,6 @@ public class OtherProfieActivity extends AppCompatActivity {
         setContentView(R.layout.activity_other_profie);
 
         profile = (Profile) getIntent().getSerializableExtra("profile");
-        profile.setProfilePicture("h");
         initTextviews();
 
     }
@@ -58,7 +57,7 @@ public class OtherProfieActivity extends AppCompatActivity {
 
         if(profile.getProfilePicture() != null){
             new DownloadImageTask((CircleImageView) findViewById(R.id.profilepic_imageview))
-                    .execute("https://firebasestorage.googleapis.com/v0/b/parent-test-e6612.appspot.com/o/images%2Fcf5cbeeb-36fa-47f2-a3fd-b748d83599b4?alt=media&token=4baef8bf-72af-424d-bd5d-e3b59b006f9b");
+                    .execute(profile.getProfilePicture());
         }
 
         ImageView report = (ImageView) findViewById(R.id.reportuser_imageview);

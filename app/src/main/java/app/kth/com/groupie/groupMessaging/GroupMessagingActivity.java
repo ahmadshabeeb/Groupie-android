@@ -55,6 +55,7 @@ import app.kth.com.groupie.data.structure.Message;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
+import app.kth.com.groupie.otherProfile.OtherProfieActivity;
 import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.utilities.Utility;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -118,13 +119,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     private String mGroupId;
     private ArrayList<Profile> mMemberProfiles;
     private DatabaseReference mGroupConversationRef;
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Log.d(TAG, "onClick called.");
-            goToParentActivity();
-        }
-    };
+
 
     private TextView mGroupNotificationTextView;
     private EditText mMessageEditText;
@@ -259,12 +254,11 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     }
                                     Log.w(TAG, "onFailure", e);
                                 } else {
-                                    String result = task.getResult().replaceAll("\\s", "_");
+                                    String result = task.getResult();
                                     Log.d(TAG, "profile result as a string: " + result);
                                     Gson gson = new Gson();
                                     Profile profile = gson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
-                                    Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
                                 }
                             }
                         });
@@ -304,15 +298,14 @@ public class GroupMessagingActivity extends AppCompatActivity
 
         mConversationId = mGroup.getConversationId();
 
-        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
-            mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "edit group button clicked. group id: "+mGroupId);
-                    goToEditGroupActivity();
-                }
+        mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "edit group button clicked. group id: "+mGroupId);
+                goToEditGroupActivity();
+            }
             });
-        }
+
 
         mGroupConversationRef = conversationsRef.child(mConversationId);
 
@@ -335,7 +328,6 @@ public class GroupMessagingActivity extends AppCompatActivity
             public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 Log.d(TAG, "messageViewHolder created - means user is not the sender");
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
-                view.findViewById(R.id.profilePictureImageView).setOnClickListener(mOnClickListener);
                 return new messageViewHolder(view);
             }
             @Override
@@ -368,13 +360,13 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.profilePictureImageView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
-//                        if (!mMemberProfiles.isEmpty()) {
-//                            int profileIndex = getProfileIndexFromMsg(msg);
-//                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
-//                            if (mCurrentUser.getPhotoUrl() != null){
-//                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
-//                            }
-//                        }
+                        if (mMemberProfiles.size() == mGroup.getNumberOfMembers()) {
+                            int profileIndex = getProfileIndexFromMsg(msg);
+                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
+                            if (mCurrentUser.getPhotoUrl() != null){
+                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
+                            }
+                        }
                     }
                 }
             }
@@ -408,18 +400,21 @@ public class GroupMessagingActivity extends AppCompatActivity
             public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View viewHolder = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.profile_item, parent, false);
-                viewHolder.findViewById(R.id.navDrawerRelativeLayout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick called.");
-                    }
-                });
+
                 return new ProfileViewHolder(viewHolder);
             }
 
             @Override
             public void onBindViewHolder(ProfileViewHolder holder, int position) {
-                holder.mProfileNameTextView.setText(profileCards.get(position).getFirstName());
+                Profile profile = profileCards.get(position);
+                holder.mProfileNameTextView.setText(profile.getFirstName());
+                holder.mNavDrawerRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "lastname." + profile.getLastName());
+                        goToOtherProfile(profile);
+                    }
+                });
             }
 
             @Override
@@ -487,6 +482,12 @@ public class GroupMessagingActivity extends AppCompatActivity
         });
         Log.d(TAG, "end.");
 
+    }
+
+    private void goToOtherProfile(Profile profile) {
+        Intent intent = new Intent(this, OtherProfieActivity.class);
+        intent.putExtra("profile", profile);
+        startActivity(intent);
     }
 
     private void goToEditGroupActivity() {

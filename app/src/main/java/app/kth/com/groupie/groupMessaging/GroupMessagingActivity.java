@@ -261,9 +261,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                                 } else {
                                     String result = task.getResult().replaceAll("\\s", "_");
                                     Log.d(TAG, "profile result as a string: " + result);
-                                    GsonBuilder profileGson = new GsonBuilder();
-                                    profileGson.setLenient();
-                                    Gson gson = profileGson.create();
+                                    Gson gson = new Gson();
                                     Profile profile = gson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
                                     Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());

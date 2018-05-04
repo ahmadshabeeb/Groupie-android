@@ -59,15 +59,15 @@
         app:layout_constraintTop_toBottomOf="@+id/profilefield_textview"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profilepic_imageview"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/ic_profile" />
+        android:src="@mipmap/ic_profile" />
 
     <TextView
         android:id="@+id/lastname_textview"

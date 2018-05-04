@@ -22,6 +22,7 @@ import java.net.URL;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.Profile;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class OtherProfieActivity extends AppCompatActivity {
 
@@ -56,7 +57,7 @@ public class OtherProfieActivity extends AppCompatActivity {
         field.setText(profile.getFieldOfStudy());
 
         if(profile.getProfilePicture() != null){
-            new DownloadImageTask((ImageView) findViewById(R.id.profilepic_imageview))
+            new DownloadImageTask((CircleImageView) findViewById(R.id.profilepic_imageview))
                     .execute("https://firebasestorage.googleapis.com/v0/b/parent-test-e6612.appspot.com/o/images%2Fcf5cbeeb-36fa-47f2-a3fd-b748d83599b4?alt=media&token=4baef8bf-72af-424d-bd5d-e3b59b006f9b");
         }
 
@@ -73,9 +74,9 @@ public class OtherProfieActivity extends AppCompatActivity {
 
     // show The Image in a ImageView
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+        CircleImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(CircleImageView bmImage) {
             this.bmImage = bmImage;
         }
 

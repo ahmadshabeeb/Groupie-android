@@ -58,5 +58,8 @@ dependencies {
 
     //swipe refresh layout
     implementation 'com.android.support:support-v4:27.1.1'
+
+    //circle imageview
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 apply plugin: 'com.google.gms.google-services'

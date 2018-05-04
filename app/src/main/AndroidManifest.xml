@@ -58,10 +58,9 @@
             android:screenOrientation="portrait"
             />
         <activity
-            android:name=".parent.Preview"
+            android:name=".parent.PreviewActivity"
             android:label="Preview"
-            android:theme="@style/AppTheme.NoActionBar.PreviewTheme"
-            android:screenOrientation="portrait">
+            android:theme="@style/AppTheme.NoActionBar.PreviewTheme">
         </activity>
     </application>
 

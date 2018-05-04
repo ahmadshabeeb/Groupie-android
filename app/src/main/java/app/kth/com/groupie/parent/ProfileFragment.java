@@ -133,7 +133,7 @@ public class ProfileFragment extends Fragment {
             Glide.with(ProfileFragment.this)
                     .load(urlImage)
                     .into(profilePicture);
-        } else{
+        } else {
             profilePicture.setImageResource(R.mipmap.ic_profile);
         }
     }

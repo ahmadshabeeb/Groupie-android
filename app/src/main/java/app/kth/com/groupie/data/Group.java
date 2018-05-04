@@ -1,14 +1,15 @@
 package app.kth.com.groupie.data;
 
-import java.util.Map;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.HashMap;
+import java.util.Map;
 import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 
-/**
- * Created by Ahmad on 4/11/2018.
- */
 
-public class Group implements RecyclerListItem {
+public class Group implements Parcelable, RecyclerListItem {
     private String groupId;
     private String subject;
     private String topic;
@@ -24,6 +25,57 @@ public class Group implements RecyclerListItem {
     private boolean hasMeetingDate;
     private String owner;
     private long meetingDateTimeStamp;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(groupId);
+        dest.writeString(subject);
+        dest.writeString(topic);
+        dest.writeString(description);
+        dest.writeMap(members);
+        dest.writeInt(numberOfMembers);
+        dest.writeInt(maxNumberOfMembers);
+        dest.writeString(timeOfCreation);
+        dest.writeString(location);
+        dest.writeString(conversationId);
+        dest.writeValue(isPublic); // must cast to boolean when retrieving
+        dest.writeString(dateOfMeeting);
+        dest.writeValue(hasMeetingDate); // must cast to boolean when retrieving
+        dest.writeString(owner);
+    }
+    public static final Parcelable.Creator<Group> CREATOR = new Parcelable.Creator<Group>(){
+        @Override
+        public Group createFromParcel(Parcel source) {
+            Group group = new Group();
+            group.setGroupId(source.readString());
+            group.setSubject(source.readString());
+            group.setTopic(source.readString());
+            group.setDescription(source.readString());
+            group.setMembers((HashMap<String, Boolean>) source.readHashMap(HashMap.class.getClassLoader()));
+            group.setNumberOfMembers(source.readInt());
+            group.setMaxNumberOfMembers(source.readInt());
+            group.setTimeOfCreation(source.readString());
+            group.setLocation(source.readString());
+            group.setConversationId(source.readString());
+            group.setIsPublic((Boolean) source.readValue(Boolean.class.getClassLoader()));
+            group.setDateOfMeeting(source.readString());
+            group.setHasMeetingDate((Boolean) source.readValue(Boolean.class.getClassLoader()));
+            group.setOwner(source.readString());
+            return group;
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
+
+    public Group() {}
 
     public String getGroupId() {
         return groupId;
@@ -111,10 +163,7 @@ public class Group implements RecyclerListItem {
     public void setOwner(String owner) {
         this.owner = owner;
     }
-
-
     public long getMeetingDateTimeStamp() { return meetingDateTimeStamp; }
-
     public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
 
     @Override

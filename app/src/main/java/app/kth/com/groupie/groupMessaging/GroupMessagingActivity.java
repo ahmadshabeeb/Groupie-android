@@ -362,6 +362,13 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.messageItemReceivedTextView.setText(msg.getText());
                         if (mMemberProfiles.size() == mGroup.getNumberOfMembers()) {
                             int profileIndex = getProfileIndexFromMsg(msg);
+                            holder.profilePictureImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    goToOtherProfile(mMemberProfiles.get(profileIndex));
+                                }
+                            });
+
                             holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
                             if (mCurrentUser.getPhotoUrl() != null){
                                 holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));

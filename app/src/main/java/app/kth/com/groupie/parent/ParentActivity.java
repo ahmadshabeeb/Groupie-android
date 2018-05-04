@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,8 +17,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -25,6 +29,7 @@ import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
 import app.kth.com.groupie.firstLogin.FirstLoginActivity;
 
@@ -38,6 +43,8 @@ public class ParentActivity extends AppCompatActivity {
     BrowserFragment browserFragment;
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    DatabaseReference databaseReference;
+    PrivateProfile currentUserProfile;
     public BrowserFragment.FilterChoice filterChoice;
     private boolean isCreateGroupPressed = false;
 
@@ -64,7 +71,7 @@ public class ParentActivity extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
-        //Check if user already signed in and update UI
+       // Check if user already signed in and update UI
         currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -72,12 +79,17 @@ public class ParentActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser currentUser){
         if (currentUser == null){
             toLoginActivity();
+        } else{
+            getUserProfile();
         }
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent);
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         homeFragment = new HomeFragment();
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
@@ -86,7 +98,6 @@ public class ParentActivity extends AppCompatActivity {
 
         //Filtering for groups in browser
         filterChoice= new BrowserFragment.FilterChoice();
-
         getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -125,8 +136,9 @@ public class ParentActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GroupMessagingActivity.class);
         startActivity(intent);
     }
-    public void toEditProfileActivity(){
+    public void toEditProfileActivity(PrivateProfile currentUserProfile){
         Intent intent = new Intent(this, EditProfileActivity.class);
+        intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);
     }
     public void toSettingActivity(){
@@ -144,5 +156,16 @@ public class ParentActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void getUserProfile(){
+        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
 }

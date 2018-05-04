@@ -1,5 +1,6 @@
 package app.kth.com.groupie.createGroup;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -11,12 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,6 +31,7 @@ import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 
 public class CreateGroupActivity extends AppCompatActivity {
     Button currentDayButton;
@@ -34,6 +40,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     private static SeekBar seek_bar;
     private static TextView seekBarTextView;
     DatabaseReference dbr;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class CreateGroupActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         membersSeekBar();
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
         initButtons();
         initImageButtons();
     }
@@ -377,7 +386,6 @@ public class CreateGroupActivity extends AppCompatActivity {
         group.setMembers(members);
 
         addGroupToDB(group);
-        finish();
     }
 
     private void addGroupToDB(Group group){
@@ -386,6 +394,35 @@ public class CreateGroupActivity extends AppCompatActivity {
         dbr.child("groups").child(groupId).setValue(group);
         group.setGroupId(groupId);
         Log.d("Tag", groupId);
+        progressBar.setVisibility(View.VISIBLE);
+        checkForConvId(group);
+
+    }
+    private void checkForConvId(Group group){
+        dbr.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child("groups").child(group.getGroupId())
+                        .child("conversationId").exists()) {
+                    group.setConversationId((String) dataSnapshot.child("groups").child(group.getGroupId()).child("conversationId").getValue());
+                    goToGroupMessaging(group);
+                } else{
+                    checkForConvId(group);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                }
+        });
+    }
+
+    private void goToGroupMessaging(Group group){
+        Intent intent = new Intent(this, GroupMessagingActivity.class);
+        intent.putExtra("group", group);
+        finish();
+        startActivity(intent);
     }
 
 }

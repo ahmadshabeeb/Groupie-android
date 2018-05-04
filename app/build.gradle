@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
@@ -40,17 +41,29 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
     //firebase
-    implementation 'com.google.firebase:firebase-core:15.0.0'
-    implementation 'com.google.firebase:firebase-database:15.0.0'
+    implementation 'com.google.firebase:firebase-core:15.0.2'
+    implementation 'com.google.firebase:firebase-database:15.0.1'
     implementation 'com.google.firebase:firebase-functions:15.0.0'
-    implementation 'com.google.firebase:firebase-auth:15.0.0'
-    implementation 'com.google.firebase:firebase-storage:15.0.0'
+    implementation 'com.google.firebase:firebase-auth:15.1.0'
+    implementation 'com.google.firebase:firebase-storage:15.0.2'
+    implementation 'com.google.firebase:firebase-analytics:15.0.2'
+    implementation 'com.google.firebase:firebase-config:15.0.2'
+    implementation 'com.google.firebase:firebase-messaging:15.0.2'
+    implementation 'com.google.firebase:firebase-appindexing:15.0.1'
+    implementation 'com.google.firebase:firebase-crash:15.0.2'
+    implementation 'com.firebaseui:firebase-ui-database:3.3.1'
+
+    // External library used for profile picture circles
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //Gson for JSON <-> Java
     implementation 'com.google.code.gson:gson:2.8.2'
 
     //Glide for images
     implementation 'com.github.bumptech.glide:glide:4.3.1'
+
+    //circular images
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //Sliding panel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'

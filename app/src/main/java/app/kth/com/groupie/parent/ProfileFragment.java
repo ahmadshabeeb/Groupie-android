@@ -1,6 +1,7 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -66,13 +67,13 @@ public class ProfileFragment extends Fragment {
         } else {
             displayProfileValues(currentUserProfile);
         }
-        //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
-//        toGroup.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                //go to group activity
-//                activity.toGroupMessagingActivity();
-//            }
-//        });
+        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                mAuth.signOut();
+                startActivity(new Intent(getActivity(), ParentActivity.class));
+            }
+        });
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){

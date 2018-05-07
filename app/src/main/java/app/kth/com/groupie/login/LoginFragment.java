@@ -31,7 +31,7 @@ import app.kth.com.groupie.parent.ParentActivity;
 public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
     private String errorMessage;
-    private LoginActivity activity;
+    private LoginActivity activity = new LoginActivity();
     private EditText inputEmail;
     private EditText inputPassword;
     private TextView errorTextView;

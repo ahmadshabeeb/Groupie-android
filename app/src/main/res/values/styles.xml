@@ -23,6 +23,7 @@
 
     <style name="AppTheme.NoActionBar.PreviewTheme">
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:shadowColor">@color/lightGrey</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
     

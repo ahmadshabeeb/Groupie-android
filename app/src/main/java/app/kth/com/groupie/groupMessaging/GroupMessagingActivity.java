@@ -1,8 +1,13 @@
 package app.kth.com.groupie.groupMessaging;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.JsonReader;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -47,6 +52,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -276,11 +282,28 @@ public class GroupMessagingActivity extends AppCompatActivity
         return 0;
     }
 
+
+    private void stall(){
+        Log.d(TAG, "MEMBERZZ " + mMemberProfiles.size());
+        if(mMemberProfiles.size() > mGroup.getNumberOfMembers()){
+            return;
+        } else{
+            new Handler().postDelayed(new Runnable(){
+                @Override
+                public void run() {
+
+                }
+            },100);
+            stall();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
         mGroupId = mGroup.getGroupId();
+        Log.d(TAG, "NUMBEROFMEMBERS" + mGroup.getNumberOfMembers());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
@@ -289,6 +312,7 @@ public class GroupMessagingActivity extends AppCompatActivity
         initialize();
         mMemberProfiles = new ArrayList<Profile>();
         getGroupMembers();
+
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -351,13 +375,14 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.messageItemSentTextView.setVisibility(View.VISIBLE);
                         holder.messageItemSentTextView.setText(msg.getText());
                     } else {
-//                        mViewHolder.setClickable(true);
+//                      mViewHolder.setClickable(true);
                         holder.messageItemSentTextView.setVisibility(View.GONE);
                         holder.notificationMessageTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.VISIBLE);
                         holder.profilePictureImageView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
+                        holder.senderTextView.setText(msg.getName());
                         if (mMemberProfiles.size() == mGroup.getNumberOfMembers()) {
                             int profileIndex = getProfileIndexFromMsg(msg);
                             holder.profilePictureImageView.setOnClickListener(new View.OnClickListener() {
@@ -367,7 +392,8 @@ public class GroupMessagingActivity extends AppCompatActivity
                                 }
                             });
 
-                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
+                            //setProfilePicture(mMemberProfiles.get(profileIndex), holder.profilePictureImageView, profileIndex);
+
                             if (mCurrentUser.getPhotoUrl() != null){
                                 holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
                             }
@@ -490,6 +516,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                 Message msg = new Message();
                 msg.setText(mMessageEditText.getText().toString());
                 msg.setSenderUserId(mCurrentUser.getUid());
+                msg.setName((getCurrentUserProfile().getFirstName()));
                 // use cloud function to fill in rest of sender data
                 mGroupConversationRef.child(CHILD_MESSAGES)
                         .push().setValue(msg);
@@ -497,7 +524,15 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
         Log.d(TAG, "end.");
+    }
 
+    private Profile getCurrentUserProfile(){
+        for(Profile profile : mMemberProfiles){
+            if(profile.getUserId().equals(mCurrentUser.getUid())){
+                return profile;
+            }
+        }
+        return null;
     }
 
     private void goToOtherProfile(Profile profile) {
@@ -563,5 +598,52 @@ public class GroupMessagingActivity extends AppCompatActivity
     public void onResume() {
         super.onResume();
         mFirebaseAdapter.startListening();
+    }
+
+
+    private void setProfilePicture(Profile profile, CircleImageView circleImageView, int index){
+        if(profile.getProfilePicture() != null){
+            if(profilePictures.size() != mMemberProfiles.size()) {
+                new DownloadImageTask(circleImageView)
+                        .execute(profile.getProfilePicture());
+            } else{
+                circleImageView.setImageBitmap(profilePictures.get(index));
+            }
+        } else{
+            circleImageView.setImageDrawable(getResources().getDrawable(R.drawable.person));
+        }
+    }
+
+    ArrayList<Bitmap> profilePictures = new ArrayList<>();
+
+    // show The Image in a ImageView
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        CircleImageView bmImage;
+
+        public DownloadImageTask(CircleImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+            Log.d("picsize= " + profilePictures.size() +"Member= " + mMemberProfiles.size(), TAG );
+            if(profilePictures.size() < mMemberProfiles.size()){
+                Log.d("ADDEDANOTHER", TAG );
+                profilePictures.add(result);
+            }
+        }
     }
 }

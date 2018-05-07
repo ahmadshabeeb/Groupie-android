@@ -396,8 +396,8 @@ public class CreateGroupActivity extends AppCompatActivity {
         Log.d("Tag", groupId);
         progressBar.setVisibility(View.VISIBLE);
         checkForConvId(group);
-
     }
+
     private void checkForConvId(Group group){
         dbr.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -410,10 +410,8 @@ public class CreateGroupActivity extends AppCompatActivity {
                     checkForConvId(group);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
                 }
         });
     }

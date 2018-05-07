@@ -3,6 +3,7 @@ package app.kth.com.groupie.editGroup;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -24,8 +25,10 @@ import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.data.structure.Message;
 
 public class EditGroupActivity extends Activity {
+    private String mGroupId;
 
     Group group;
     Button currentDayButton;
@@ -40,9 +43,10 @@ public class EditGroupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_group);
-
-        //Group group = (Group) getIntent().getSerializableExtra("group");
-        group = getFakeGroup();
+        group = (Group) getIntent().getParcelableExtra("group");
+        mGroupId = getIntent().getStringExtra("groupId");
+        Log.d("LOGGG","owner: "+group.getOwner());
+        Log.d("LOGGG","groupID: "+mGroupId);
 
         initButtons();
         membersSeekBar();
@@ -81,6 +85,7 @@ public class EditGroupActivity extends Activity {
             privateSwitch.setChecked(true);
             privateSwitch.setText("public");
         } else{
+            privateSwitch.setChecked(false);
             privateSwitch.setText("private");
         }
         privateSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -95,23 +100,6 @@ public class EditGroupActivity extends Activity {
         });
     }
 
-    private Group getFakeGroup(){
-        Group group = new Group();
-        group.setGroupId("-LB5FW2THw2tC7Z2sG-N");
-        group.setConversationId("-LB5Fhf0xMTEoHzzxc5u");
-        group.setTopic("Kalkulus");
-        group.setSubject("Math");
-        group.setMaxNumberOfMembers(7);
-        group.setDateOfMeeting("04-05-2018");
-        group.setHasMeetingDate(true);
-        group.setLocation("KTH KISTA");
-        group.setDescription("I want to do math");
-        group.setIsPublic(true);
-        group.setOwner("PncdUlIsTtZIiROftRPvchzjYUb2");
-        group.setTimeOfCreation("27-04-2018");
-
-        return group;
-    }
 
     private void initButtons(){
         currentDate = group.getDateOfMeeting();
@@ -301,9 +289,14 @@ public class EditGroupActivity extends Activity {
         updatedvalues.put("maxNumberOfMembers", members);
         updatedvalues.put("dateOfMeeting", currentDate);
         updatedvalues.put("hasMeetingDate", group.isHasMeetingDate());
-        updatedvalues.put("public", privateSwitch.isChecked());
+        updatedvalues.put("isPublic", privateSwitch.isChecked());
+        dbr.child("groups").child(mGroupId).updateChildren(updatedvalues);
 
-        dbr.child("groups").child(group.getGroupId()).updateChildren(updatedvalues);
+        Message notificationMsg = new Message();
+        notificationMsg.setSenderUserId("notification");
+        notificationMsg.setText("has updated the group info.");
+        notificationMsg.setName("The owner");
+        dbr.child("conversations").child(group.getConversationId()).child("messages").push().setValue(notificationMsg);
         finish();
     }
 }

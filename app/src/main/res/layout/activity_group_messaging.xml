@@ -1,9 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".groupMessaging.GroupMessagingActivity">
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        layout="@layout/app_bar_group_messaging"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/appbar"/>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="false"
+        >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/nav_header_group_messaging" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/nav_drawer_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/offWhite"
+            android:nestedScrollingEnabled="false"
+            android:layout_weight="1"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            >
+
+            <Button
+                android:id="@+id/leaveGroupButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LEAVE GROUP"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/editGroupButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EDIT GROUP"
+                android:textAlignment="center"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    </android.support.design.widget.NavigationView>
+
+
+</android.support.v4.widget.DrawerLayout>

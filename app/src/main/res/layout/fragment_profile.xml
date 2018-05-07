@@ -23,7 +23,7 @@
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toBottomOf="@+id/profile_default_location" />
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_picture"
         android:layout_width="91dp"
         android:layout_height="84dp"
@@ -32,7 +32,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@mipmap/ic_profile"
-        android:textColor="@color/darkNavy"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

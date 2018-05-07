@@ -44,6 +44,7 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int[] daysReference = new int[7];
     private boolean[] headers = new boolean[7];
     private Context context;
+
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
@@ -374,7 +375,10 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    context.startActivity(new Intent(context , GroupMessagingActivity.class));
+                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
+                                    Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
+                                    intent.putExtra("group", group);
+                                    context.startActivity(intent);
                                 }
                             }
                         });

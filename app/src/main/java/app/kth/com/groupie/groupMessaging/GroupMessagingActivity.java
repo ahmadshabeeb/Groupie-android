@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -230,15 +231,14 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private ArrayList<Profile> getGroupMembers() {
-//        int j=0;
-//        ArrayList<String> currentMemberIds = new ArrayList<String>();
-//        for (Profile profile: mMemberProfiles) {
-//            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
-//            j++;
-//        }
-        mMemberProfiles.clear();
+        int j=0;
+        ArrayList<String> currentMemberIds = new ArrayList<String>();
+        for (Profile profile: mMemberProfiles) {
+            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
+            j++;
+        }
         for (String userId: mGroup.getMembers().keySet()) {
-//            if (!currentMemberIds.contains(userId)) {
+            if (!currentMemberIds.contains(userId)) {
                 Log.d(TAG, userId + " user IDDDD");
                 Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
                         .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -262,7 +262,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                                 }
                             }
                         });
-            //}
+            }
         }
         return new ArrayList<Profile>();
     }
@@ -286,7 +286,6 @@ public class GroupMessagingActivity extends AppCompatActivity
         setContentView(R.layout.activity_group_messaging);
 
         initDrawer();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initialize();
         mMemberProfiles = new ArrayList<Profile>();
         getGroupMembers();
@@ -305,7 +304,6 @@ public class GroupMessagingActivity extends AppCompatActivity
                 goToEditGroupActivity();
             }
             });
-
 
         mGroupConversationRef = conversationsRef.child(mConversationId);
 
@@ -391,6 +389,14 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top,
+                                       int right, int bottom, int oldLeft, int oldTop,
+                                       int oldRight, int oldBottom) {
+                mMessageRecyclerView.scrollToPosition(mMessageRecyclerView.getAdapter().getItemCount()-1);
+            }
+        });
 
         class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
             private ArrayList<Profile> profileCards;
@@ -457,8 +463,11 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.d(TAG, "onDrawerOpened called.");
                 updateGroupInfo();
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                Log.d(TAG, "onDrawerOpened called.");
             }
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {}
@@ -531,7 +540,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             mDrawerLayout.openDrawer(GravityCompat.END);
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

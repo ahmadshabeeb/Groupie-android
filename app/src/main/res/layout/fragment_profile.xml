@@ -7,7 +7,6 @@
     android:background="@color/offWhite"
     tools:context="parent.ProfileFragment">
 
-
     <Button
         android:id="@+id/to_edit_profile"
         android:layout_width="wrap_content"

@@ -78,11 +78,11 @@ public class ProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
 
-        if (currentUserProfile == null) {
-           getUserProfile();
-        } else {
+        if (currentUserProfile != null) {
             displayProfileValues(currentUserProfile);
         }
+
+        getUserProfile();
 
         //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
         //        toGroup.setOnClickListener(new View.OnClickListener() {

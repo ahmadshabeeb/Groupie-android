@@ -81,7 +81,7 @@ public class Utility {
                 public void run() {
                     button.setEnabled(true);
                 }
-            }, 5000);
+            }, 2500);
 
             return true;
         } else return false;

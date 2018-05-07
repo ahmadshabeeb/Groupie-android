@@ -86,8 +86,7 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //go to reset Password
-                if (Utility.buttonTimeout((Button) resetPopUp))
-                    goToResetFromRegistration();
+                goToResetFromRegistration();
 
             }
         });

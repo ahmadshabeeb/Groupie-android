@@ -30,6 +30,7 @@ import org.w3c.dom.Text;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.data.structure.Profile;
+import app.kth.com.groupie.utilities.Utility;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -72,6 +73,7 @@ public class ProfileFragment extends Fragment {
         } else {
             displayProfileValues(currentUserProfile);
         }
+
         //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
 //        toGroup.setOnClickListener(new View.OnClickListener() {
 //            public void onClick(View view){
@@ -83,16 +85,8 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                if (editProfileButton.isEnabled())
+                if (Utility.buttonTimeout(editProfileButton))
                     activity.toEditProfileActivity(currentUserProfile);
-
-                editProfileButton.setEnabled(false);
-                editProfileButton.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        editProfileButton.setEnabled(true);
-                    }
-                }, 5000);
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {

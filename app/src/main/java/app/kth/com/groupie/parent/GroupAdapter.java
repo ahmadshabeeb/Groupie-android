@@ -173,8 +173,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 updateReferences(6,6);
             }
         }
-
-
     }
 
     private void addHeaderToDataSet(String day, int position) {
@@ -359,7 +357,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (holder.joinGroupBtn.isEnabled()) {
+                if (Utility.buttonTimeout(holder.joinGroupBtn)) {
                     final String groupId = group.getGroupId();
 
                     Utility.callCloudFunctions("dbGroupsJoin", groupId)
@@ -390,14 +388,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                 }
                             });
                 }
-
-                holder.joinGroupBtn.setEnabled(false);
-                holder.joinGroupBtn.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        holder.joinGroupBtn.setEnabled(true);
-                    }
-                }, 5000);
             }
         });
     }

@@ -26,6 +26,7 @@ import com.google.firebase.storage.StorageReference;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
+import app.kth.com.groupie.login.LoginActivity;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -71,7 +72,8 @@ public class ProfileFragment extends Fragment {
         signOut.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 mAuth.signOut();
-                startActivity(new Intent(getActivity(), ParentActivity.class));
+                currentUser = null;
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
 

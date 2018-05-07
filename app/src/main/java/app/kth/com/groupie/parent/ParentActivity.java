@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import app.kth.com.groupie.EditProfileActivity;
+import app.kth.com.groupie.profile.EditProfileActivity;
 import app.kth.com.groupie.R;
-import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.createGroup.CreateGroupActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,19 +19,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-
-import app.kth.com.groupie.EditProfileActivity;
-import app.kth.com.groupie.R;
-import app.kth.com.groupie.SettingsActivity;
-import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
-import app.kth.com.groupie.firstLogin.FirstLoginActivity;
 
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.registration.RegistrationActivity;
 
 public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;

@@ -3,6 +3,7 @@ package app.kth.com.groupie.parent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
+
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.recycleViewData.RecyclerHeader;
@@ -356,50 +358,38 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
      *
      */
-    private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
+    private void setJoinGroupButton (final Group group, GroupAdapter.GroupViewHolder holder) {
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Utility.buttonTimeout(holder.joinGroupBtn)) {
-                    final String groupId = group.getGroupId();
+                final String groupId = group.getGroupId();
 
-                    Utility.callCloudFunctions("dbGroupsJoin", groupId)
-                            .addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        Exception e = task.getException();
+                Utility.callCloudFunctions("dbGroupsJoin", groupId)
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Exception e = task.getException();
 
-                                        if (e instanceof FirebaseFunctionsException) {
-                                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                            FirebaseFunctionsException.Code code = ffe.getCode();
-                                            //Object details = ffe.getDetails();
-                                            String message = ffe.getMessage();
-                                            Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
-                                        }
-
-                                        Log.w("TAG", "onFailure", e);
-                                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        return;
-                                    } else {
-                                        String result = task.getResult();
-                                        Intent intent = new Intent(context, GroupMessagingActivity.class);
-                                        Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
-                                        intent.putExtra("group", group);
-                                        context.startActivity(intent);
+                                    if (e instanceof FirebaseFunctionsException) {
+                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                        FirebaseFunctionsException.Code code = ffe.getCode();
+                                        //Object details = ffe.getDetails();
+                                        String message = ffe.getMessage();
+                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
                                     }
 
                                     Log.w("TAG", "onFailure", e);
                                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     return;
                                 } else {
-//                                    String result = task.getResult();
-                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
-                                    intent.putExtra("group", group);
-                                    context.startActivity(intent);
+                                    String result = task.getResult();
+                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    i.putExtra("group" , (Parcelable) group);
+                                    context.startActivity(i);
                                 }
-                            });
-                }
+                            }
+                        });
             }
         });
     }

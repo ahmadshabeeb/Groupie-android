@@ -1,14 +1,12 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +18,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,11 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.data.structure.Profile;
+
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -51,18 +46,14 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private PrivateProfile currentUserProfile;
-    private RecyclerView mRecycleView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView myGroupHistoryRecycleView;
+    private RecyclerView.Adapter myGroupHistoryAdapter;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
-        mRecycleView = rootView.findViewById(R.id.group_list_recycle_profile);
-
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        mRecycleView.setLayoutManager(mLayoutManager);
-        initializeAdapter();
 
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         editProfileButton = (Button) rootView.findViewById(R.id.to_edit_profile);
@@ -91,6 +82,14 @@ public class ProfileFragment extends Fragment {
         //                activity.toGroupMessagingActivity();
         //            }
         //        });
+//        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
+//        signOut.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view){
+//                mAuth.signOut();
+//                currentUser = null;
+//                startActivity(new Intent(getActivity(), LoginActivity.class));
+//            }
+//        });
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -99,12 +98,20 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        return rootView;
-    }
+//        settingsButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View view){
+//                //go to group activity
+//            }
+//        });
 
-    private void initializeAdapter() {
-        mAdapter = new ProfileAdapter();
-        mRecycleView.setAdapter(mAdapter);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        myGroupHistoryRecycleView = rootView.findViewById(R.id.group_history_recycler_view);
+        LinearLayoutManager LayoutManager = new LinearLayoutManager(getActivity());
+        myGroupHistoryRecycleView.setLayoutManager(LayoutManager);
+        myGroupHistoryAdapter = new GroupHistoryAdapter(getActivity(),progressBar);
+        myGroupHistoryRecycleView.setAdapter(myGroupHistoryAdapter);
+
+        return rootView;
     }
 
     @Override

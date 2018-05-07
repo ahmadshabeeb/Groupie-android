@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android = "http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android = "http://schemas.android.com/apk/res/android"
+    android:id="@+id/browser_swipe"
     android:layout_height="match_parent"
-    android:background="@color/offWhite"
-    android:orientation="vertical"
-    android:layout_marginBottom="60dp">
+    android:layout_width="match_parent">
 
-    <TextView
-        android:id="@+id/title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
-        android:text="My groups"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/browser_swipe"
-        android:layout_below="@id/title_textview"
-        android:layout_height="140dp"
-        android:layout_width="match_parent">
-
-    <include layout="@layout/list_group_recycle_home"/>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-<include layout="@layout/layout_circular_progress_bar"
-        android:layout_below="@id/title_textview"
-        android:layout_height="150dp"
+    <RelativeLayout
         android:layout_width="match_parent"
-        />
-
-    <TextView
-        android:id="@+id/title2_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/browser_swipe"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginBottom="5dp"
-        android:text="Recommended for you"
-        android:textStyle="bold"
-        android:textColor="#000000"/>
-
-    <include layout="@layout/list_group_recycle_home_recommended"
-        android:layout_below="@id/title2_textview"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"/>
-    
-</RelativeLayout>
+        android:background="@color/offWhite"
+        android:orientation="vertical"
+        android:layout_marginBottom="60dp">
+
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:text="My groups"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            />
+
+        <include layout="@layout/list_group_recycle_home"
+            android:id="@+id/my_groups_recyclerView"
+            android:layout_below="@id/title_textview"
+            android:layout_height="140dp"
+            android:layout_width="match_parent"/>
+
+    <include layout="@layout/layout_circular_progress_bar"
+        android:id="@+id/progressBar_my_groups"
+            android:layout_below="@id/title_textview"
+            android:layout_height="150dp"
+            android:layout_width="match_parent"
+            />
+
+        <TextView
+            android:id="@+id/title2_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_groups_recyclerView"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="5dp"
+            android:text="Recommended for you"
+            android:textStyle="bold"
+            android:textColor="#000000"/>
+
+        <include layout="@layout/list_group_recycle_home_recommended"
+            android:layout_below="@id/title2_textview"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"/>
+
+        <include layout="@layout/layout_circular_progress_bar"
+            android:id="@+id/progressBar_recommended_groups"
+            android:layout_below="@id/title2_textview"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            />
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,15 +29,16 @@ import app.kth.com.groupie.utilities.Utility;
 public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGroupAdapter.GroupViewHolder> {
     private ArrayList<Group> groups;
     private Resources resources;
-    private ProgressBar progressBar;
+    private RelativeLayout progressBar;
     private Context context;
 
-    public RecommendedGroupAdapter(Context context, ArrayList<Group> groups, ProgressBar progressBar) {
+    public RecommendedGroupAdapter(Context context, ArrayList<Group> groups, RelativeLayout progressBar) {
         this.context = context;
         this.progressBar = progressBar;
         this.groups = groups;
         resources = context.getResources();
-
+        notifyDataSetChanged();
+        stopLoadingProgressBar();
     }
 
     private void stopLoadingProgressBar() {
@@ -66,15 +66,6 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
             super(itemView);
         }
     }
-
-    public class HeaderViewHolder extends RecyclerView.ViewHolder{
-        TextView header = (TextView) itemView.findViewById(R.id.header);
-
-        public HeaderViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
 
     @NonNull
     @Override

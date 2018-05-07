@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,9 +29,12 @@ import app.kth.com.groupie.utilities.Utility;
 
 public class HomeFragment extends Fragment {
     ParentActivity activity;
-    private RecyclerView mRecycleView;
-    private RecyclerView.Adapter mAdapter;
-    private ProgressBar progressBar;
+    private RecyclerView myGorupsRecycleView;
+    private RecyclerView recommendedGroupsRecycleView;
+    private RecyclerView.Adapter myGroupsAdapter;
+    private RecyclerView.Adapter recommendedGroupsAdapter;
+    private RelativeLayout myGroupsprogressBar;
+    private RelativeLayout recommendedGroupsprogressBar;
     private SwipeRefreshLayout swipe;
     private ViewGroup rootView;
     private Context context;
@@ -41,12 +44,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         this.context = getActivity();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_home, container, false);
-        mRecycleView = rootView.findViewById(R.id.group_list_recycle_home);
-        progressBar = rootView.findViewById(R.id.progressBar);
+        myGorupsRecycleView = rootView.findViewById(R.id.group_list_recycle_home);
+        myGroupsprogressBar = rootView.findViewById(R.id.progressBar_my_groups);
+        recommendedGroupsprogressBar = rootView.findViewById(R.id.progressBar_recommended_groups);
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mRecycleView.setLayoutManager(mLayoutManager);
-        initializeAdapter();
+        myGorupsRecycleView.setLayoutManager(mLayoutManager);
+        initializeMyGroupsAdapter();
 
         getRecommendedGroup();
 
@@ -55,9 +59,9 @@ public class HomeFragment extends Fragment {
         return rootView;
     }
 
-    private void initializeAdapter() {
-        mAdapter = new HomeAdapter(getActivity(), progressBar);
-        mRecycleView.setAdapter(mAdapter);
+    private void initializeMyGroupsAdapter() {
+        myGroupsAdapter = new HomeAdapter(getActivity(), myGroupsprogressBar);
+        myGorupsRecycleView.setAdapter(myGroupsAdapter);
     }
 
     private void getRecommendedGroup() {
@@ -92,20 +96,20 @@ public class HomeFragment extends Fragment {
 
     private void createRecommendedGroupsViews (Group[] groups){
         ArrayList<Group> arrayList = new ArrayList<Group>(Arrays.asList(groups));
-        RecyclerView homeRecycleView = rootView.findViewById(R.id.list_group_recycle_home_recommended);
+        recommendedGroupsRecycleView = rootView.findViewById(R.id.list_group_recycle_home_recommended);
         LinearLayoutManager homeLayoutManager = new LinearLayoutManager(getActivity());
-        homeRecycleView.setLayoutManager(homeLayoutManager);
-        RecommendedGroupAdapter recommendedGroupAdapter = new RecommendedGroupAdapter(context, arrayList, progressBar);
-        homeRecycleView.setAdapter(recommendedGroupAdapter);
+        recommendedGroupsRecycleView.setLayoutManager(homeLayoutManager);
+        recommendedGroupsAdapter = new RecommendedGroupAdapter(context, arrayList, recommendedGroupsprogressBar);
+        recommendedGroupsRecycleView.setAdapter(recommendedGroupsAdapter);
     }
-
 
     private void refreshPulldown(ViewGroup rootView) {
         swipe = rootView.findViewById(R.id.browser_swipe);
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initializeAdapter();
+                initializeMyGroupsAdapter();
+                getRecommendedGroup();
                 swipe.setRefreshing(false);
             }
         });

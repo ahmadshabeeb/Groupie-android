@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,11 +34,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
     private Context context;
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
-    private ProgressBar progressBar;
+    private RelativeLayout progressBar;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
 
-    public HomeAdapter(Context context, ProgressBar progressBar) {
+    public HomeAdapter(Context context, RelativeLayout progressBar) {
         this.context = context;
         this.progressBar = progressBar;
         mAuth = FirebaseAuth.getInstance();

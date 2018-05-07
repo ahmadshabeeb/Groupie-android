@@ -27,6 +27,8 @@ import com.google.firebase.storage.StorageReference;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.login.LoginActivity;
+import app.kth.com.groupie.data.structure.Profile;
+import app.kth.com.groupie.utilities.Utility;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -63,6 +65,7 @@ public class ProfileFragment extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
+
         if (currentUserProfile == null){
            getUserProfile();
         } else {
@@ -80,7 +83,8 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                activity.toEditProfileActivity(currentUserProfile);
+                if (Utility.buttonTimeout(editProfileButton))
+                    activity.toEditProfileActivity(currentUserProfile);
             }
         });
         settingsButton.setOnClickListener(new View.OnClickListener() {

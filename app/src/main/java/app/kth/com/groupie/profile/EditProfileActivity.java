@@ -1,4 +1,4 @@
-package app.kth.com.groupie;
+package app.kth.com.groupie.profile;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,13 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.content.Context;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,15 +31,12 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.net.URL;
 import java.util.UUID;
 
-import app.kth.com.groupie.createGroup.CreateGroupActivity;
+import app.kth.com.groupie.R;
+import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.firstLogin.ProfilePictureFragment;
 
 public class EditProfileActivity extends AppCompatActivity {
     private TextView emailTV;
@@ -88,12 +81,14 @@ public class EditProfileActivity extends AppCompatActivity {
         saveChangesButton = (Button) findViewById(R.id.save_changes_button);
         profilePicture = (ImageView) findViewById(R.id.profile_picture_imageView);
         displayThings();
+
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
             }
         });
+
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

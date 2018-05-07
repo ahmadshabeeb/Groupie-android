@@ -18,6 +18,7 @@ public class Profile implements Serializable{
     private String school;
     private String fieldOfStudy;
 
+    public Profile() {}
 
     public String getUserId()  {
         return userId;

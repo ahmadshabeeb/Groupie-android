@@ -1,12 +1,10 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.data.structure.Profile;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -133,7 +128,7 @@ public class ProfileFragment extends Fragment {
             Glide.with(ProfileFragment.this)
                     .load(urlImage)
                     .into(profilePicture);
-        } else{
+        } else {
             profilePicture.setImageResource(R.mipmap.ic_profile);
         }
     }

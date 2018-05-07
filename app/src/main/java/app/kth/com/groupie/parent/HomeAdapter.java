@@ -2,6 +2,7 @@ package app.kth.com.groupie.parent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -223,7 +224,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(context , GroupMessagingActivity.class);
-                //i.putExtra("group" , (Parcelable) group);
+                i.putExtra("group" , (Parcelable) group);
                 context.startActivity(i);
             }
         });

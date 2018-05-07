@@ -47,6 +47,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private int[] daysReference = new int[7];
     private boolean[] headers = new boolean[7];
     private Context context;
+
     private final int NUM_GROUPS_TO_LOAD = 100;
     private DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
@@ -69,26 +70,24 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     //--------------DATASET FOR BROSWER ADAPTER-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+        Query onlyPublicGroups = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
 
-        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+        onlyPublicGroups.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
 
                 //Add group to browser if it is public and matches user subject and date selection
-                if (group.getIsPublic()) {
-                    if (filterChoice.isChosenSubject(group.getSubject())
-                            && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())
-                            && !isUserMember(group)) {
-
+                if (filterChoice.isChosenSubject(group.getSubject())
+                        && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())
+                        && !isUserMember(group)) {
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
                         notifyDataSetChanged();
                         stopLoadingProgressBar();
                     }
                 }
-            }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -385,8 +384,10 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                                     return;
                                 } else {
-                                    String result = task.getResult();
-                                    context.startActivity(new Intent(context , GroupMessagingActivity.class));
+//                                    String result = task.getResult();
+                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
+                                    intent.putExtra("group", group);
+                                    context.startActivity(intent);
                                 }
                             }
                         });

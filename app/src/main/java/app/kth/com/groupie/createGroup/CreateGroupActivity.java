@@ -32,6 +32,7 @@ import java.util.Map;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 
 public class CreateGroupActivity extends AppCompatActivity {
     Button currentDayButton;
@@ -417,7 +418,7 @@ public class CreateGroupActivity extends AppCompatActivity {
     }
 
     private void goToGroupMessaging(Group group){
-        Intent intent = new Intent(this, GroupMessagingActivity.class);
+        Intent intent = new Intent(this, PrepareGroupMessageActivity.class);
         intent.putExtra("group", group);
         finish();
         startActivity(intent);

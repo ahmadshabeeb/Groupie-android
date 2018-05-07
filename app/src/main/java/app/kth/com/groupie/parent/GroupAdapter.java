@@ -33,6 +33,7 @@ import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.recycleViewData.RecyclerHeader;
 import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -379,7 +380,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
+                                    Intent intent = new Intent(context , PrepareGroupMessageActivity.class);
                                     Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
                                     intent.putExtra("group", group);
                                     context.startActivity(intent);

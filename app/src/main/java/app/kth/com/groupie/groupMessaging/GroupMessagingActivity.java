@@ -56,9 +56,12 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.Message;
+import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
@@ -111,6 +114,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private static final String TAG = "LogMainActivity";
     private FirebaseUser mCurrentUser;
+    private String mCurrentUserId;
 
     private Button mSendButton;
     private Button mProfilePictureButton;
@@ -138,17 +142,15 @@ public class GroupMessagingActivity extends AppCompatActivity
     private Button mLeaveGroupBtn;
     private Button mEditGroupBtn;
     private DrawerLayout mDrawerLayout;
-
     private RecyclerView mProfileRecyclerView;
-
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
-    private boolean isFirst =true;
+    private Profile currentUserProfile;
 
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
         if (mCurrentUser!=null &&
-                mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
+                mCurrentUserId.equals(msg.getSenderUserId())) return true; // change when get updated classes
         return false;
     }
 
@@ -191,7 +193,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     private void updateGroupInfo() {
         getGroupMembers();
         mEditGroupBtn.setVisibility(View.GONE);
-        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
+        if (mGroup.getOwner().equals(mCurrentUserId)) {
             if (!mGroup.getIsPublic()) {
                 mGroupNotificationTextView.bringToFront();
                 mGroupNotificationTextView.setVisibility(View.VISIBLE);
@@ -282,39 +284,26 @@ public class GroupMessagingActivity extends AppCompatActivity
         return 0;
     }
 
-
-    private void stall(){
-        Log.d(TAG, "MEMBERZZ " + mMemberProfiles.size());
-        if(mMemberProfiles.size() > mGroup.getNumberOfMembers()){
-            return;
-        } else{
-            new Handler().postDelayed(new Runnable(){
-                @Override
-                public void run() {
-
-                }
-            },100);
-            stall();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
         mGroupId = mGroup.getGroupId();
-        Log.d(TAG, "NUMBEROFMEMBERS" + mGroup.getNumberOfMembers());
+        mMemberProfiles = (ArrayList<Profile>) intent.getSerializableExtra("profiles");
+        Log.d(TAG, "FROM PREPARE" + mMemberProfiles.size() + mMemberProfiles.get(0).getFirstName());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
 
         initDrawer();
         initialize();
-        mMemberProfiles = new ArrayList<Profile>();
-        getGroupMembers();
-
+        DownloadAllPictures();
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mCurrentUserId = mCurrentUser.getUid();
+        currentUserProfile = getCurrentUserProfile();
+
+
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference conversationsRef = mFirebaseDatabaseReference.child(CHILD_CONVERSATIONS);
         final DatabaseReference groupsRef = mFirebaseDatabaseReference.child(CHILD_GROUPS);
@@ -367,7 +356,6 @@ public class GroupMessagingActivity extends AppCompatActivity
                     holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
                 } else {
                     if (userIsSender(msg)) {
-//                        holder.setClickable(false);
                         holder.messageItemReceivedTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.GONE);
                         holder.profilePictureImageView.setVisibility(View.GONE);
@@ -375,7 +363,6 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.messageItemSentTextView.setVisibility(View.VISIBLE);
                         holder.messageItemSentTextView.setText(msg.getText());
                     } else {
-//                      mViewHolder.setClickable(true);
                         holder.messageItemSentTextView.setVisibility(View.GONE);
                         holder.notificationMessageTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.VISIBLE);
@@ -391,12 +378,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     goToOtherProfile(mMemberProfiles.get(profileIndex));
                                 }
                             });
-
-                            //setProfilePicture(mMemberProfiles.get(profileIndex), holder.profilePictureImageView, profileIndex);
-
-                            if (mCurrentUser.getPhotoUrl() != null){
-                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
-                            }
+                            holder.profilePictureImageView.setImageBitmap(profilePictures.get(mMemberProfiles.get(profileIndex).getUserId()));
                         }
                     }
                 }
@@ -515,8 +497,9 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onClick(View view) {
                 Message msg = new Message();
                 msg.setText(mMessageEditText.getText().toString());
-                msg.setSenderUserId(mCurrentUser.getUid());
-                msg.setName((getCurrentUserProfile().getFirstName()));
+                msg.setSenderUserId(mCurrentUserId);
+
+                msg.setName(getCurrentUserProfile().getFirstName());
                 // use cloud function to fill in rest of sender data
                 mGroupConversationRef.child(CHILD_MESSAGES)
                         .push().setValue(msg);
@@ -528,11 +511,18 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private Profile getCurrentUserProfile(){
         for(Profile profile : mMemberProfiles){
-            if(profile.getUserId().equals(mCurrentUser.getUid())){
+            if(profile.getUserId().equals(mCurrentUserId)){
+                Log.d(TAG, "zuserID" + profile.getUserId());
                 return profile;
             }
+            Log.d(TAG, "xuserID" + mCurrentUserId);
+            Log.d(TAG, "xxuserID" + mMemberProfiles.get(0).getUserId() + mMemberProfiles.size());
         }
-        return null;
+
+        Profile erroruser = new Profile();
+        erroruser.setFirstName("ERRORUSER");
+        return erroruser;
+
     }
 
     private void goToOtherProfile(Profile profile) {
@@ -601,27 +591,19 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
 
-    private void setProfilePicture(Profile profile, CircleImageView circleImageView, int index){
-        if(profile.getProfilePicture() != null){
-            if(profilePictures.size() != mMemberProfiles.size()) {
-                new DownloadImageTask(circleImageView)
-                        .execute(profile.getProfilePicture());
-            } else{
-                circleImageView.setImageBitmap(profilePictures.get(index));
-            }
-        } else{
-            circleImageView.setImageDrawable(getResources().getDrawable(R.drawable.person));
+    private void DownloadAllPictures(){
+        for(Profile profile : mMemberProfiles){
+            new DownloadImageTask(profile)
+                    .execute(profile.getProfilePicture());
         }
     }
 
-    ArrayList<Bitmap> profilePictures = new ArrayList<>();
-
+    Map<String, Bitmap> profilePictures = new HashMap<>();
     // show The Image in a ImageView
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        CircleImageView bmImage;
-
-        public DownloadImageTask(CircleImageView bmImage) {
-            this.bmImage = bmImage;
+        Profile profile;
+        public DownloadImageTask(Profile profile){
+            this.profile = profile;
         }
 
         protected Bitmap doInBackground(String... urls) {
@@ -638,12 +620,8 @@ public class GroupMessagingActivity extends AppCompatActivity
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
             Log.d("picsize= " + profilePictures.size() +"Member= " + mMemberProfiles.size(), TAG );
-            if(profilePictures.size() < mMemberProfiles.size()){
-                Log.d("ADDEDANOTHER", TAG );
-                profilePictures.add(result);
-            }
+            profilePictures.put(profile.getUserId(), result);
         }
     }
 }

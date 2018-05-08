@@ -1,5 +1,6 @@
 package app.kth.com.groupie.parent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -24,6 +25,8 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -38,15 +41,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
     private RelativeLayout progressBar;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private TextView userErrorMessage;
 
-    public HomeAdapter(Context context, RelativeLayout progressBar) {
+    public HomeAdapter(Context context, RelativeLayout progressBar, TextView userErrorMessage) {
         this.context = context;
         this.progressBar = progressBar;
+        this.userErrorMessage = userErrorMessage;
+
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         groupArrayList = new ArrayList<>();
         getGroupsFromDatabase(databaseReference);
+        runTimeOut();
     }
 
     //--------------DATASET-----------------------//
@@ -86,6 +93,32 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
             }
         });
     }
+
+    private void runTimeOut() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (groupArrayList.size() == 0) { //  Timeout
+                            noGroupsToDisplay();
+                        }
+                    }
+                });
+            }
+        };
+
+        // Setting timeout of 10 sec to the request
+        timer.schedule(timerTask, 5000L);
+    }
+
+    private void noGroupsToDisplay() {
+        stopLoadingProgressBar();
+        userErrorMessage.setVisibility(View.VISIBLE);
+    }
+
 
     private void stopLoadingProgressBar() {
         progressBar.setVisibility(View.GONE);

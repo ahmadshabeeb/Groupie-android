@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout swipe;
     private ViewGroup rootView;
     private Context context;
+    private TextView userErrorMessage;
 
     @Nullable
     @Override
@@ -50,6 +52,8 @@ public class HomeFragment extends Fragment {
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         myGorupsRecycleView.setLayoutManager(mLayoutManager);
+        userErrorMessage = rootView.findViewById(R.id.browser_user_error_message);
+
         initializeMyGroupsAdapter();
 
         getRecommendedGroup();
@@ -60,7 +64,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initializeMyGroupsAdapter() {
-        myGroupsAdapter = new HomeAdapter(getActivity(), myGroupsprogressBar);
+        myGroupsAdapter = new HomeAdapter(getActivity(), myGroupsprogressBar, userErrorMessage);
         myGorupsRecycleView.setAdapter(myGroupsAdapter);
     }
 

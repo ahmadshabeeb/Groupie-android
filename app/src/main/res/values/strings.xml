@@ -103,4 +103,7 @@
     <string name="lawAndPoliticalScience">Law and Political Science</string>
     <string name="artAndMusic">Art and Music</string>
     <string name="other">Other</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="no_groups_error">There are no groups to display</string>
 </resources>

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:gravity="top"
     sothree:umanoPanelHeight="40dp"
-    sothree:umanoShadowHeight="0dp"
+    sothree:umanoShadowHeight="15dp"
     sothree:umanoParallaxOffset="100dp"
     sothree:umanoDragView="@+id/dragView"
     sothree:umanoOverlay="true"
@@ -18,7 +18,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lightGrey"
+        android:background="@color/offWhite"
         android:orientation="vertical"
         android:paddingTop="40dp">
 
@@ -30,7 +30,6 @@
             android:layout_height="wrap_content">
 
             <include layout="@layout/list_group_recycle" />
-
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </FrameLayout>

@@ -5,16 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import app.kth.com.groupie.EditProfileActivity;
-import app.kth.com.groupie.R;
-import app.kth.com.groupie.SettingsActivity;
-import app.kth.com.groupie.createGroup.CreateGroupActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -23,19 +17,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.HashMap;
-
 import app.kth.com.groupie.EditProfileActivity;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.SettingsActivity;
-import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
-import app.kth.com.groupie.firstLogin.FirstLoginActivity;
-
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.registration.RegistrationActivity;
 
 public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
@@ -45,10 +34,12 @@ public class ParentActivity extends AppCompatActivity {
     FirebaseUser currentUser;
     DatabaseReference databaseReference;
     PrivateProfile currentUserProfile;
+    private boolean userloogedIn = false;
     public BrowserFragment.FilterChoice filterChoice;
+    private boolean isCreateGroupPressed = false;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -65,22 +56,6 @@ public class ParentActivity extends AppCompatActivity {
             return false;
         }
     };
-
-    @Override
-    public void onStart(){
-        super.onStart();
-       // Check if user already signed in and update UI
-        currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
-    public void updateUI(FirebaseUser currentUser){
-        if (currentUser == null){
-            toLoginActivity();
-        } else{
-            getUserProfile();
-        }
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +71,19 @@ public class ParentActivity extends AppCompatActivity {
 
         //Filtering for groups in browser
         filterChoice= new BrowserFragment.FilterChoice();
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        if (currentUser == null){
+            toLoginActivity();
+        } else{
+            getUserProfile();
+            getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+            BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+            navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        }
     }
 
     @Override
@@ -111,17 +96,18 @@ public class ParentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()) {
             case R.id.action_create_group:
-                Intent intent = new Intent(this, CreateGroupActivity.class);
-                startActivity(intent);
+                if (!isCreateGroupPressed) {
+                    isCreateGroupPressed = true;
+                    Intent intent = new Intent(this, CreateGroupActivity.class);
+                    startActivity(intent);
+                } else {
+                    isCreateGroupPressed = false;
+                }
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void signOut(){
-        mAuth.signOut();
-        onStart();
     }
 
     public void toGroupMessagingActivity(){
@@ -139,6 +125,7 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     public void toLoginActivity(){
+        userloogedIn = true;
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -159,5 +146,10 @@ public class ParentActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

@@ -1,8 +1,13 @@
 package app.kth.com.groupie.groupMessaging;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.JsonReader;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,12 +28,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -46,15 +53,20 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.Message;
+import app.kth.com.groupie.data.structure.PrivateProfile;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.editGroup.EditGroupActivity;
+import app.kth.com.groupie.otherProfile.OtherProfieActivity;
 import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.utilities.Utility;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -103,6 +115,7 @@ public class GroupMessagingActivity extends AppCompatActivity
 
     private static final String TAG = "LogMainActivity";
     private FirebaseUser mCurrentUser;
+    private String mCurrentUserId;
 
     private Button mSendButton;
     private Button mProfilePictureButton;
@@ -118,13 +131,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     private String mGroupId;
     private ArrayList<Profile> mMemberProfiles;
     private DatabaseReference mGroupConversationRef;
-    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Log.d(TAG, "onClick called.");
-            goToParentActivity();
-        }
-    };
+
 
     private TextView mGroupNotificationTextView;
     private EditText mMessageEditText;
@@ -136,17 +143,15 @@ public class GroupMessagingActivity extends AppCompatActivity
     private Button mLeaveGroupBtn;
     private Button mEditGroupBtn;
     private DrawerLayout mDrawerLayout;
-
     private RecyclerView mProfileRecyclerView;
-
     private DatabaseReference mFirebaseDatabaseReference;
     private FirebaseRecyclerAdapter<Message, messageViewHolder> mFirebaseAdapter;
-    private boolean isFirst =true;
+    private Profile currentUserProfile;
 
     private boolean userIsSender(Message msg) {
         Log.d(TAG, "userIsSender called");
         if (mCurrentUser!=null &&
-                mCurrentUser.getUid().equals(msg.getSenderUserId())) return true; // change when get updated classes
+                mCurrentUserId.equals(msg.getSenderUserId())) return true; // change when get updated classes
         return false;
     }
 
@@ -189,7 +194,7 @@ public class GroupMessagingActivity extends AppCompatActivity
     private void updateGroupInfo() {
         getGroupMembers();
         mEditGroupBtn.setVisibility(View.GONE);
-        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
+        if (mGroup.getOwner().equals(mCurrentUserId)) {
             if (!mGroup.getIsPublic()) {
                 mGroupNotificationTextView.bringToFront();
                 mGroupNotificationTextView.setVisibility(View.VISIBLE);
@@ -235,15 +240,14 @@ public class GroupMessagingActivity extends AppCompatActivity
     }
 
     private ArrayList<Profile> getGroupMembers() {
-//        int j=0;
-//        ArrayList<String> currentMemberIds = new ArrayList<String>();
-//        for (Profile profile: mMemberProfiles) {
-//            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
-//            j++;
-//        }
-        mMemberProfiles.clear();
+        int j=0;
+        ArrayList<String> currentMemberIds = new ArrayList<String>();
+        for (Profile profile: mMemberProfiles) {
+            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
+            j++;
+        }
         for (String userId: mGroup.getMembers().keySet()) {
-//            if (!currentMemberIds.contains(userId)) {
+            if (!currentMemberIds.contains(userId)) {
                 Log.d(TAG, userId + " user IDDDD");
                 Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
                         .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -259,16 +263,15 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     }
                                     Log.w(TAG, "onFailure", e);
                                 } else {
-                                    String result = task.getResult().replaceAll("\\s", "_");
+                                    String result = task.getResult();
                                     Log.d(TAG, "profile result as a string: " + result);
                                     Gson gson = new Gson();
                                     Profile profile = gson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
-                                    Log.d(TAG, "PROFILE OBJECT NAME: " + profile.getFirstName());
                                 }
                             }
                         });
-            //}
+            }
         }
         return new ArrayList<Profile>();
     }
@@ -279,7 +282,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             if (profile.getUserId().equals(msg.getSenderUserId())) return i;
             i++;
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -287,32 +290,33 @@ public class GroupMessagingActivity extends AppCompatActivity
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
         mGroupId = mGroup.getGroupId();
+        mMemberProfiles = (ArrayList<Profile>) intent.getSerializableExtra("profiles");
+        Log.d(TAG, "FROM PREPARE" + mMemberProfiles.size() + mMemberProfiles.get(0).getFirstName());
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_messaging);
 
         initDrawer();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initialize();
-        mMemberProfiles = new ArrayList<Profile>();
-        getGroupMembers();
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        mCurrentUserId = mCurrentUser.getUid();
+        currentUserProfile = getCurrentUserProfile();
+
+
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference conversationsRef = mFirebaseDatabaseReference.child(CHILD_CONVERSATIONS);
         final DatabaseReference groupsRef = mFirebaseDatabaseReference.child(CHILD_GROUPS);
 
         mConversationId = mGroup.getConversationId();
 
-        if (mGroup.getOwner().equals(mCurrentUser.getUid())) {
-            mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.d(TAG, "edit group button clicked. group id: "+mGroupId);
-                    goToEditGroupActivity();
-                }
+        mEditGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "edit group button clicked. group id: "+mGroupId);
+                goToEditGroupActivity();
+            }
             });
-        }
 
         mGroupConversationRef = conversationsRef.child(mConversationId);
 
@@ -335,7 +339,6 @@ public class GroupMessagingActivity extends AppCompatActivity
             public messageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 Log.d(TAG, "messageViewHolder created - means user is not the sender");
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item, parent, false);
-                view.findViewById(R.id.profilePictureImageView).setOnClickListener(mOnClickListener);
                 return new messageViewHolder(view);
             }
             @Override
@@ -353,7 +356,6 @@ public class GroupMessagingActivity extends AppCompatActivity
                     holder.notificationMessageTextView.setText(msg.getName() + " " + msg.getText());
                 } else {
                     if (userIsSender(msg)) {
-//                        holder.setClickable(false);
                         holder.messageItemReceivedTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.GONE);
                         holder.profilePictureImageView.setVisibility(View.GONE);
@@ -361,20 +363,28 @@ public class GroupMessagingActivity extends AppCompatActivity
                         holder.messageItemSentTextView.setVisibility(View.VISIBLE);
                         holder.messageItemSentTextView.setText(msg.getText());
                     } else {
-//                        mViewHolder.setClickable(true);
                         holder.messageItemSentTextView.setVisibility(View.GONE);
                         holder.notificationMessageTextView.setVisibility(View.GONE);
                         holder.senderTextView.setVisibility(View.VISIBLE);
                         holder.profilePictureImageView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setVisibility(View.VISIBLE);
                         holder.messageItemReceivedTextView.setText(msg.getText());
-//                        if (!mMemberProfiles.isEmpty()) {
-//                            int profileIndex = getProfileIndexFromMsg(msg);
-//                            holder.senderTextView.setText(mMemberProfiles.get(profileIndex).getFirstName());
-//                            if (mCurrentUser.getPhotoUrl() != null){
-//                                holder.profilePictureImageView.setImageURI(Uri.parse(msg.getImageUrl()));
-//                            }
-//                        }
+                        holder.senderTextView.setText(msg.getName());
+                        if (mMemberProfiles.size() == mGroup.getNumberOfMembers()) {
+                            int profileIndex = getProfileIndexFromMsg(msg);
+                            holder.profilePictureImageView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if(profileIndex != -1) {
+                                        goToOtherProfile(mMemberProfiles.get(profileIndex));
+                                    }
+                                }
+                            });
+                            if(profileIndex != -1) {
+                                String picture = mMemberProfiles.get(profileIndex).getProfilePicture();
+                                Glide.with(getApplicationContext()).load(picture).into(holder.profilePictureImageView);
+                            }
+                        }
                     }
                 }
             }
@@ -392,6 +402,14 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
         mMessageRecyclerView.setAdapter(mFirebaseAdapter);
+        mMessageRecyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top,
+                                       int right, int bottom, int oldLeft, int oldTop,
+                                       int oldRight, int oldBottom) {
+                mMessageRecyclerView.scrollToPosition(mMessageRecyclerView.getAdapter().getItemCount()-1);
+            }
+        });
 
         class ProfileRecyclerViewAdapter extends RecyclerView.Adapter<ProfileViewHolder> {
             private ArrayList<Profile> profileCards;
@@ -408,18 +426,24 @@ public class GroupMessagingActivity extends AppCompatActivity
             public ProfileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
                 View viewHolder = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.profile_item, parent, false);
-                viewHolder.findViewById(R.id.navDrawerRelativeLayout).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.d(TAG, "onClick called.");
-                    }
-                });
+
                 return new ProfileViewHolder(viewHolder);
             }
 
             @Override
             public void onBindViewHolder(ProfileViewHolder holder, int position) {
-                holder.mProfileNameTextView.setText(profileCards.get(position).getFirstName());
+                Profile profile = profileCards.get(position);
+                holder.mProfileNameTextView.setText(profile.getFirstName());
+                if(profile.getProfilePicture() != null) {
+                    Glide.with(getApplicationContext()).load(profile.getProfilePicture()).into(holder.mNavProfilePictureImageView);
+                }
+                holder.mNavDrawerRelativeLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "lastname." + profile.getLastName());
+                        goToOtherProfile(profile);
+                    }
+                });
             }
 
             @Override
@@ -455,8 +479,11 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {}
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
-                Log.d(TAG, "onDrawerOpened called.");
                 updateGroupInfo();
+                InputMethodManager inputMethodManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                Log.d(TAG, "onDrawerOpened called.");
             }
             @Override
             public void onDrawerClosed(@NonNull View drawerView) {}
@@ -471,6 +498,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                 Log.d(TAG,"LEAVE GROUP");
                 Utility.callCloudFunctions("dbGroupsLeave", mGroupId);
                 goToParentActivity();
+                finish();
             }
         });
         mSendButton.setOnClickListener(new View.OnClickListener() {
@@ -478,7 +506,9 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onClick(View view) {
                 Message msg = new Message();
                 msg.setText(mMessageEditText.getText().toString());
-                msg.setSenderUserId(mCurrentUser.getUid());
+                msg.setSenderUserId(mCurrentUserId);
+
+                msg.setName(getCurrentUserProfile().getFirstName());
                 // use cloud function to fill in rest of sender data
                 mGroupConversationRef.child(CHILD_MESSAGES)
                         .push().setValue(msg);
@@ -486,7 +516,28 @@ public class GroupMessagingActivity extends AppCompatActivity
             }
         });
         Log.d(TAG, "end.");
+    }
 
+    private Profile getCurrentUserProfile(){
+        for(Profile profile : mMemberProfiles){
+            if(profile.getUserId().equals(mCurrentUserId)){
+                Log.d(TAG, "zuserID" + profile.getUserId());
+                return profile;
+            }
+            Log.d(TAG, "xuserID" + mCurrentUserId);
+            Log.d(TAG, "xxuserID" + mMemberProfiles.get(0).getUserId() + mMemberProfiles.size());
+        }
+
+        Profile erroruser = new Profile();
+        erroruser.setFirstName("ERRORUSER");
+        return erroruser;
+
+    }
+
+    private void goToOtherProfile(Profile profile) {
+        Intent intent = new Intent(this, OtherProfieActivity.class);
+        intent.putExtra("profile", profile);
+        startActivity(intent);
     }
 
     private void goToEditGroupActivity() {
@@ -523,7 +574,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             mDrawerLayout.openDrawer(GravityCompat.END);
             return true;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -547,4 +598,5 @@ public class GroupMessagingActivity extends AppCompatActivity
         super.onResume();
         mFirebaseAdapter.startListening();
     }
+
 }

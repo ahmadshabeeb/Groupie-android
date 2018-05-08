@@ -25,6 +25,7 @@ import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class PreviewActivity extends Activity {
@@ -113,7 +114,7 @@ public class PreviewActivity extends Activity {
                             return;
                         } else {
                             String result = task.getResult();
-                            Intent intent = new Intent(PreviewActivity.this , GroupMessagingActivity.class);
+                            Intent intent = new Intent(PreviewActivity.this , PrepareGroupMessageActivity.class);
                             Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
                             intent.putExtra("group", group);
                             startActivity(intent);

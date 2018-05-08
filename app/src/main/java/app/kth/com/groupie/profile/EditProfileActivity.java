@@ -4,10 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import app.kth.com.groupie.R;
-import app.kth.com.groupie.SettingsActivity;
 import app.kth.com.groupie.data.structure.PrivateProfile;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -116,8 +115,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void toSettingActivity(){
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        //git getSupportFragmentManager().beginTransaction().replace(R.id.container, new SettingsFragment()).commit();
     }
 
 

@@ -19,9 +19,8 @@
         <activity
             android:name=".parent.ParentActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
-            >
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,23 +30,17 @@
         <activity
             android:name=".registration.RegistrationActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".login.LoginActivity" />
+        <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".groupMessaging.GroupMessagingActivity"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".profile.EditProfileActivity"
             android:label="Edit Profile"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="Group Messaging"
-            android:theme="@style/AppTheme"/>
-        <activity
-            android:name=".firstLogin.FirstLoginActivity" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".firstLogin.FirstLoginActivity" />
         <activity
             android:name=".createGroup.CreateGroupActivity"
             android:label="@string/title_activity_create_group"
@@ -55,6 +48,15 @@
         <activity
             android:name=".editGroup.EditGroupActivity"
             android:label="@string/title_activity_edit_group"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".otherProfile.OtherProfieActivity"
+            android:label="@string/title_activity_other_profie"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".groupMessaging.PrepareGroupMessageActivity"
+            android:label="@string/title_activity_prepare_group_message"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             />
         <activity

@@ -12,7 +12,7 @@
         android:id="@+id/navProfilePictureImageView"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@mipmap/ic_profile" />
 
     <TextView
         android:id="@+id/navProfileNameTextView"

@@ -37,6 +37,7 @@ import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.recycleViewData.RecyclerHeader;
 import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -354,34 +355,37 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String groupId = group.getGroupId();
+                if (Utility.buttonTimeout(holder.joinGroupBtn)) {
+                    final String groupId = group.getGroupId();
 
-                Utility.callCloudFunctions("dbGroupsJoin", groupId)
-                        .addOnCompleteListener(new OnCompleteListener<String>() {
-                            @Override
-                            public void onComplete(@NonNull Task<String> task) {
-                                if (!task.isSuccessful()) {
-                                    Exception e = task.getException();
+                    Utility.callCloudFunctions("dbGroupsJoin", groupId)
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Exception e = task.getException();
 
-                                    if (e instanceof FirebaseFunctionsException) {
-                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                        FirebaseFunctionsException.Code code = ffe.getCode();
-                                        //Object details = ffe.getDetails();
-                                        String message = ffe.getMessage();
-                                        Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
+                                        if (e instanceof FirebaseFunctionsException) {
+                                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                            FirebaseFunctionsException.Code code = ffe.getCode();
+                                            //Object details = ffe.getDetails();
+                                            String message = ffe.getMessage();
+                                            Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
+                                        }
+
+                                        Log.w("TAG", "onFailure", e);
+                                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        return;
+                                    } else {
+                                        String result = task.getResult();
+                                        Intent intent = new Intent(context, PrepareGroupMessageActivity.class);
+                                        Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
+                                        intent.putExtra("group", group);
+                                        context.startActivity(intent);
                                     }
-
-                                    Log.w("TAG", "onFailure", e);
-                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    return;
-                                } else {
-                                    String result = task.getResult();
-                                    Intent i = new Intent(context , GroupMessagingActivity.class);
-                                    i.putExtra("group" , (Parcelable) group);
-                                    context.startActivity(i);
                                 }
-                            }
-                        });
+                    });
+                }
             }
         });
     }

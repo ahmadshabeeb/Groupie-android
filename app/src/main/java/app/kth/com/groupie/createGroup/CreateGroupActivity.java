@@ -32,6 +32,7 @@ import java.util.Map;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 
 public class CreateGroupActivity extends AppCompatActivity {
     Button currentDayButton;
@@ -406,7 +407,6 @@ public class CreateGroupActivity extends AppCompatActivity {
         Log.d("Tag", groupId);
         progressBar.setVisibility(View.VISIBLE);
         checkForConvId(group);
-
     }
 
     private void checkForConvId(Group group){
@@ -421,16 +421,14 @@ public class CreateGroupActivity extends AppCompatActivity {
                     checkForConvId(group);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
                 }
         });
     }
 
     private void goToGroupMessaging(Group group){
-        Intent intent = new Intent(this, GroupMessagingActivity.class);
+        Intent intent = new Intent(this, PrepareGroupMessageActivity.class);
         intent.putExtra("group", group);
         finish();
         startActivity(intent);

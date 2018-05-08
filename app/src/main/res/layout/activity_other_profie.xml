@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".otherProfile.OtherProfieActivity">
+
+
+    <TextView
+        android:id="@+id/profileschool_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="School"
+        android:textColor="@color/darkNavy"
+        android:textSize="20dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profilefield_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Field of Study"
+        android:textSize="20dp"
+        android:textColor="@color/darkNavy"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileschool_textview" />
+
+    <TextView
+        android:id="@+id/profilename_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="27dp"
+        android:layout_marginTop="32dp"
+        android:text="Firstname"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilepic_imageview" />
+
+    <TextView
+        android:id="@+id/profilebio_textview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="Bio"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/reportuser_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilefield_textview"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profilepic_imageview"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@mipmap/ic_profile" />
+
+    <TextView
+        android:id="@+id/lastname_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Lastname"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilename_textview" />
+
+    <TextView
+        android:id="@+id/reportuser_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:text="Report this user"
+        app:layout_constraintBottom_toBottomOf="@+id/reportuser_imageview"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/reportuser_imageview"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/circle"
+        android:src="@drawable/flag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/reportuser_textview" />
+</android.support.constraint.ConstraintLayout>

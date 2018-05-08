@@ -12,21 +12,6 @@
     android:paddingTop="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Group Info"-->
-        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"-->
-        <!--android:textColor="@color/offWhite"-->
-        <!--android:background="@color/darkNavy"-->
-        <!--android:textAlignment="center"-->
-        <!--android:id="@+id/groupInfoHeaderTextView"-->
-        <!--android:layout_marginBottom="10dp"-->
-        <!--/>-->
-
-
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +27,6 @@
         android:layout_toRightOf="@id/fixedSubjectTextView"
         android:id="@+id/editableSubjectTextView"
         android:textColor="@color/darkNavy"
-        android:text="Dummy Subject"
         android:paddingTop="10dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
@@ -66,7 +50,6 @@
         android:layout_toRightOf="@id/fixedTopicTextView"
         android:id="@+id/editableTopicTextView"
         android:textColor="@color/darkNavy"
-        android:text="Dummy Topic"
         android:layout_below="@id/fixedSubjectTextView"
         android:paddingTop="10dp"
         android:layout_alignParentEnd="true"
@@ -91,7 +74,6 @@
         android:layout_toRightOf="@id/fixedLocationTextView"
         android:id="@+id/editableLocationTextView"
         android:textColor="@color/darkNavy"
-        android:text="Dummy Location"
         android:layout_below="@id/fixedTopicTextView"
         android:paddingTop="10dp"
         android:layout_alignParentEnd="true"
@@ -116,7 +98,6 @@
         android:layout_toRightOf="@id/fixedDayTextView"
         android:id="@+id/editableDayTextView"
         android:textColor="@color/darkNavy"
-        android:text="Dummy Day"
         android:layout_below="@id/fixedLocationTextView"
         android:paddingTop="10dp"
         android:layout_alignParentEnd="true"
@@ -140,7 +121,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/editableDescriptionTextView"
         android:textColor="@color/darkNavy"
-        android:text="Dummy Description"
         android:layout_below="@id/fixedDescriptionTextView"
         android:paddingTop="10dp"
         android:paddingLeft="20dp"

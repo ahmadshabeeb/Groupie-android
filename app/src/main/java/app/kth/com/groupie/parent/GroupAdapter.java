@@ -43,6 +43,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
+    private int subjectID;
 
     private long[] daysInUNIX;
     private int[] daysReference = new int[7];
@@ -256,15 +257,15 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerListItem item = groupArrayList.get(position);
-
         if (item.isHeader()) {
             RecyclerHeader header = (RecyclerHeader) item;
             ((HeaderViewHolder) holder).header.setText(header.getDay());
         } else {
             Group group = (Group) item;
             setFields(group, (GroupViewHolder) holder);
-            setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);
+            subjectID = setSubjectImage(group, (GroupViewHolder) holder);
+            setGroupCardClickable(group, holder);
         }
     }
 
@@ -303,50 +304,41 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private void setSubjectImage(Group group, GroupViewHolder holder) {
+    private int setSubjectImage(Group group, GroupViewHolder holder) {
         // show right image based on the subject
 
         switch (group.getSubject()){
             case "Language":
                 //replace by the right image
                 holder.subjectImage.setBackgroundResource(R.drawable.language);
-                break;
-
+                return R.drawable.language;
             case "Programming" :
                 holder.subjectImage.setBackgroundResource(R.drawable.programming);
-                break;
-
+                return R.drawable.programming;
             case "Math" :
                 holder.subjectImage.setBackgroundResource(R.drawable.math);
-                break;
-
+                return R.drawable.math;
             case "Business and Economics" :
                 holder.subjectImage.setBackgroundResource(R.drawable.business);
-                break;
-
+                return R.drawable.business;
             case "Engineering" :
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
-                break;
-
+                return R.drawable.engineering;
             case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
-                break;
-
+                return R.drawable.science;
             case "Law and Political Science" :
                 holder.subjectImage.setBackgroundResource(R.drawable.law);
-                break;
-
+                return R.drawable.law;
             case "Art and Music" :
                 holder.subjectImage.setBackgroundResource(R.drawable.music);
-                break;
-
+                return R.drawable.music;
             case "Other" :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
-
+                return R.drawable.other;
             default :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
+                return R.drawable.other;
         }
     }
 
@@ -376,7 +368,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                                         FirebaseFunctionsException.Code code = ffe.getCode();
                                         //Object details = ffe.getDetails();
                                         String message = ffe.getMessage();
-                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
+                                        Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
                                     }
 
                                     Log.w("TAG", "onFailure", e);
@@ -401,5 +393,17 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 isMember = true;
         }
         return isMember;
+    }
+
+    public void setGroupCardClickable(final Group group, RecyclerView.ViewHolder holder){
+        ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PreviewActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("SubjectID", subjectID);
+                context.startActivity(intent);
+            }
+        });
     }
 }

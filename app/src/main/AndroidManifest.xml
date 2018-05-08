@@ -55,7 +55,12 @@
         <activity
             android:name=".editGroup.EditGroupActivity"
             android:label="@string/title_activity_edit_group"
-            android:theme="@style/AppTheme">
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".parent.PreviewActivity"
+            android:label="Preview"
+            android:theme="@style/AppTheme.NoActionBar.PreviewTheme">
         </activity>
     </application>
 

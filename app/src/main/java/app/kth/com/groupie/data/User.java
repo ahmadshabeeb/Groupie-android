@@ -7,9 +7,15 @@ import java.util.HashMap;
  */
 
 public class User {
-    private HashMap<String, Object> history;
+    private HashMap<String, Boolean> groupHistory;
 
-    public HashMap<String, Object> getHistory() {
-        return history;
+    public User() {}
+
+    public HashMap<String, Boolean> getGroupHistory() {
+        return groupHistory;
+    }
+
+    public void setGroupHistory(HashMap<String, Boolean> groupHistory) {
+        this.groupHistory = groupHistory;
     }
 }

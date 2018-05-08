@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +15,16 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -31,7 +32,6 @@ import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 
 public class GroupHistoryAdapter extends RecyclerView.Adapter<GroupHistoryAdapter.GroupViewHolder> {
     private List<Group> groupArrayList;
-    private List<String> groupsIds;
     private Context context;
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
@@ -44,28 +44,58 @@ public class GroupHistoryAdapter extends RecyclerView.Adapter<GroupHistoryAdapte
         this.progressBar = progressBar;
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(currentUser.getUid()).child("groupHistory");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         groupArrayList = new ArrayList<>();
-        addDataToDataSet();
-        notifyDataSetChanged();
+        getGroupsFromDatabase(databaseReference);
     }
 
-    private void addDataToDataSet(){
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+    //--------------DATASET-----------------------//
+    private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
+        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+
+        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("TAG user current", currentUser.getUid());
-//                HashMap<String, Object> history = (HashMap<String, Object>) dataSnapshot.getValue(HashMap.class);
-//                for (Map.Entry<String, Object> entry: history.entrySet()){
-//                    Log.d("TAG history", entry.getKey() + "" );
-//                }
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+                if (isUserMember(group)) {
+                    group.setGroupId(dataSnapshot.getKey());
+                    groupArrayList.add(group);
+                    notifyDataSetChanged();
+                    stopLoadingProgressBar();
+                }
             }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
+
+    private void stopLoadingProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    private boolean isUserMember(Group group){
+        boolean isMember = false;
+        for (Map.Entry<String, Boolean> entry: group.getMembers().entrySet()) {
+            if(currentUser != null && entry.getKey().equals(currentUser.getUid()))
+                isMember = true;
+        }
+        return isMember;
+    }
+
 
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout parent = (RelativeLayout) itemView.findViewById(R.id.group_card_view);
@@ -88,7 +118,7 @@ public class GroupHistoryAdapter extends RecyclerView.Adapter<GroupHistoryAdapte
     @NonNull
     @Override
     public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history_group, parent, false);
         return new GroupViewHolder(v);
     }
 

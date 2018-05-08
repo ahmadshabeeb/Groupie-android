@@ -80,8 +80,6 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
 
                                     if((mMemberProfiles.size() >= mGroup.getNumberOfMembers() + i) && isFirst){
                                         isFirst = false;
-                                        Toast toast = Toast.makeText(getApplicationContext(), "" + mMemberProfiles.size(), Toast.LENGTH_LONG);
-                                        toast.show();
                                         Intent intent = new Intent(getApplicationContext(), GroupMessagingActivity.class);
                                         intent.putExtra("group", mGroup);
                                         intent.putExtra("profiles", mMemberProfiles);

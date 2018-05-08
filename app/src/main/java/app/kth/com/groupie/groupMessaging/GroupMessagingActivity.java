@@ -282,7 +282,7 @@ public class GroupMessagingActivity extends AppCompatActivity
             if (profile.getUserId().equals(msg.getSenderUserId())) return i;
             i++;
         }
-        return 0;
+        return -1;
     }
 
     @Override
@@ -375,13 +375,15 @@ public class GroupMessagingActivity extends AppCompatActivity
                             holder.profilePictureImageView.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    goToOtherProfile(mMemberProfiles.get(profileIndex));
+                                    if(profileIndex != -1) {
+                                        goToOtherProfile(mMemberProfiles.get(profileIndex));
+                                    }
                                 }
                             });
-
-                            String picture = mMemberProfiles.get(profileIndex).getProfilePicture();
-                            Glide.with(getApplicationContext()).load(picture).into(holder.profilePictureImageView);
-                            //holder.profilePictureImageView.setImageBitmap(.getUserId()));
+                            if(profileIndex != -1) {
+                                String picture = mMemberProfiles.get(profileIndex).getProfilePicture();
+                                Glide.with(getApplicationContext()).load(picture).into(holder.profilePictureImageView);
+                            }
                         }
                     }
                 }
@@ -432,6 +434,9 @@ public class GroupMessagingActivity extends AppCompatActivity
             public void onBindViewHolder(ProfileViewHolder holder, int position) {
                 Profile profile = profileCards.get(position);
                 holder.mProfileNameTextView.setText(profile.getFirstName());
+                if(profile.getProfilePicture() != null) {
+                    Glide.with(getApplicationContext()).load(profile.getProfilePicture()).into(holder.mNavProfilePictureImageView);
+                }
                 holder.mNavDrawerRelativeLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -493,6 +498,7 @@ public class GroupMessagingActivity extends AppCompatActivity
                 Log.d(TAG,"LEAVE GROUP");
                 Utility.callCloudFunctions("dbGroupsLeave", mGroupId);
                 goToParentActivity();
+                finish();
             }
         });
         mSendButton.setOnClickListener(new View.OnClickListener() {

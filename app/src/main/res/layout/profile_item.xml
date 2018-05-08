@@ -8,7 +8,6 @@
     android:layout_marginTop="10dp"
     >
 
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/navProfilePictureImageView"
         android:layout_width="36dp"
@@ -25,6 +24,4 @@
         android:textAlignment="center"
         android:layout_toRightOf="@id/navProfilePictureImageView"
         />
-
-
 </RelativeLayout>

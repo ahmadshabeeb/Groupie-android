@@ -56,7 +56,14 @@
         <activity
             android:name=".groupMessaging.PrepareGroupMessageActivity"
             android:label="@string/title_activity_prepare_group_message"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".parent.PreviewActivity"
+            android:label="Preview"
+            android:theme="@style/AppTheme.NoActionBar.PreviewTheme">
+        </activity>
     </application>
 
 </manifest>

@@ -83,7 +83,9 @@ public class EditProfileActivity extends AppCompatActivity {
         bioET = (EditText) findViewById(R.id.bio_editText);
         saveChangesButton = (Button) findViewById(R.id.save_changes_button);
         profilePicture = (ImageView) findViewById(R.id.profile_picture_imageView);
-        displayThings();
+        if (currentUserProfile != null){
+            displayThings();
+        }
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

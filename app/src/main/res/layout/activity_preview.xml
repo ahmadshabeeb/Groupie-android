@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/offWhite">
+    android:background="@drawable/preview_group">
 
     <TextView
         android:id="@+id/what"
@@ -14,7 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="16dp"
         android:text="What :"
         android:textColor="@color/black"
         android:textStyle="bold"
@@ -84,15 +85,12 @@
         android:id="@+id/profile_preview_recycle_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@color/offWhite"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/lineBreak2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineBreak1">
-
-    </android.support.v7.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/lineBreak1"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/lineBreak2"
@@ -100,13 +98,11 @@
         android:layout_height="1dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="@color/black"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_preview_recycle_view"></LinearLayout>
-
 
     <ScrollView
         android:id="@+id/description_scrollView"
@@ -134,7 +130,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:textColor="@color/black"
-                android:textStyle="bold" />
+                />
         </LinearLayout>
     </ScrollView>
 
@@ -143,10 +139,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@color/darkNavy"
         android:text="Join"
         android:textColor="@color/offWhite"
         android:textStyle="bold"
+        android:background="@drawable/preview_group_join"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -159,7 +155,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_end="48dp" />
-
-
 
 </android.support.constraint.ConstraintLayout>

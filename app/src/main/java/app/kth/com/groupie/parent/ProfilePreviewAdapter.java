@@ -71,6 +71,4 @@ public class ProfilePreviewAdapter extends RecyclerView.Adapter<ProfilePreviewAd
         Log.d("tag", "getItemCount: " + profileList.size());
         return profileList.size();
     }
-
-
 }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGroupAdapter.GroupViewHolder> {
@@ -201,7 +202,7 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    Intent i = new Intent(context , PrepareGroupMessageActivity.class);
                                     i.putExtra("group" , (Parcelable) group);
                                     context.startActivity(i);
                                 }

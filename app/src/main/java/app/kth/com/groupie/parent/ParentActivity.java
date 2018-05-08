@@ -29,7 +29,6 @@ import app.kth.com.groupie.data.structure.PrivateProfile;
 
 
 import app.kth.com.groupie.data.structure.Profile;
-import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.otherProfile.OtherProfieActivity;
 
@@ -118,10 +117,7 @@ public class ParentActivity extends AppCompatActivity {
         }
     }
 
-    public void toGroupMessagingActivity(){
-        Intent intent = new Intent(this, GroupMessagingActivity.class);
-        startActivity(intent);
-    }
+
     public void toEditProfileActivity(PrivateProfile currentUserProfile){
         Intent intent = new Intent(this, EditProfileActivity.class);
         intent.putExtra("CurrentUserProfile", currentUserProfile);

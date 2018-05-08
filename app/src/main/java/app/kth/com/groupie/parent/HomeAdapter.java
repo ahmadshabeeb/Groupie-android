@@ -28,6 +28,7 @@ import java.util.Map;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolder> {
@@ -223,11 +224,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(context , GroupMessagingActivity.class);
+                Intent i = new Intent(context , PrepareGroupMessageActivity.class);
                 i.putExtra("group" , (Parcelable) group);
                 context.startActivity(i);
             }
         });
     }
-
 }

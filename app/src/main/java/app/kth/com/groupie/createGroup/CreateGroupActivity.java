@@ -331,7 +331,17 @@ public class CreateGroupActivity extends AppCompatActivity {
             createButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    createGroup();
+                    if (createButton.isEnabled()) {
+                        createGroup();
+                    }
+
+                    createButton.setEnabled(false);
+                    createButton.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            createButton.setEnabled(true);
+                        }
+                    }, 5000);
                 }
             });
         }
@@ -398,6 +408,7 @@ public class CreateGroupActivity extends AppCompatActivity {
         checkForConvId(group);
 
     }
+
     private void checkForConvId(Group group){
         dbr.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -424,5 +435,4 @@ public class CreateGroupActivity extends AppCompatActivity {
         finish();
         startActivity(intent);
     }
-
 }

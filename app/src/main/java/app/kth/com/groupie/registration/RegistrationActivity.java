@@ -1,11 +1,8 @@
 package app.kth.com.groupie.registration;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -15,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.login.ResetPasswordFragment;
+import app.kth.com.groupie.utilities.Utility;
 
 
 public class RegistrationActivity extends AppCompatActivity {
@@ -44,6 +40,7 @@ public class RegistrationActivity extends AppCompatActivity {
     private Button registerButton;
     private CheckBox termsCheckBox;
     private String [] domains = {"kth.se", "su.se", "ki.se", "hhs.se", "sh.se", "kmh.se", "shh.se", "fhs.se", "esh.se", "konstfack.se", "smi.se", "uniarts.se", "kkh.se", "ths.se", "chiro-student.se", "gih.se", "rkh.se"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,38 +55,19 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         toRegister();
     }
 
-
     public void toRegister(){
         registerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                resetPopUp.setText("");
-                // Do something in response to button click
-                String[] emailAndPassword = getEmailandPassword(view);
-                if (emailAndPassword[1].equals(emailAndPassword[2])){
-                    if (checkEmail(emailAndPassword[0])){
-                        if (!emailAndPassword[1].isEmpty()){
-                            if (termsCheckBox.isChecked()){
-                                createAccount(emailAndPassword[0], emailAndPassword[1], view);
-                            }
-                            else {
-                                errorMsg = "You need to accept the terms and service to sign up!";
-                            }
-                        }
-                    }else{
-                        errorMsg = "Your email needs to have one of Stockholm's Universities' domain in order to register!";
-                    }
-                } else {
-                    errorMsg = "Passwords didn't match!";
-                }
-                error.setText(errorMsg);
-                errorMsg = null;
+                if (Utility.buttonTimeout(registerButton))
+                    registerUser();
             }
         });
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +76,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
             }
         });
+
         resetPopUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +86,30 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void registerUser() {
+        resetPopUp.setText("");
+        // Do something in response to button click
+        String[] emailAndPassword = getEmailandPassword(view);
+        if (emailAndPassword[1].equals(emailAndPassword[2])){
+            if (checkEmail(emailAndPassword[0])){
+                if (!emailAndPassword[1].isEmpty()){
+                    if (termsCheckBox.isChecked()){
+                        createAccount(emailAndPassword[0], emailAndPassword[1], view);
+                    }
+                    else {
+                        errorMsg = "You need to accept the terms and service to sign up!";
+                    }
+                }
+            }else{
+                errorMsg = "Your email needs to have one of Stockholm's Universities' domain in order to register!";
+            }
+        } else {
+            errorMsg = "Passwords didn't match!";
+        }
+        error.setText(errorMsg);
+        errorMsg = null;
     }
 
     public void createAccount(String email, String password, final View view){
@@ -214,5 +217,4 @@ public class RegistrationActivity extends AppCompatActivity {
         intent.putExtra("goToResetFromRegistration", true);
         startActivity(intent);
     }
-
 }

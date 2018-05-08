@@ -1,6 +1,7 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -14,7 +15,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,10 +25,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-
+import app.kth.com.groupie.login.LoginActivity;
+import app.kth.com.groupie.utilities.Utility;
 
 public class ProfileFragment extends Fragment {
     ParentActivity activity;
@@ -72,37 +72,20 @@ public class ProfileFragment extends Fragment {
         if (currentUserProfile != null) {
             displayProfileValues(currentUserProfile);
         }
-
         getUserProfile();
 
-        //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
-        //        toGroup.setOnClickListener(new View.OnClickListener() {
-        //            public void onClick(View view){
-        //                //go to group activity
-        //                activity.toGroupMessagingActivity();
-        //            }
-        //        });
-//        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
-//        signOut.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                mAuth.signOut();
-//                currentUser = null;
-//                startActivity(new Intent(getActivity(), LoginActivity.class));
-//            }
-//        });
-
+        if (currentUserProfile == null){
+           getUserProfile();
+        } else {
+            displayProfileValues(currentUserProfile);
+        }
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
-                activity.toEditProfileActivity(currentUserProfile);
+                if (Utility.buttonTimeout(editProfileButton))
+                    activity.toEditProfileActivity(currentUserProfile);
             }
         });
-
-//        settingsButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                //go to group activity
-//            }
-//        });
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         myGroupHistoryRecycleView = rootView.findViewById(R.id.group_history_recycler_view);

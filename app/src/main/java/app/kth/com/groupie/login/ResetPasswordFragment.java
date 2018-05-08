@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
 import app.kth.com.groupie.R;
+import app.kth.com.groupie.utilities.Utility;
 
 
 public class ResetPasswordFragment extends Fragment {
@@ -42,7 +44,15 @@ public class ResetPasswordFragment extends Fragment {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendResetPasswordMail(v);
+                String email = emailInput.getText().toString();
+
+                if(!email.isEmpty()) {
+                    if (Utility.buttonTimeout(resetButton)) {
+                        sendResetPasswordMail(v, email);
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Enter an email", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -59,16 +69,18 @@ public class ResetPasswordFragment extends Fragment {
         return rootview;
     }
     
-    public void sendResetPasswordMail(final View view){
-        String email = emailInput.getText().toString();
+    public void sendResetPasswordMail(final View view, String email){
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             //PRINT?
+                            Toast.makeText(getActivity(), "We've sent you a reset password link to your email", Toast.LENGTH_LONG).show();
                         } else {
                             //PRINT ERROR MESSAGE?
+                            Toast.makeText(getActivity(), "Error :(", Toast.LENGTH_LONG).show();
+
                         }
                     }
                 });

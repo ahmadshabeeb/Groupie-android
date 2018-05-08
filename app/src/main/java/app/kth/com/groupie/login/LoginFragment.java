@@ -26,12 +26,13 @@ import com.google.firebase.functions.FirebaseFunctions;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.parent.ParentActivity;
+import app.kth.com.groupie.utilities.Utility;
 
 
 public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
     private String errorMessage;
-    private LoginActivity activity;
+    private LoginActivity activity = new LoginActivity();
     private EditText inputEmail;
     private EditText inputPassword;
     private TextView errorTextView;
@@ -50,7 +51,8 @@ public class LoginFragment extends Fragment {
         loginbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startlogin(v);
+                if (Utility.buttonTimeout(loginbutton))
+                    startlogin(v);
             }
         });
 
@@ -59,7 +61,8 @@ public class LoginFragment extends Fragment {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.goToRegistration();
+                if (Utility.buttonTimeout(signup))
+                    activity.goToRegistration();
             }
         });
 

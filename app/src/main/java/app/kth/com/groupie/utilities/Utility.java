@@ -2,12 +2,14 @@ package app.kth.com.groupie.utilities;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.functions.FirebaseFunctions;
 import com.google.firebase.functions.HttpsCallableResult;
 import com.google.gson.Gson;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,5 +68,21 @@ public class Utility {
         String weekDay = sdf.format(date);
         Log.d("Week day" , weekDay + "..." );
         return weekDay;
+    }
+
+    public static Boolean buttonTimeout(Button button) {
+        if (button.isEnabled()) {
+            Log.d("TAG", "BUTTON PRESSED");
+
+            button.setEnabled(false);
+            button.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    button.setEnabled(true);
+                }
+            }, 2500);
+
+            return true;
+        } else return false;
     }
 }

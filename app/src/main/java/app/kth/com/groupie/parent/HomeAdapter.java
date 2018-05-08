@@ -2,49 +2,102 @@ package app.kth.com.groupie.parent;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.functions.FirebaseFunctionsException;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
-import app.kth.com.groupie.utilities.Utility;
 
-public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGroupAdapter.GroupViewHolder> {
-    private ArrayList<Group> groups;
-    private Resources resources;
-    private RelativeLayout progressBar;
+
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolder> {
+    private List<Group> groupArrayList;
     private Context context;
-    private int subjectID;
+    private final int NUM_GROUPS_TO_LOAD = 100;
+    private final DatabaseReference databaseReference;
+    private RelativeLayout progressBar;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
-    public RecommendedGroupAdapter(Context context, ArrayList<Group> groups, RelativeLayout progressBar) {
+    public HomeAdapter(Context context, RelativeLayout progressBar) {
         this.context = context;
         this.progressBar = progressBar;
-        this.groups = groups;
-        resources = context.getResources();
-        notifyDataSetChanged();
-        stopLoadingProgressBar();
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
+        groupArrayList = new ArrayList<>();
+        getGroupsFromDatabase(databaseReference);
+    }
+
+    //--------------DATASET-----------------------//
+    private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
+        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+
+        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Group group = dataSnapshot.getValue(Group.class);
+
+                //Add group to browser if it is public and matches user subject and date selection
+                if (group.getIsPublic()) {
+                    if (group.isHasMeetingDate() && isUserMember(group)) {
+                        group.setGroupId(dataSnapshot.getKey());
+                        groupArrayList.add(group);
+                        notifyDataSetChanged();
+                        stopLoadingProgressBar();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     private void stopLoadingProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    private boolean isUserMember(Group group){
+        boolean isMember = false;
+        for (Map.Entry<String, Boolean> entry: group.getMembers().entrySet()) {
+            if(currentUser != null && entry.getKey().equals(currentUser.getUid()))
+                isMember = true;
+        }
+        return isMember;
     }
 
     /**
@@ -57,7 +110,6 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
         TextView topic = (TextView) itemView.findViewById(R.id.group_topic_textview);
         TextView location = (TextView) itemView.findViewById(R.id.group_location_textview);
         TextView description = (TextView) itemView.findViewById(R.id.group_description_textview);
-        Button joinGroupBtn = (Button) itemView.findViewById(R.id.join_group_btn);
 
         // fixed textViews
         TextView topicTitle = (TextView) itemView.findViewById(R.id.topic_textview_fixed);
@@ -71,24 +123,23 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
 
     @NonNull
     @Override
-    public RecommendedGroupAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group, parent, false);
-        return new GroupViewHolder(v);
-
+    public HomeAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group_home, parent, false);
+                return new GroupViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
-        Group group = groups.get(position);
-        setFields(group, holder);
-        subjectID = setSubjectImage(group, holder);
-        setJoinGroupButton(group, holder);
-        setCardViewToBeClickable(group, holder);
+        Group group = groupArrayList.get(position);
+            setFields(group, holder);
+            setSubjectImage(group, holder);
+            setCardViewToBeClickable(group, holder);
+
     }
 
     @Override
     public int getItemCount() {
-        return groups.size();
+        return groupArrayList.size();
     }
 
     //-----------------HELPER METHODS--------------
@@ -121,96 +172,60 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
         }
     }
 
-    private int setSubjectImage(Group group, GroupViewHolder holder) {
+    private void setSubjectImage(Group group, GroupViewHolder holder) {
         // show right image based on the subject
 
         switch (group.getSubject()){
             case "Language":
                 //replace by the right image
                 holder.subjectImage.setBackgroundResource(R.drawable.language);
-                return R.drawable.language;
+                break;
+
             case "Programming" :
                 holder.subjectImage.setBackgroundResource(R.drawable.programming);
-                return R.drawable.programming;
+                break;
+
             case "Math" :
                 holder.subjectImage.setBackgroundResource(R.drawable.math);
-                return R.drawable.math;
+                break;
+
             case "Business and Economics" :
                 holder.subjectImage.setBackgroundResource(R.drawable.business);
-                return R.drawable.business;
+                break;
+
             case "Engineering" :
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
-                return R.drawable.engineering;
+                break;
+
             case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
-                return R.drawable.science;
+                break;
+
             case "Law and Political Science" :
                 holder.subjectImage.setBackgroundResource(R.drawable.law);
-                return R.drawable.law;
+                break;
+
             case "Art and Music" :
                 holder.subjectImage.setBackgroundResource(R.drawable.music);
-                return R.drawable.music;
+                break;
+
             case "Other" :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                return R.drawable.other;
+                break;
+
             default :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                return R.drawable.other;
+                break;
         }
-    }
-
-    /**
-     *
-     * @param group
-     * @param holder
-     *
-     * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
-     *
-     */
-    private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
-        holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String groupId = group.getGroupId();
-
-                Utility.callCloudFunctions("dbGroupsJoin", groupId)
-                        .addOnCompleteListener(new OnCompleteListener<String>() {
-                            @Override
-                            public void onComplete(@NonNull Task<String> task) {
-                                if (!task.isSuccessful()) {
-                                    Exception e = task.getException();
-
-                                    if (e instanceof FirebaseFunctionsException) {
-                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                        FirebaseFunctionsException.Code code = ffe.getCode();
-                                        //Object details = ffe.getDetails();
-                                        String message = ffe.getMessage();
-                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
-                                    }
-
-                                    Log.w("TAG", "onFailure", e);
-                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    return;
-                                } else {
-                                    String result = task.getResult();
-                                    Intent i = new Intent(context , GroupMessagingActivity.class);
-                                    i.putExtra("group" , (Parcelable) group);
-                                    context.startActivity(i);
-                                }
-                            }
-                        });
-            }
-        });
     }
 
     private void setCardViewToBeClickable(final Group group, GroupViewHolder holder){
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PreviewActivity.class);
-                intent.putExtra("group", group);
-                intent.putExtra("SubjectID", subjectID);
-                context.startActivity(intent);
+                Intent i = new Intent(context , GroupMessagingActivity.class);
+                i.putExtra("group" , (Parcelable) group);
+                context.startActivity(i);
             }
         });
     }

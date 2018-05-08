@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import app.kth.com.groupie.firstLogin.FirstLoginActivity;
+import app.kth.com.groupie.parent.ParentActivity;
 import app.kth.com.groupie.registration.RegistrationActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -69,7 +70,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void goToHome(){
-        finish();
+        Intent intent = new Intent(this, ParentActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
     public void toFirstLogin(){
         Intent intent = new Intent(this, FirstLoginActivity.class);

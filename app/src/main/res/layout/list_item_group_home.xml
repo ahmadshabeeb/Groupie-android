@@ -2,19 +2,20 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_margin="10dp"
-    android:layout_width="match_parent"
+    android:layout_width="280dp"
     android:layout_height="120dp"
     android:background="@drawable/layout_cardview_background"
     android:id="@+id/group_card_view"
-    android:clickable="true"
     >
-  
+
     <ImageView
         android:id="@+id/subject_imageview"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_centerVertical="true"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
         />
 
     <TextView
@@ -101,16 +102,6 @@
         android:singleLine="true"
         android:layout_toRightOf="@id/description_textview_fixed"
         android:layout_below="@id/group_location_textview"
-        />
-
-    <Button
-        android:id="@+id/join_group_btn"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="18dp"
-        android:background="@drawable/join_group"
         />
 
 </RelativeLayout>

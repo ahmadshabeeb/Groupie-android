@@ -3,6 +3,7 @@ package app.kth.com.groupie.parent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -39,6 +43,7 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
+    private int subjectID;
 
     private long[] daysInUNIX;
     private int[] daysReference = new int[7];
@@ -46,39 +51,44 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context context;
 
     private final int NUM_GROUPS_TO_LOAD = 100;
-    private final DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
     private Resources resources;
     private ProgressBar progressBar;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     public BrowserAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
         this.filterChoice = filterChoice;
         this.progressBar = progressBar;
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         resources = context.getResources();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         getGroupsFromDatabase(databaseReference);
     }
 
-    //--------------DATASET-----------------------//
+    //--------------DATASET FOR BROSWER ADAPTER-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
 
-        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+        Query onlyPublicGroups = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
+        onlyPublicGroups.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
 
                 //Add group to browser if it is public and matches user subject and date selection
-                if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
-                    group.setGroupId(dataSnapshot.getKey());
-                    addGroupToDataSet(group);
-                    notifyDataSetChanged();
-                    stopLoadingProgressBar();
+                if (filterChoice.isChosenSubject(group.getSubject())
+                        && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())
+                        && !isUserMember(group)) {
+                        group.setGroupId(dataSnapshot.getKey());
+                        addGroupToDataSet(group);
+                        notifyDataSetChanged();
+                        stopLoadingProgressBar();
+                    }
                 }
-            }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
@@ -169,8 +179,6 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 updateReferences(6,6);
             }
         }
-
-
     }
 
     private void addHeaderToDataSet(String day, int position) {
@@ -247,15 +255,15 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RecyclerListItem item = groupArrayList.get(position);
-
         if (item.isHeader()) {
             RecyclerHeader header = (RecyclerHeader) item;
             ((HeaderViewHolder) holder).header.setText(header.getDay());
         } else {
             Group group = (Group) item;
             setFields(group, (GroupViewHolder) holder);
-            setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);
+            subjectID = setSubjectImage(group, (GroupViewHolder) holder);
+            setGroupCardClickable(group, holder);
         }
     }
 
@@ -294,50 +302,41 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void setSubjectImage(Group group, GroupViewHolder holder) {
+    private int setSubjectImage(Group group, GroupViewHolder holder) {
         // show right image based on the subject
 
         switch (group.getSubject()){
             case "Language":
                 //replace by the right image
                 holder.subjectImage.setBackgroundResource(R.drawable.language);
-                break;
-
+                return R.drawable.language;
             case "Programming" :
                 holder.subjectImage.setBackgroundResource(R.drawable.programming);
-                break;
-
+                return R.drawable.programming;
             case "Math" :
                 holder.subjectImage.setBackgroundResource(R.drawable.math);
-                break;
-
+                return R.drawable.math;
             case "Business and Economics" :
                 holder.subjectImage.setBackgroundResource(R.drawable.business);
-                break;
-
+                return R.drawable.business;
             case "Engineering" :
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
-                break;
-
+                return R.drawable.engineering;
             case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
-                break;
-
+                return R.drawable.science;
             case "Law and Political Science" :
                 holder.subjectImage.setBackgroundResource(R.drawable.law);
-                break;
-
+                return R.drawable.law;
             case "Art and Music" :
                 holder.subjectImage.setBackgroundResource(R.drawable.music);
-                break;
-
+                return R.drawable.music;
             case "Other" :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
-
+                return R.drawable.other;
             default :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
+                return R.drawable.other;
         }
     }
 
@@ -349,7 +348,7 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
      *
      */
-    private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
+    private void setJoinGroupButton (final Group group, BrowserAdapter.GroupViewHolder holder) {
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -367,7 +366,7 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                         FirebaseFunctionsException.Code code = ffe.getCode();
                                         //Object details = ffe.getDetails();
                                         String message = ffe.getMessage();
-                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
+                                        Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
                                     }
 
                                     Log.w("TAG", "onFailure", e);
@@ -375,13 +374,33 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    Intent intent = new Intent(context , GroupMessagingActivity.class);
-                                    Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
-                                    intent.putExtra("group", group);
-                                    context.startActivity(intent);
+                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    i.putExtra("group" , (Parcelable) group);
+                                    context.startActivity(i);
                                 }
                             }
                         });
+            }
+        });
+    }
+
+    private boolean isUserMember(Group group){
+        boolean isMember = false;
+        for (Map.Entry<String, Boolean> entry: group.getMembers().entrySet()) {
+            if(entry.getKey().equals(currentUser.getUid()))
+                isMember = true;
+        }
+        return isMember;
+    }
+
+    public void setGroupCardClickable(final Group group, RecyclerView.ViewHolder holder){
+        ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PreviewActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("SubjectID", subjectID);
+                context.startActivity(intent);
             }
         });
     }

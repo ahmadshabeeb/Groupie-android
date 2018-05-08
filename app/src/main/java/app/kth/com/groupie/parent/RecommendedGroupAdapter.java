@@ -3,6 +3,7 @@ package app.kth.com.groupie.parent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -200,7 +201,9 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    context.startActivity(new Intent(context , GroupMessagingActivity.class));
+                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    i.putExtra("group" , (Parcelable) group);
+                                    context.startActivity(i);
                                 }
                             }
                         });

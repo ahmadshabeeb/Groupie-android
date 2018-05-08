@@ -110,9 +110,6 @@ public class LoginFragment extends Fragment {
                                             activity.goToHome();
                                         }else{
                                             activity.toFirstLogin();
-                                            if(mAuth.getCurrentUser() != null){
-                                                activity.goToHome();
-                                            }
                                         }
                                     }
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,6 +76,7 @@ public class ParentActivity extends AppCompatActivity {
 
     @Override
     public void onStart(){
+        Log.d("tag", "onStart: We here");
         super.onStart();
         if (currentUser == null){
             toLoginActivity();

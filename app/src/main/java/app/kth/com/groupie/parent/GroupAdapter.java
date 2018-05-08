@@ -3,6 +3,7 @@ package app.kth.com.groupie.parent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,8 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -48,40 +50,45 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Context context;
 
     private final int NUM_GROUPS_TO_LOAD = 100;
-    private final DatabaseReference databaseReference;
+    private DatabaseReference databaseReference;
     private BrowserFragment.FilterChoice filterChoice;
     private Resources resources;
     private ProgressBar progressBar;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
 
     public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
         this.filterChoice = filterChoice;
         this.progressBar = progressBar;
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         resources = context.getResources();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         getGroupsFromDatabase(databaseReference);
     }
 
-    //--------------DATASET-----------------------//
+    //--------------DATASET FOR BROSWER ADAPTER-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
-        Query nearestGroupMeetingQuery = databaseReference.orderByChild("meetingDateTimeStamp").limitToLast(NUM_GROUPS_TO_LOAD);
+        Query onlyPublicGroups = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
 
-        nearestGroupMeetingQuery.addChildEventListener(new ChildEventListener() {
+        onlyPublicGroups.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
 
                 //Add group to browser if it is public and matches user subject and date selection
-                if (group.getIsPublic()) {
-                    if (filterChoice.isChosenSubject(group.getSubject()) && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())) {
+                if (filterChoice.isChosenSubject(group.getSubject())
+                        && filterChoice.isChosenDay(group.getMeetingDateTimeStamp())
+                        && !isUserMember(group)) {
                         group.setGroupId(dataSnapshot.getKey());
                         addGroupToDataSet(group);
                         notifyDataSetChanged();
                         stopLoadingProgressBar();
                     }
                 }
-            }
+
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -255,8 +262,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((HeaderViewHolder) holder).header.setText(header.getDay());
         } else {
             Group group = (Group) item;
-            Log.d("TAG", "after ordering: " + group.getMeetingDateTimeStamp());
-
             setFields(group, (GroupViewHolder) holder);
             setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);
@@ -353,42 +358,48 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
      *
      */
-    private void setJoinGroupButton (final Group group, GroupViewHolder holder) {
+    private void setJoinGroupButton (final Group group, GroupAdapter.GroupViewHolder holder) {
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Utility.buttonTimeout(holder.joinGroupBtn)) {
-                    final String groupId = group.getGroupId();
+                final String groupId = group.getGroupId();
 
-                    Utility.callCloudFunctions("dbGroupsJoin", groupId)
-                            .addOnCompleteListener(new OnCompleteListener<String>() {
-                                @Override
-                                public void onComplete(@NonNull Task<String> task) {
-                                    if (!task.isSuccessful()) {
-                                        Exception e = task.getException();
+                Utility.callCloudFunctions("dbGroupsJoin", groupId)
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (!task.isSuccessful()) {
+                                    Exception e = task.getException();
 
-                                        if (e instanceof FirebaseFunctionsException) {
-                                            FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
-                                            FirebaseFunctionsException.Code code = ffe.getCode();
-                                            //Object details = ffe.getDetails();
-                                            String message = ffe.getMessage();
-                                            Log.d("TAG", "ERROR CODE: " + code + " ... " + message);
-                                        }
-
-                                        Log.w("TAG", "onFailure", e);
-                                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        return;
-                                    } else {
-                                        String result = task.getResult();
-                                        Intent intent = new Intent(context, GroupMessagingActivity.class);
-                                        Log.d("TAG", "JOINING THIS GROUP " + group.getGroupId());
-                                        intent.putExtra("group", group);
-                                        context.startActivity(intent);
+                                    if (e instanceof FirebaseFunctionsException) {
+                                        FirebaseFunctionsException ffe = (FirebaseFunctionsException) e;
+                                        FirebaseFunctionsException.Code code = ffe.getCode();
+                                        //Object details = ffe.getDetails();
+                                        String message = ffe.getMessage();
+                                        Log.d("TAG", "EROR CODE: " + code + " ... " + message);
                                     }
+
+                                    Log.w("TAG", "onFailure", e);
+                                    Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    return;
+                                } else {
+                                    String result = task.getResult();
+                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    i.putExtra("group" , (Parcelable) group);
+                                    context.startActivity(i);
                                 }
-                            });
-                }
+                            }
+                        });
             }
         });
+    }
+
+    private boolean isUserMember(Group group){
+        boolean isMember = false;
+        for (Map.Entry<String, Boolean> entry: group.getMembers().entrySet()) {
+            if(entry.getKey().equals(currentUser.getUid()))
+                isMember = true;
+        }
+        return isMember;
     }
 }

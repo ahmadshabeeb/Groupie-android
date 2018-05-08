@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.functions.FirebaseFunctions;
 
 import org.json.JSONObject;
@@ -20,15 +21,16 @@ import app.kth.com.groupie.utilities.Utility;
 public class FirstLoginActivity extends AppCompatActivity {
     private FirebaseFunctions addProfileFunction;
     private PrivateProfile privateProfile;
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     private boolean registrationCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_login);
-
         mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
         UserProfileFragment firstFragment = new UserProfileFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(app.kth.com.groupie.R.id.fragment_container, firstFragment).commit();
@@ -90,10 +92,11 @@ public class FirstLoginActivity extends AppCompatActivity {
         addToDatabase(privateProfile);
         registrationCompleted = true;
         finish();
-        if(mAuth.getCurrentUser() != null){
+        if(currentUser != null){
             Intent intent = new Intent(this, ParentActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);        }
+            startActivity(intent);
+        }
     }
 
     public void addToDatabase(PrivateProfile privateProfile){

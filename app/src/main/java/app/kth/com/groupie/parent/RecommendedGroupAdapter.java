@@ -32,6 +32,7 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
     private Resources resources;
     private RelativeLayout progressBar;
     private Context context;
+    private int subjectID;
 
     public RecommendedGroupAdapter(Context context, ArrayList<Group> groups, RelativeLayout progressBar) {
         this.context = context;
@@ -80,19 +81,9 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
         setFields(group, holder);
-        setSubjectImage(group, holder);
+        subjectID = setSubjectImage(group, holder);
         setJoinGroupButton(group, holder);
         setCardViewToBeClickable(group, holder);
-        int subjectID = setSubjectImage(group, holder);
-        ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, PreviewActivity.class);
-                intent.putExtra("group", group);
-                intent.putExtra("SubjectID", subjectID);
-                context.startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -216,7 +207,10 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // do something
+                Intent intent = new Intent(context, PreviewActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("SubjectID", subjectID);
+                context.startActivity(intent);
             }
         });
     }

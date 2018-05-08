@@ -43,6 +43,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
+    private int subjectID;
 
     private long[] daysInUNIX;
     private int[] daysReference = new int[7];
@@ -262,18 +263,9 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             Group group = (Group) item;
             setFields(group, (GroupViewHolder) holder);
-            int subjectID = setSubjectImage(group, (GroupViewHolder) holder);
             setJoinGroupButton(group, (GroupViewHolder) holder);
-
-            ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, PreviewActivity.class);
-                    intent.putExtra("group", group);
-                    intent.putExtra("SubjectID", subjectID);
-                    context.startActivity(intent);
-                }
-            });
+            subjectID = setSubjectImage(group, (GroupViewHolder) holder);
+            setGroupCardClickable(group, holder);
         }
     }
 
@@ -401,5 +393,17 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 isMember = true;
         }
         return isMember;
+    }
+
+    public void setGroupCardClickable(final Group group, RecyclerView.ViewHolder holder){
+        ((GroupViewHolder) holder).parent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, PreviewActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("SubjectID", subjectID);
+                context.startActivity(intent);
+            }
+        });
     }
 }

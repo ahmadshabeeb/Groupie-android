@@ -1,12 +1,11 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
+import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.utilities.Utility;
 
@@ -73,14 +71,14 @@ public class ProfileFragment extends Fragment {
         } else {
             displayProfileValues(currentUserProfile);
         }
-
-        //Button toGroup = (Button) rootView.findViewById(R.id.sign_out);
-//        toGroup.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View view){
-//                //go to group activity
-//                activity.toGroupMessagingActivity();
-//            }
-//        });
+        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view){
+                mAuth.signOut();
+                currentUser = null;
+                startActivity(new Intent(getActivity(), LoginActivity.class));
+            }
+        });
 
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
@@ -146,6 +144,7 @@ public class ProfileFragment extends Fragment {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
+
 
 
 }

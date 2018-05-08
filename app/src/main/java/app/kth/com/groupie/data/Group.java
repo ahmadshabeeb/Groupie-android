@@ -1,9 +1,8 @@
 package app.kth.com.groupie.data;
 
-
+import com.google.firebase.database.Exclude;
 import android.os.Parcel;
 import android.os.Parcelable;
-
 import java.util.HashMap;
 import java.util.Map;
 import app.kth.com.groupie.data.recycleViewData.RecyclerListItem;
@@ -166,6 +165,7 @@ public class Group implements Parcelable, RecyclerListItem {
     public long getMeetingDateTimeStamp() { return meetingDateTimeStamp; }
     public void setMeetingDateTimeStamp(long meetingDateTimeStamp) { this.meetingDateTimeStamp = meetingDateTimeStamp; }
 
+    @Exclude
     @Override
     public boolean isHeader() {
         return false;

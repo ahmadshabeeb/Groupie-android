@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,6 +34,7 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
 
     boolean isFirst = true;
     Group mGroup;
+    int i = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +43,12 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         mGroup = (Group) intent.getParcelableExtra("group");
+
         Map<String, Boolean> map = mGroup.getMembers();
-        map.put(FirebaseAuth.getInstance().getCurrentUser().getUid(), true);
+        if(!(map.containsKey(FirebaseAuth.getInstance().getCurrentUser().getUid()))) {
+            map.put(FirebaseAuth.getInstance().getCurrentUser().getUid(), true);
+            i++;
+        }
         mGroup.setMembers(map);
         getMembers();
     }
@@ -50,14 +56,7 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
     ArrayList<Profile> mMemberProfiles;
     String TAG = "Preparegroup";
     private void getMembers() {
-        int j = 0;
-        ArrayList<String> currentMemberIds = new ArrayList<String>();
-        for (Profile profile : mMemberProfiles) {
-            currentMemberIds.add(mMemberProfiles.get(j).getUserId());
-            j++;
-        }
         for (String userId : mGroup.getMembers().keySet()) {
-            if (!currentMemberIds.contains(userId)) {
                 Log.d(TAG, userId + " user IDDDD");
                 Utility.callCloudFunctions("dbUsersProfileGetPublic", userId)
                         .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -79,8 +78,10 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
                                     Profile profile = gson.fromJson(result, Profile.class);
                                     mMemberProfiles.add(profile);
 
-                                    if((mMemberProfiles.size() >= mGroup.getNumberOfMembers()) && isFirst){
+                                    if((mMemberProfiles.size() >= mGroup.getNumberOfMembers() + i) && isFirst){
                                         isFirst = false;
+                                        Toast toast = Toast.makeText(getApplicationContext(), "" + mMemberProfiles.size(), Toast.LENGTH_LONG);
+                                        toast.show();
                                         Intent intent = new Intent(getApplicationContext(), GroupMessagingActivity.class);
                                         intent.putExtra("group", mGroup);
                                         intent.putExtra("profiles", mMemberProfiles);
@@ -90,7 +91,6 @@ public class PrepareGroupMessageActivity extends AppCompatActivity {
                                 }
                             }
                         });
-            }
         }
     }
 

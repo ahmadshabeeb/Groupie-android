@@ -35,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.database.SnapshotParser;
@@ -297,7 +298,6 @@ public class GroupMessagingActivity extends AppCompatActivity
 
         initDrawer();
         initialize();
-        DownloadAllPictures();
 
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mCurrentUserId = mCurrentUser.getUid();
@@ -378,7 +378,10 @@ public class GroupMessagingActivity extends AppCompatActivity
                                     goToOtherProfile(mMemberProfiles.get(profileIndex));
                                 }
                             });
-                            holder.profilePictureImageView.setImageBitmap(profilePictures.get(mMemberProfiles.get(profileIndex).getUserId()));
+
+                            String picture = mMemberProfiles.get(profileIndex).getProfilePicture();
+                            Glide.with(getApplicationContext()).load(picture).into(holder.profilePictureImageView);
+                            //holder.profilePictureImageView.setImageBitmap(.getUserId()));
                         }
                     }
                 }
@@ -590,38 +593,4 @@ public class GroupMessagingActivity extends AppCompatActivity
         mFirebaseAdapter.startListening();
     }
 
-
-    private void DownloadAllPictures(){
-        for(Profile profile : mMemberProfiles){
-            new DownloadImageTask(profile)
-                    .execute(profile.getProfilePicture());
-        }
-    }
-
-    Map<String, Bitmap> profilePictures = new HashMap<>();
-    // show The Image in a ImageView
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        Profile profile;
-        public DownloadImageTask(Profile profile){
-            this.profile = profile;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            Log.d("picsize= " + profilePictures.size() +"Member= " + mMemberProfiles.size(), TAG );
-            profilePictures.put(profile.getUserId(), result);
-        }
-    }
 }

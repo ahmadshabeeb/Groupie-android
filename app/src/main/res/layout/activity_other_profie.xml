@@ -14,6 +14,7 @@
         android:text="School"
         android:textColor="@color/darkNavy"
         android:textSize="20dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +28,7 @@
         android:text="Field of Study"
         android:textSize="20dp"
         android:textColor="@color/darkNavy"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileschool_textview" />
@@ -39,6 +41,7 @@
         android:text="Firstname"
         android:textSize="20dp"
         android:textColor="@color/black"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +80,7 @@
         android:text="Lastname"
         android:textSize="20dp"
         android:textColor="@color/black"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilename_textview" />

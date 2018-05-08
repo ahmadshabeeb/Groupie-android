@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,9 +57,10 @@ public class OtherProfieActivity extends AppCompatActivity {
         TextView field = (TextView) findViewById(R.id.profilefield_textview);
         field.setText(profile.getFieldOfStudy());
 
+        CircleImageView profilepic = (CircleImageView) findViewById(R.id.profilepic_imageview);
+
         if(profile.getProfilePicture() != null){
-            new DownloadImageTask((CircleImageView) findViewById(R.id.profilepic_imageview))
-                    .execute(profile.getProfilePicture());
+            Glide.with(this).load(profile.getProfilePicture()).into(profilepic);
         }
 
         ImageView report = (ImageView) findViewById(R.id.reportuser_imageview);
@@ -71,29 +74,5 @@ public class OtherProfieActivity extends AppCompatActivity {
     }
 
 
-    // show The Image in a ImageView
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        CircleImageView bmImage;
 
-        public DownloadImageTask(CircleImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }
 }

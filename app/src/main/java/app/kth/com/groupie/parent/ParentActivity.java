@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,11 +38,10 @@ public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
     ProfileFragment profileFragment;
     BrowserFragment browserFragment;
-    FirebaseAuth mAuth;
-    FirebaseUser currentUser;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
     DatabaseReference databaseReference;
     PrivateProfile currentUserProfile;
-    private boolean userloogedIn = false;
     public BrowserFragment.FilterChoice filterChoice;
     private boolean isCreateGroupPressed = false;
 
@@ -69,23 +69,23 @@ public class ParentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parent);
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
+        Log.d("tag", "onCreate: " + currentUser);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         homeFragment = new HomeFragment();
         browserFragment = new BrowserFragment();
         profileFragment = new ProfileFragment();
-        mAuth = FirebaseAuth.getInstance();
-        currentUser = mAuth.getCurrentUser();
-
         //Filtering for groups in browser
         filterChoice= new BrowserFragment.FilterChoice();
     }
 
     @Override
     public void onStart(){
+        Log.d("tag", "onStart: We here");
         super.onStart();
-        if (currentUser == null){
+        if (mAuth.getCurrentUser() == null){
+            Log.d("tag", "onStart: We really here" + currentUser);
             toLoginActivity();
-        } else{
+        } else {
             getUserProfile();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
             BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -128,7 +128,6 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     public void toLoginActivity(){
-        userloogedIn = true;
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
@@ -147,7 +146,7 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     public void getUserProfile(){
-        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);

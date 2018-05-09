@@ -107,12 +107,11 @@ public class LoginFragment extends Fragment {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         if (dataSnapshot.exists()){
+                                            activity.finish();
                                             activity.goToHome();
                                         }else{
+                                            activity.finish();
                                             activity.toFirstLogin();
-                                            if(mAuth.getCurrentUser() != null){
-                                                activity.goToHome();
-                                            }
                                         }
                                     }
 

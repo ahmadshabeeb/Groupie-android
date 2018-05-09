@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout swipe;
     private ViewGroup rootView;
     private Context context;
+    private TextView userErrorMessage;
 
     @Nullable
     @Override
@@ -48,8 +50,10 @@ public class HomeFragment extends Fragment {
         myGroupsprogressBar = rootView.findViewById(R.id.progressBar_my_groups);
         recommendedGroupsprogressBar = rootView.findViewById(R.id.progressBar_recommended_groups);
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
         myGorupsRecycleView.setLayoutManager(mLayoutManager);
+        userErrorMessage = rootView.findViewById(R.id.browser_user_error_message);
+
         initializeMyGroupsAdapter();
 
         getRecommendedGroup();
@@ -60,7 +64,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void initializeMyGroupsAdapter() {
-        myGroupsAdapter = new HomeAdapter(getActivity(), myGroupsprogressBar);
+        myGroupsAdapter = new HomeAdapter(context, myGroupsprogressBar, userErrorMessage);
         myGorupsRecycleView.setAdapter(myGroupsAdapter);
     }
 
@@ -81,7 +85,7 @@ public class HomeFragment extends Fragment {
                             }
 
                             Log.w("TAG", "onFailure", e);
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                             return;
                         } else {
                             String result = task.getResult();
@@ -97,7 +101,7 @@ public class HomeFragment extends Fragment {
     private void createRecommendedGroupsViews (Group[] groups){
         ArrayList<Group> arrayList = new ArrayList<Group>(Arrays.asList(groups));
         recommendedGroupsRecycleView = rootView.findViewById(R.id.list_group_recycle_home_recommended);
-        LinearLayoutManager homeLayoutManager = new LinearLayoutManager(getActivity());
+        LinearLayoutManager homeLayoutManager = new LinearLayoutManager(context);
         recommendedGroupsRecycleView.setLayoutManager(homeLayoutManager);
         recommendedGroupsAdapter = new RecommendedGroupAdapter(context, arrayList, recommendedGroupsprogressBar);
         recommendedGroupsRecycleView.setAdapter(recommendedGroupsAdapter);
@@ -118,7 +122,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        activity = (ParentActivity) getActivity();
+        activity = (ParentActivity) context;
     }
 
     @Override

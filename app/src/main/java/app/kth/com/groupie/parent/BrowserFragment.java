@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.RelativeLayout;
 
 import java.text.DateFormat;
@@ -44,6 +45,7 @@ public class BrowserFragment extends Fragment {
     private List<Integer> subjectResourceIds;
     private Button reset;
     private ProgressBar progressBar;
+    private TextView userErrorMessage;
     private RelativeLayout card;
 
     @Nullable
@@ -61,7 +63,6 @@ public class BrowserFragment extends Fragment {
         resetFilterClickableListener(rootView);
 
 
-
         return rootView;
     }
 
@@ -75,6 +76,9 @@ public class BrowserFragment extends Fragment {
         this.filterChoice = activity.filterChoice;
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+
+        userErrorMessage = (TextView) rootView.findViewById(R.id.browser_user_error_message);
+
         initializeAdapter();
 
         return rootView;
@@ -289,7 +293,7 @@ public class BrowserFragment extends Fragment {
     }
 
     //----------------HELPER METHODS-------------
-    private void filterBySubject(int position, int subject, ImageView view){
+    private void filterBySubject(int position, int subject, ImageView view) {
         if (!filterSubjectTriggers[position]) {
             filterChoice.addSubject(getResources().getString(subject));
             filterSubjectTriggers[position] = true;
@@ -317,7 +321,7 @@ public class BrowserFragment extends Fragment {
     }
 
     private void initializeAdapter() {
-        mAdapter = new BrowserAdapter(getActivity(), filterChoice, daysInUNIX, progressBar);
+        mAdapter = new BrowserAdapter(getActivity(), filterChoice, daysInUNIX, progressBar, userErrorMessage);
         mRecycleView.setAdapter(mAdapter);
     }
 

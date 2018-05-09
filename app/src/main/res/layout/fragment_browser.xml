@@ -24,6 +24,8 @@
 
         <include layout="@layout/layout_circular_progress_bar"/>
 
+        <include layout="@layout/no_groups_error_message"/>
+
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/browser_swipe"
             android:layout_width="match_parent"

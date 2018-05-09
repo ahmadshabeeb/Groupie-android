@@ -1,5 +1,6 @@
 package app.kth.com.groupie.parent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -31,6 +32,9 @@ import com.google.firebase.functions.FirebaseFunctionsException;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
@@ -41,6 +45,7 @@ import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
@@ -58,17 +63,21 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
+    private TextView userErrorMessage;
 
-    public BrowserAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar) {
+    public BrowserAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar, TextView userErrorMessage) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
         this.filterChoice = filterChoice;
         this.progressBar = progressBar;
+        this.userErrorMessage = userErrorMessage;
+
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         resources = context.getResources();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         getGroupsFromDatabase(databaseReference);
+        runTimeOut();
     }
 
     //--------------DATASET FOR BROSWER ADAPTER-----------------------//
@@ -106,6 +115,31 @@ public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void runTimeOut() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                timer.cancel();
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    public void run() {
+                        if (groupArrayList.size() == 0) { //  Timeout
+                            noGroupsToDisplay();
+                        }
+                    }
+                });
+            }
+        };
+
+        // Setting timeout of 10 sec to the request
+        timer.schedule(timerTask, 5000L);
+    }
+
+    private void noGroupsToDisplay() {
+        stopLoadingProgressBar();
+        userErrorMessage.setVisibility(View.VISIBLE);
     }
 
     /**

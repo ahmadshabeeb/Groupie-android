@@ -92,6 +92,8 @@
     <string name="chooseSubject">Please choose your favorite subject from one of the nine below. You can change this at any time in your profile.</string>
 
     <string name="title_activity_edit_group">EditGroupActivity</string>
+    <string name="title_activity_other_profie">otherProfieActivity</string>
+    <string name="title_activity_prepare_group_message">PrepareGroupMessageActivity</string>
 
     <!-- SUBJECT STRINGS -->
     <string name="language">Language</string>
@@ -106,4 +108,5 @@
 
     <!-- ERROR MESSAGES -->
     <string name="no_groups_error">There are no groups to display</string>
+
 </resources>

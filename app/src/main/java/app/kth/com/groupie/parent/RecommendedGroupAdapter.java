@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
 public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGroupAdapter.GroupViewHolder> {
@@ -32,6 +33,7 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
     private Resources resources;
     private RelativeLayout progressBar;
     private Context context;
+    private int subjectID;
 
     public RecommendedGroupAdapter(Context context, ArrayList<Group> groups, RelativeLayout progressBar) {
         this.context = context;
@@ -80,10 +82,10 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
     public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
         Group group = groups.get(position);
         setFields(group, holder);
-        setSubjectImage(group, holder);
+        subjectID = setSubjectImage(group, holder);
         setJoinGroupButton(group, holder);
         setCardViewToBeClickable(group, holder);
-        }
+    }
 
     @Override
     public int getItemCount() {
@@ -120,50 +122,41 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
         }
     }
 
-    private void setSubjectImage(Group group, GroupViewHolder holder) {
+    private int setSubjectImage(Group group, GroupViewHolder holder) {
         // show right image based on the subject
 
         switch (group.getSubject()){
             case "Language":
                 //replace by the right image
                 holder.subjectImage.setBackgroundResource(R.drawable.language);
-                break;
-
+                return R.drawable.language;
             case "Programming" :
                 holder.subjectImage.setBackgroundResource(R.drawable.programming);
-                break;
-
+                return R.drawable.programming;
             case "Math" :
                 holder.subjectImage.setBackgroundResource(R.drawable.math);
-                break;
-
+                return R.drawable.math;
             case "Business and Economics" :
                 holder.subjectImage.setBackgroundResource(R.drawable.business);
-                break;
-
+                return R.drawable.business;
             case "Engineering" :
                 holder.subjectImage.setBackgroundResource(R.drawable.engineering);
-                break;
-
+                return R.drawable.engineering;
             case "Natural Sciences" :
                 holder.subjectImage.setBackgroundResource(R.drawable.science);
-                break;
-
+                return R.drawable.science;
             case "Law and Political Science" :
                 holder.subjectImage.setBackgroundResource(R.drawable.law);
-                break;
-
+                return R.drawable.law;
             case "Art and Music" :
                 holder.subjectImage.setBackgroundResource(R.drawable.music);
-                break;
-
+                return R.drawable.music;
             case "Other" :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
-
+                return R.drawable.other;
             default :
                 holder.subjectImage.setBackgroundResource(R.drawable.other);
-                break;
+                return R.drawable.other;
         }
     }
 
@@ -201,7 +194,7 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
                                     return;
                                 } else {
                                     String result = task.getResult();
-                                    Intent i = new Intent(context , GroupMessagingActivity.class);
+                                    Intent i = new Intent(context , PrepareGroupMessageActivity.class);
                                     i.putExtra("group" , (Parcelable) group);
                                     context.startActivity(i);
                                 }
@@ -215,7 +208,10 @@ public class RecommendedGroupAdapter extends RecyclerView.Adapter<RecommendedGro
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // do something
+                Intent intent = new Intent(context, PreviewActivity.class);
+                intent.putExtra("group", group);
+                intent.putExtra("SubjectID", subjectID);
+                context.startActivity(intent);
             }
         });
     }

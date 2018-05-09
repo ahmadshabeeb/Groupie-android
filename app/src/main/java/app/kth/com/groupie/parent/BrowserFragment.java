@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.RelativeLayout;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -45,6 +46,7 @@ public class BrowserFragment extends Fragment {
     private Button reset;
     private ProgressBar progressBar;
     private TextView userErrorMessage;
+    private RelativeLayout card;
 
     @Nullable
     @Override
@@ -59,6 +61,8 @@ public class BrowserFragment extends Fragment {
         subjectClickableListeners();
         dayOfMeetingClickableListeners();
         resetFilterClickableListener(rootView);
+
+
 
         return rootView;
     }

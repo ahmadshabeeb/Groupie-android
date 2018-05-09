@@ -8,6 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import app.kth.com.groupie.EditProfileActivity;
+import app.kth.com.groupie.R;
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,14 +23,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import app.kth.com.groupie.EditProfileActivity;
-import app.kth.com.groupie.R;
-import app.kth.com.groupie.SettingsActivity;
-import app.kth.com.groupie.createGroup.CreateGroupActivity;
+
+import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.editGroup.EditGroupActivity;
-import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
+
+
+import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.login.LoginActivity;
+import app.kth.com.groupie.otherProfile.OtherProfieActivity;
+
 
 public class ParentActivity extends AppCompatActivity {
     HomeFragment homeFragment;
@@ -110,18 +117,14 @@ public class ParentActivity extends AppCompatActivity {
         }
     }
 
-    public void toGroupMessagingActivity(){
-        Intent intent = new Intent(this, GroupMessagingActivity.class);
-        startActivity(intent);
-    }
+
     public void toEditProfileActivity(PrivateProfile currentUserProfile){
         Intent intent = new Intent(this, EditProfileActivity.class);
         intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);
     }
     public void toSettingActivity(){
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new SettingsFragment()).commit();
     }
 
     public void toLoginActivity(){
@@ -131,7 +134,15 @@ public class ParentActivity extends AppCompatActivity {
     }
 
     public void goToEditGroup(){
-        Intent intent = new Intent(this, EditGroupActivity.class);
+        Intent intent = new Intent(this, OtherProfieActivity.class);
+        Profile fake = new Profile();
+        fake.setFirstName("Daniel");
+        fake.setLastName("Muresu");
+        fake.setSchool("Kungliga Tekniska Högskolan");
+        fake.setBio("I like to study math and programming and stuff like that and more stuff and more stuff and more stuff and more stuff and more stuff");
+        fake.setFieldOfStudy("ICT");
+        intent.putExtra("profile", fake);
+
         startActivity(intent);
     }
 
@@ -151,5 +162,9 @@ public class ParentActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public void signOut(){
+        mAuth.signOut();
     }
 }

@@ -27,7 +27,6 @@ import java.util.Map;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
-import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 
 
@@ -58,9 +57,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
-
-                //Add group to browser if it is public and matches user subject and date selection
-                if (group.getIsPublic()) {
                     if (group.isHasMeetingDate() && isUserMember(group)) {
                         group.setGroupId(dataSnapshot.getKey());
                         groupArrayList.add(group);
@@ -68,8 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
                         stopLoadingProgressBar();
                     }
                 }
-            }
-
+                
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }

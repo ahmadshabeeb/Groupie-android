@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.RelativeLayout;
 
 import java.text.DateFormat;
@@ -44,6 +45,7 @@ public class BrowserFragment extends Fragment {
     private List<Integer> subjectResourceIds;
     private Button reset;
     private ProgressBar progressBar;
+    private TextView userErrorMessage;
     private RelativeLayout card;
 
     @Nullable
@@ -75,9 +77,17 @@ public class BrowserFragment extends Fragment {
         this.filterChoice = activity.filterChoice;
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+
+        userErrorMessage = (TextView)rootView.findViewById(R.id.browser_user_error_message);
+
         initializeAdapter();
 
         return rootView;
+    }
+
+    private void initializeAdapter() {
+        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX, progressBar, userErrorMessage);
+        mRecycleView.setAdapter(mAdapter);
     }
 
     private void initViews(ViewGroup rootView) {
@@ -314,11 +324,6 @@ public class BrowserFragment extends Fragment {
             button.setBackgroundColor(resources.getColor(R.color.offWhite));
             button.setTextColor(resources.getColor(R.color.darkNavy));
         }
-    }
-
-    private void initializeAdapter() {
-        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX, progressBar);
-        mRecycleView.setAdapter(mAdapter);
     }
 
     //FRONT END FOR RESET BUTTON THAT DESELECTS USER INPUTS

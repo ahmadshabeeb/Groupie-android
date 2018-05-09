@@ -93,6 +93,7 @@
 
     <string name="title_activity_edit_group">EditGroupActivity</string>
     <string name="title_activity_other_profie">otherProfieActivity</string>
+    <string name="title_activity_prepare_group_message">PrepareGroupMessageActivity</string>
 
     <!-- SUBJECT STRINGS -->
     <string name="language">Language</string>
@@ -104,5 +105,8 @@
     <string name="lawAndPoliticalScience">Law and Political Science</string>
     <string name="artAndMusic">Art and Music</string>
     <string name="other">Other</string>
-    <string name="title_activity_prepare_group_message">PrepareGroupMessageActivity</string>
+
+    <!-- ERROR MESSAGES -->
+    <string name="no_groups_error">There are no groups to display</string>
+
 </resources>

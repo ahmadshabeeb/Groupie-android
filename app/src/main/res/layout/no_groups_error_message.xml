@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/browser_user_error_message"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="gone"
+    android:text="@string/no_groups_error"
+    android:gravity="center"
+    android:includeFontPadding="false"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="15dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

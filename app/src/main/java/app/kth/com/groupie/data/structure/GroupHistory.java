@@ -1,20 +1,21 @@
 package app.kth.com.groupie.data.structure;
 
-import java.text.DateFormat;
+import java.util.HashMap;
 
 /**
  * Created by Ahmad on 4/12/2018.
  */
 
 public class GroupHistory {
-    private String groupId;
-    private DateFormat timeJoined;
+    private HashMap<String, Boolean> groups;
 
-    public String getGroupId() {
-        return groupId;
+    public GroupHistory() {}
+
+    public HashMap<String, Boolean> getGroups() {
+        return groups;
     }
 
-    public DateFormat getTimeJoined() {
-        return timeJoined;
+    public void setGroups(HashMap<String, Boolean> groups) {
+        this.groups = groups;
     }
 }

@@ -1,11 +1,8 @@
 package app.kth.com.groupie.registration;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
@@ -15,7 +12,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +25,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.login.ResetPasswordFragment;
 import app.kth.com.groupie.utilities.Utility;
 
 

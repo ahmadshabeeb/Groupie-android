@@ -1,22 +1,21 @@
 package app.kth.com.groupie.data;
 
-import java.util.List;
-
-import app.kth.com.groupie.data.structure.GroupHistory;
+import java.util.HashMap;
 
 /**
  * Created by Ahmad on 4/11/2018.
  */
 
 public class User {
-    private String userId;
-    private List<GroupHistory> history;
+    private HashMap<String, Boolean> groupHistory;
 
-    public String getUserId() {
-        return userId;
+    public User() {}
+
+    public HashMap<String, Boolean> getGroupHistory() {
+        return groupHistory;
     }
 
-    public List<GroupHistory> getHistory() {
-        return history;
+    public void setGroupHistory(HashMap<String, Boolean> groupHistory) {
+        this.groupHistory = groupHistory;
     }
 }

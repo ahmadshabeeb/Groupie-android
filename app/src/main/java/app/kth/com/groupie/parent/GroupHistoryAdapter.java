@@ -1,6 +1,5 @@
 package app.kth.com.groupie.parent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,35 +25,28 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.Group;
 import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 
-
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolder> {
+public class GroupHistoryAdapter extends RecyclerView.Adapter<GroupHistoryAdapter.GroupViewHolder> {
     private List<Group> groupArrayList;
     private Context context;
     private final int NUM_GROUPS_TO_LOAD = 100;
     private final DatabaseReference databaseReference;
-    private RelativeLayout progressBar;
+    private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private TextView userErrorMessage;
 
-    public HomeAdapter(Context context, RelativeLayout progressBar, TextView userErrorMessage) {
+    public GroupHistoryAdapter(Context context, ProgressBar progressBar) {
         this.context = context;
         this.progressBar = progressBar;
-        this.userErrorMessage = userErrorMessage;
-
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("groups");
         groupArrayList = new ArrayList<>();
         getGroupsFromDatabase(databaseReference);
-        runTimeOut();
     }
 
     //--------------DATASET-----------------------//
@@ -64,14 +57,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Group group = dataSnapshot.getValue(Group.class);
-                    if (group.isHasMeetingDate() && isUserMember(group)) {
-                        group.setGroupId(dataSnapshot.getKey());
-                        groupArrayList.add(group);
-                        notifyDataSetChanged();
-                        stopLoadingProgressBar();
-                    }
+                if (isUserMember(group)) {
+                    group.setGroupId(dataSnapshot.getKey());
+                    groupArrayList.add(group);
+                    notifyDataSetChanged();
+                    stopLoadingProgressBar();
                 }
-                
+            }
+
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
@@ -90,32 +83,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
         });
     }
 
-    private void runTimeOut() {
-        Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                timer.cancel();
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    public void run() {
-                        if (groupArrayList.size() == 0) { //  Timeout
-                            noGroupsToDisplay();
-                        }
-                    }
-                });
-            }
-        };
-
-        // Setting timeout of 10 sec to the request
-        timer.schedule(timerTask, 5000L);
-    }
-
-    private void noGroupsToDisplay() {
-        stopLoadingProgressBar();
-        userErrorMessage.setVisibility(View.VISIBLE);
-    }
-
-
     private void stopLoadingProgressBar() {
         progressBar.setVisibility(View.GONE);
     }
@@ -129,9 +96,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
         return isMember;
     }
 
-    /**
-     *  THIS SECTION OF CODE IS WHERE GROUP DATA IS BOUND TO THE VIEWS
-     */
+
     public class GroupViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout parent = (RelativeLayout) itemView.findViewById(R.id.group_card_view);
         ImageView subjectImage = (ImageView) itemView.findViewById(R.id.subject_imageview);
@@ -152,27 +117,26 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
 
     @NonNull
     @Override
-    public HomeAdapter.GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_group_home, parent, false);
-                return new GroupViewHolder(v);
+    public GroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history_group, parent, false);
+        return new GroupViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull GroupViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GroupHistoryAdapter.GroupViewHolder holder, int position) {
         Group group = groupArrayList.get(position);
-            setFields(group, holder);
-            setSubjectImage(group, holder);
-            setCardViewToBeClickable(group, holder);
-
+        setFields(group, holder);
+        setSubjectImage(group, holder);
+        setCardViewToBeClickable(group, holder);
     }
 
     @Override
     public int getItemCount() {
-        return groupArrayList.size();
+        return this.groupArrayList.size();
     }
 
     //-----------------HELPER METHODS--------------
-    private void setFields(Group group, GroupViewHolder holder) {
+    private void setFields(Group group, GroupHistoryAdapter.GroupViewHolder holder) {
         holder.subject.setText(group.getSubject());
 
         // Empty fields are hidden
@@ -201,7 +165,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
         }
     }
 
-    private void setSubjectImage(Group group, GroupViewHolder holder) {
+    private void setSubjectImage(Group group, GroupHistoryAdapter.GroupViewHolder holder) {
         // show right image based on the subject
 
         switch (group.getSubject()){
@@ -248,7 +212,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.GroupViewHolde
         }
     }
 
-    private void setCardViewToBeClickable(final Group group, GroupViewHolder holder){
+    private void setCardViewToBeClickable(final Group group, GroupHistoryAdapter.GroupViewHolder holder){
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

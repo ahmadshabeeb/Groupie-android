@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".profile.EditProfileActivity"
             android:label="Edit Profile"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />

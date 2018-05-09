@@ -63,7 +63,6 @@ public class BrowserFragment extends Fragment {
         resetFilterClickableListener(rootView);
 
 
-
         return rootView;
     }
 
@@ -78,16 +77,11 @@ public class BrowserFragment extends Fragment {
 
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
-        userErrorMessage = (TextView)rootView.findViewById(R.id.browser_user_error_message);
+        userErrorMessage = (TextView) rootView.findViewById(R.id.browser_user_error_message);
 
         initializeAdapter();
 
         return rootView;
-    }
-
-    private void initializeAdapter() {
-        mAdapter = new GroupAdapter(getActivity(), filterChoice, daysInUNIX, progressBar, userErrorMessage);
-        mRecycleView.setAdapter(mAdapter);
     }
 
     private void initViews(ViewGroup rootView) {
@@ -299,7 +293,7 @@ public class BrowserFragment extends Fragment {
     }
 
     //----------------HELPER METHODS-------------
-    private void filterBySubject(int position, int subject, ImageView view){
+    private void filterBySubject(int position, int subject, ImageView view) {
         if (!filterSubjectTriggers[position]) {
             filterChoice.addSubject(getResources().getString(subject));
             filterSubjectTriggers[position] = true;
@@ -324,6 +318,11 @@ public class BrowserFragment extends Fragment {
             button.setBackgroundColor(resources.getColor(R.color.offWhite));
             button.setTextColor(resources.getColor(R.color.darkNavy));
         }
+    }
+
+    private void initializeAdapter() {
+        mAdapter = new BrowserAdapter(getActivity(), filterChoice, daysInUNIX, progressBar, userErrorMessage);
+        mRecycleView.setAdapter(mAdapter);
     }
 
     //FRONT END FOR RESET BUTTON THAT DESELECTS USER INPUTS

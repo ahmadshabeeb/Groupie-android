@@ -1,23 +1,22 @@
-package app.kth.com.groupie;
+package app.kth.com.groupie.profile;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.content.Context;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,14 +31,11 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
-import java.net.URL;
 import java.util.UUID;
 
+import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.firstLogin.ProfilePictureFragment;
 
 public class EditProfileActivity extends AppCompatActivity {
     private TextView emailTV;
@@ -83,21 +79,43 @@ public class EditProfileActivity extends AppCompatActivity {
         bioET = (EditText) findViewById(R.id.bio_editText);
         saveChangesButton = (Button) findViewById(R.id.save_changes_button);
         profilePicture = (ImageView) findViewById(R.id.profile_picture_imageView);
-        if (currentUserProfile != null){
-            displayThings();
-        }
+        displayThings();
+
         profilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
             }
         });
+
         saveChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 modifyCurrentUserProfile();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_profile_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()) {
+            case R.id.settings:
+                toSettingActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void toSettingActivity(){
+        //git getSupportFragmentManager().beginTransaction().replace(R.id.container, new SettingsFragment()).commit();
     }
 
 
@@ -107,7 +125,8 @@ public class EditProfileActivity extends AppCompatActivity {
         nameET.setText(currentUserProfile.getFirstName() + " " + currentUserProfile.getLastName());
         fieldOfStudyET.setText(currentUserProfile.getFieldOfStudy());
         defaultLocationET.setText(currentUserProfile.getStudyLocation());
-        if(currentUserProfile.getBio() != null){
+
+        if(currentUserProfile.getBio() != null) {
             bioET.setText(currentUserProfile.getBio());
         }
         preChooseFavoriteSubject();

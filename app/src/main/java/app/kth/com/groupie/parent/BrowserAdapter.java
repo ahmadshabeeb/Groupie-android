@@ -44,9 +44,8 @@ import app.kth.com.groupie.groupMessaging.GroupMessagingActivity;
 import app.kth.com.groupie.groupMessaging.PrepareGroupMessageActivity;
 import app.kth.com.groupie.utilities.Utility;
 
-import static java.util.concurrent.TimeUnit.*;
+public class BrowserAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<RecyclerListItem> groupArrayList = new ArrayList<>();
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_GROUP = 1;
@@ -66,7 +65,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private FirebaseUser currentUser;
     private TextView userErrorMessage;
 
-    public GroupAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar, TextView userErrorMessage) {
+    public BrowserAdapter(Context context, BrowserFragment.FilterChoice filterChoice, long[] daysInUNIX, ProgressBar progressBar, TextView userErrorMessage) {
         this.context = context;
         this.daysInUNIX = daysInUNIX;
         this.filterChoice = filterChoice;
@@ -83,8 +82,8 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     //--------------DATASET FOR BROSWER ADAPTER-----------------------//
     private void getGroupsFromDatabase(final DatabaseReference databaseReference) {
-        Query onlyPublicGroups = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
 
+        Query onlyPublicGroups = databaseReference.orderByChild("isPublic").equalTo(true).limitToLast(NUM_GROUPS_TO_LOAD);
         onlyPublicGroups.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -100,7 +99,6 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                         stopLoadingProgressBar();
                     }
                 }
-
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
@@ -385,7 +383,7 @@ public class GroupAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * WHERE WE ADD THE USER TO THE GROUP VIA CLOUD FUNCTION
      *
      */
-    private void setJoinGroupButton (final Group group, GroupAdapter.GroupViewHolder holder) {
+    private void setJoinGroupButton (final Group group, BrowserAdapter.GroupViewHolder holder) {
         holder.joinGroupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

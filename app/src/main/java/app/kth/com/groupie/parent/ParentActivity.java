@@ -9,12 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import app.kth.com.groupie.EditProfileActivity;
-import app.kth.com.groupie.R;
-import app.kth.com.groupie.createGroup.CreateGroupActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,14 +18,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-
-import app.kth.com.groupie.data.Group;
+import app.kth.com.groupie.R;
+import app.kth.com.groupie.createGroup.CreateGroupActivity;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-
-
 import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.login.LoginActivity;
 import app.kth.com.groupie.otherProfile.OtherProfieActivity;
+import app.kth.com.groupie.profile.EditProfileActivity;
 
 
 public class ParentActivity extends AppCompatActivity {
@@ -123,15 +116,16 @@ public class ParentActivity extends AppCompatActivity {
         intent.putExtra("CurrentUserProfile", currentUserProfile);
         startActivity(intent);
     }
+
     public void toSettingActivity(){
         getSupportFragmentManager().beginTransaction().replace(R.id.container, new SettingsFragment()).commit();
     }
-
     public void toLoginActivity(){
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 
+    //WTF is this for
     public void goToEditGroup(){
         Intent intent = new Intent(this, OtherProfieActivity.class);
         Profile fake = new Profile();
@@ -141,7 +135,6 @@ public class ParentActivity extends AppCompatActivity {
         fake.setBio("I like to study math and programming and stuff like that and more stuff and more stuff and more stuff and more stuff and more stuff");
         fake.setFieldOfStudy("ICT");
         intent.putExtra("profile", fake);
-
         startActivity(intent);
     }
 

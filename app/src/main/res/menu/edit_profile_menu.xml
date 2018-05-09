@@ -2,8 +2,8 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/action_create_group"
-        android:icon="@drawable/addbox"
-        android:title="Create group"
+    <item android:id="@+id/settings"
+        android:icon="@drawable/settingsicon"
+        android:title="Settings"
         app:showAsAction="always" />
 </menu>

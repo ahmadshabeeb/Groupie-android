@@ -1,16 +1,18 @@
 package app.kth.com.groupie.parent;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,8 +28,6 @@ import com.google.firebase.storage.StorageReference;
 
 import app.kth.com.groupie.R;
 import app.kth.com.groupie.data.structure.PrivateProfile;
-import app.kth.com.groupie.login.LoginActivity;
-import app.kth.com.groupie.data.structure.Profile;
 import app.kth.com.groupie.utilities.Utility;
 
 public class ProfileFragment extends Fragment {
@@ -46,12 +46,15 @@ public class ProfileFragment extends Fragment {
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private PrivateProfile currentUserProfile;
+    private RecyclerView myGroupHistoryRecycleView;
+    private RecyclerView.Adapter myGroupHistoryAdapter;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInsatnceState){
         final ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
-        settingsButton = (ImageView) rootView.findViewById(R.id.settings_icon);
+
         profilePicture = (ImageView) rootView.findViewById(R.id.profile_picture);
         editProfileButton = (Button) rootView.findViewById(R.id.to_edit_profile);
         schoolName = (TextView) rootView.findViewById(R.id.profile_school_name);
@@ -66,20 +69,16 @@ public class ProfileFragment extends Fragment {
         currentUser = mAuth.getCurrentUser();
         currentUserProfile = activity.currentUserProfile;
 
+        if (currentUserProfile != null) {
+            displayProfileValues(currentUserProfile);
+        }
+        getUserProfile();
+
         if (currentUserProfile == null){
            getUserProfile();
         } else {
             displayProfileValues(currentUserProfile);
         }
-        Button signOut = (Button) rootView.findViewById(R.id.sign_out);
-        signOut.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                mAuth.signOut();
-                currentUser = null;
-                startActivity(new Intent(getActivity(), LoginActivity.class));
-            }
-        });
-
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view){
                 //go to group activity
@@ -87,12 +86,13 @@ public class ProfileFragment extends Fragment {
                     activity.toEditProfileActivity(currentUserProfile);
             }
         });
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view){
-                //go to group activity
-                activity.toSettingActivity();
-            }
-        });
+
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        myGroupHistoryRecycleView = rootView.findViewById(R.id.group_history_recycler_view);
+        LinearLayoutManager LayoutManager = new LinearLayoutManager(getActivity());
+        myGroupHistoryRecycleView.setLayoutManager(LayoutManager);
+        myGroupHistoryAdapter = new GroupHistoryAdapter(getActivity(),progressBar);
+        myGroupHistoryRecycleView.setAdapter(myGroupHistoryAdapter);
 
         return rootView;
     }
@@ -109,17 +109,17 @@ public class ProfileFragment extends Fragment {
         activity = null;
     }
 
-
-    public void getUserProfile(){
-        databaseReference.child("users").child(currentUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    public void getUserProfile() {
+        databaseReference.child("users").child(currentUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 currentUserProfile = dataSnapshot.child("profile").getValue(PrivateProfile.class);
                 displayProfileValues(currentUserProfile);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                //Database Error
+
             }
         });
     }
@@ -130,11 +130,14 @@ public class ProfileFragment extends Fragment {
         defaultLocation.setText(currentUserProfile.getStudyLocation());
         firstName.setText(currentUserProfile.getFirstName());
         lastName.setText(currentUserProfile.getLastName());
-        if(currentUserProfile.getProfilePicture() != null){
+
+        if (currentUserProfile.getProfilePicture() != null){
             String urlImage = currentUserProfile.getProfilePicture();
-            Glide.with(ProfileFragment.this)
-                    .load(urlImage)
-                    .into(profilePicture);
+            if(getActivity() != null){
+                Glide.with(getContext())
+                        .load(urlImage)
+                        .into(profilePicture);
+            }
         } else {
             profilePicture.setImageResource(R.mipmap.ic_profile);
         }
@@ -144,7 +147,4 @@ public class ProfileFragment extends Fragment {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
-
-
-
 }

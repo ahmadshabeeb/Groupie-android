@@ -133,9 +133,11 @@ public class ProfileFragment extends Fragment {
 
         if (currentUserProfile.getProfilePicture() != null){
             String urlImage = currentUserProfile.getProfilePicture();
-            Glide.with(ProfileFragment.this)
-                    .load(urlImage)
-                    .into(profilePicture);
+            if(getActivity() != null){
+                Glide.with(getContext())
+                        .load(urlImage)
+                        .into(profilePicture);
+            }
         } else {
             profilePicture.setImageResource(R.mipmap.ic_profile);
         }
